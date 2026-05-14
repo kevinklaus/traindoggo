@@ -54,11 +54,11 @@ export function estimatePrice(legs: Leg[], dogMode: DogMode): PriceEstimate {
   const dogPrice = dogMode === 'large' ? Math.round(basePrice * 0.5 * 100) / 100 : 0;
   const totalPrice = Math.round((basePrice + dogPrice) * 100) / 100;
 
-  let breakdown = `Base fare: \u20AC${basePrice.toFixed(2)}`;
+  let breakdown = `Indicative total €${totalPrice.toFixed(2)} for planning`;
   if (dogMode === 'large') {
-    breakdown += ` + Dog ticket: \u20AC${dogPrice.toFixed(2)}`;
+    breakdown += ` (incl. dog add-on €${dogPrice.toFixed(2)})`;
   } else if (dogMode === 'small') {
-    breakdown += ' + Small dog: Free';
+    breakdown += ' (small dog in carrier: no add-on in estimate)';
   }
 
   return { basePrice, dogPrice, totalPrice, currency: 'EUR', breakdown };

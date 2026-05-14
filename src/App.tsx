@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react';
-import { Brain as Train, Dog, Globe, Mail, Linkedin, PawPrint } from 'lucide-react';
+import { Dog, Github, Mail, Linkedin, PawPrint } from 'lucide-react';
 import type { Journey, SearchParams, DogMode } from './lib/types';
 import { searchJourneys } from './lib/api';
 import SearchForm from './components/SearchForm';
 import JourneyResults from './components/JourneyResults';
+import { TrainDogLogo } from './components/TrainDogLogo';
 
 function getDefaultDate(): string {
   return new Date().toISOString().split('T')[0];
@@ -15,23 +16,23 @@ function getDefaultTime(): string {
 }
 
 function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
-  const s = size === 'large' ? 14 : 11;
-  const iconSize = size === 'large' ? 24 : 20;
-  const pawSize = size === 'large' ? 12 : 10;
+  const wrap = size === 'large' ? 'w-16 h-16 rounded-2xl' : 'w-12 h-12 rounded-xl';
   return (
-    <div className={`relative flex items-center justify-center bg-primary rounded-xl shadow-lg shadow-primary/20 ${size === 'large' ? 'w-14 h-14' : 'w-11 h-11'}`}>
-      <Train size={iconSize} className="text-white" />
-      <PawPrint size={pawSize} className="text-accent absolute -bottom-0.5 -right-0.5 drop-shadow-sm" />
+    <div
+      className={`relative flex items-center justify-center bg-primary shadow-lg shadow-primary/25 ${wrap}`}
+      aria-hidden="true"
+    >
+      <TrainDogLogo className={size === 'large' ? 'w-11 h-11' : 'w-9 h-9'} />
     </div>
   );
 }
 
 function WaveDivider() {
   return (
-    <svg viewBox="0 0 1440 60" className="w-full block -mb-px" preserveAspectRatio="none" aria-hidden="true">
+    <svg viewBox="0 0 1440 72" className="w-full block h-12 sm:h-16 -mb-px text-secondary" preserveAspectRatio="none" aria-hidden="true">
       <path
-        d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,20 1440,40 L1440,0 L0,0 Z"
-        fill="#00017a"
+        fill="currentColor"
+        d="M0,48 C240,72 480,24 720,48 C960,72 1200,24 1440,52 L1440,0 L0,0 Z"
       />
     </svg>
   );
@@ -73,19 +74,22 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-primary/[0.03] flex flex-col">
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
+      <header className="bg-white/85 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40">
+        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3 min-w-0">
           <LogoMark />
-          <div className="min-w-0">
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight font-heading leading-tight">
-              Ticket to Tail
+          <div className="min-w-0 flex-1">
+            <h1 className="text-[clamp(1.05rem,4vw,1.35rem)] font-bold text-slate-900 tracking-tight font-heading leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
+              „Ticket to Tail.“
             </h1>
-            <p className="text-[11px] text-slate-500 font-body leading-tight">
+            <p className="text-xs sm:text-[13px] text-slate-500 font-body leading-snug mt-0.5">
               Trains for you and your dog
             </p>
           </div>
           {params.dogMode !== 'none' && (
-            <div className="ml-auto flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-700 px-2.5 py-1 rounded-full text-xs font-medium shrink-0" aria-live="polite">
+            <div
+              className="ml-auto flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 whitespace-nowrap"
+              aria-live="polite"
+            >
               <Dog size={13} aria-hidden="true" />
               {params.dogMode === 'large' ? 'Large dog' : 'Small dog'}
             </div>
@@ -93,89 +97,76 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 py-8 space-y-8 w-full flex-1">
+      <main className="max-w-3xl mx-auto px-4 py-8 space-y-8 w-full flex-1 min-w-0">
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">
-          <SearchForm
-            params={params}
-            onChange={setParams}
-            onSearch={handleSearch}
-            loading={loading}
-          />
+          <SearchForm params={params} onChange={setParams} onSearch={handleSearch} loading={loading} />
         </section>
 
         {searched && (
           <section>
-            <JourneyResults
-              journeys={journeys}
-              dogMode={params.dogMode}
-              loading={loading}
-              error={error}
-            />
+            <JourneyResults journeys={journeys} dogMode={params.dogMode} loading={loading} error={error} />
           </section>
         )}
 
         {!searched && (
-          <div className="text-center py-16 space-y-4">
+          <div className="text-center py-16 space-y-4 px-1">
             <div className="inline-flex items-center justify-center" aria-hidden="true">
               <LogoMark size="large" />
             </div>
             <div>
-              <p className="text-slate-600 font-medium font-body">Search for German rail journeys</p>
-              <p className="text-slate-400 text-sm mt-1 font-body">
-                Enter your departure and destination stations to get started
+              <p className="text-slate-600 font-medium font-body">Plan a journey with your dog in mind</p>
+              <p className="text-slate-400 text-sm mt-1 font-body max-w-md mx-auto">
+                Pick stations, then review legs, example carriage layouts, and dog-friendly Großraum areas before you reserve.
               </p>
             </div>
             <div className="flex items-center justify-center gap-6 pt-4 text-xs text-slate-400 font-body flex-wrap">
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 whitespace-nowrap">
                 <Dog size={14} aria-hidden="true" />
-                Dog-friendly planning
+                Dog-first planning
               </span>
-              <span>Real-time data</span>
-              <span>Price estimates</span>
+              <span className="whitespace-nowrap">Live timetable data</span>
             </div>
           </div>
         )}
       </main>
 
       <WaveDivider />
-      <footer className="bg-secondary text-white" role="contentinfo">
-        <div className="max-w-3xl mx-auto px-4 py-8">
-          <div className="flex flex-col items-center text-center gap-5">
-            <PawPrint size={32} className="text-accent" aria-hidden="true" />
-            <div>
-              <p className="font-heading font-bold text-lg tracking-tight">Ticket to Tail</p>
-              <p className="text-sm text-white/60 font-body mt-1 max-w-xs leading-relaxed">
-                Find the best seat for you and your dog on German trains. Check carriage layouts, dog-friendly spots, and book with confidence.
+      <footer className="bg-secondary text-white relative" role="contentinfo">
+        <div className="max-w-3xl mx-auto px-4 pt-2 pb-10">
+          <div className="flex flex-col items-center text-center gap-6">
+            <PawPrint size={56} strokeWidth={1.75} className="text-accent drop-shadow-sm" aria-hidden="true" />
+            <div className="space-y-2 max-w-md">
+              <p className="font-heading font-bold text-xl tracking-tight text-white">Ticket to Tail</p>
+              <p className="text-sm text-white/85 font-body leading-relaxed">
+                Find a comfortable seat for you and your dog, peek at example carriage layouts, then reserve the space that works for both of you.
               </p>
             </div>
-            <p className="text-xs text-white/40 font-body">
-              Built by Kevin Klaus
-            </p>
-            <div className="flex items-center gap-3">
+            <p className="text-sm font-semibold text-white/95 font-heading">Kevin Klaus</p>
+            <div className="flex items-center justify-center gap-4">
               <a
-                href="https://kevinklaus.github.io"
+                href="https://github.com/kevinklaus"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-accent/80 text-white transition-all hover:scale-110"
-                aria-label="Visit kevinklaus.github.io"
+                className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"
+                aria-label="Kevin Klaus on GitHub"
               >
-                <Globe size={18} />
+                <Github size={22} strokeWidth={2} />
               </a>
               <a
                 href="mailto:kevintheklaus@gmail.com"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-accent/80 text-white transition-all hover:scale-110"
-                aria-label="Email kevintheklaus@gmail.com"
+                className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"
+                aria-label="Email Kevin Klaus"
               >
-                <Mail size={18} />
+                <Mail size={22} strokeWidth={2} />
               </a>
               <a
-                href="https://linkedin.com/in/kevinklaus"
+                href="https://www.linkedin.com/in/kevinklaus"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-accent/80 text-white transition-all hover:scale-110"
-                aria-label="LinkedIn profile"
+                className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"
+                aria-label="Kevin Klaus on LinkedIn"
               >
-                <Linkedin size={18} />
+                <Linkedin size={22} strokeWidth={2} />
               </a>
             </div>
           </div>

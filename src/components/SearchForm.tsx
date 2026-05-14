@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowUpDown, Dog } from 'lucide-react';
+import { ArrowDownUp, Dog } from 'lucide-react';
 import type { SearchParams, Station, DogMode } from '../lib/types';
 import { searchStationsByCoords } from '../lib/api';
 import StationInput from './StationInput';
@@ -9,6 +9,19 @@ interface Props {
   onChange: (params: SearchParams) => void;
   onSearch: () => void;
   loading: boolean;
+}
+
+function SpinnerIcon({ className = 'h-4 w-4 text-white' }: { className?: string }) {
+  return (
+    <svg className={`ttt-spinner ${className}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  );
 }
 
 export default function SearchForm({ params, onChange, onSearch, loading }: Props) {
@@ -57,8 +70,8 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
         !params.from && !params.to
           ? 'Please select departure and destination stations'
           : !params.from
-          ? 'Please select a departure station'
-          : 'Please select a destination station'
+            ? 'Please select a departure station'
+            : 'Please select a destination station'
       );
       setTimeout(() => setShaking(false), 500);
       return;
@@ -73,74 +86,92 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
     { key: 'large', label: 'Large dog', desc: 'Dog ticket required', icon: <Dog size={16} /> },
   ];
 
+  const m3Field =
+    'w-full min-w-0 py-3 px-3 rounded-t-xl bg-slate-100/90 border-0 border-b-2 border-slate-400/80 text-slate-900 font-body text-sm tracking-tight tabular-nums placeholder:text-slate-400/90 focus:outline-none focus:bg-violet-50/50 focus:border-primary transition-colors';
+
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-      <div className="space-y-3">
-        <div className="flex items-end gap-1.5">
+      <div className="space-y-0">
+        <div className="flex gap-2 items-stretch">
           <div className="flex-1 min-w-0">
             <StationInput
               id="station-from"
               label="From"
               value={params.from}
               onChange={(s: Station | null) => onChange({ ...params, from: s })}
-              placeholder="e.g. M\u00fcnchen Hbf"
+              placeholder="z. B. München Hbf"
               showLocationButton
               onLocate={handleLocate}
               locating={locating}
             />
           </div>
         </div>
-        <div className="flex items-end gap-1.5">
+
+        <div className="flex justify-center py-1.5">
+          <button
+            type="button"
+            onClick={swap}
+            className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full border-2 border-slate-200 bg-white text-slate-500 shadow-sm hover:text-primary hover:border-primary/40 hover:bg-violet-50/40 transition-all active:scale-95"
+            aria-label="Swap departure and destination"
+            title="Swap direction"
+          >
+            <ArrowDownUp size={18} strokeWidth={2.25} />
+          </button>
+        </div>
+
+        <div className="flex gap-2 items-stretch">
           <div className="flex-1 min-w-0">
             <StationInput
               id="station-to"
               label="To"
               value={params.to}
               onChange={(s: Station | null) => onChange({ ...params, to: s })}
-              placeholder="e.g. Berlin Hbf"
+              placeholder="z. B. Berlin Hbf"
             />
           </div>
-          <button
-            type="button"
-            onClick={swap}
-            className="shrink-0 p-3 rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95"
-            aria-label="Swap departure and destination"
-            title="Swap"
-          >
-            <ArrowUpDown size={18} />
-          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="relative">
-          <label htmlFor="search-date" className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5">
+      <div className="grid grid-cols-2 gap-3 min-w-0">
+        <div className="min-w-0 w-full">
+          <label htmlFor="search-date" className="block text-xs font-semibold text-slate-600 tracking-wide mb-1">
             Date
           </label>
-          <div className="relative">
-            <input
-              id="search-date"
-              type="date"
-              value={params.date}
-              min={today}
-              onChange={(e) => onChange({ ...params, date: e.target.value })}
-              className="w-full px-3 py-2.5 bg-slate-50 border-0 border-b-2 border-slate-300 rounded-t-lg text-slate-800 focus:outline-none focus:border-primary focus:bg-white transition-all font-body text-sm"
-            />
-          </div>
+          <input
+            id="search-date"
+            type="date"
+            value={params.date}
+            min={today}
+            onChange={(e) => onChange({ ...params, date: e.target.value })}
+            onClick={(e) => {
+              const el = e.currentTarget;
+              if ('showPicker' in el && typeof (el as HTMLInputElement & { showPicker: () => void }).showPicker === 'function') {
+                (el as HTMLInputElement & { showPicker: () => void }).showPicker();
+              }
+            }}
+            className={m3Field}
+            autoComplete="off"
+          />
         </div>
-        <div className="relative">
-          <label htmlFor="search-time" className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5">
+        <div className="min-w-0 w-full">
+          <label htmlFor="search-time" className="block text-xs font-semibold text-slate-600 tracking-wide mb-1">
             Time
           </label>
-          <div className="relative">
-            <input
-              id="search-time"
-              type="time"
-              value={params.time}
-              onChange={(e) => onChange({ ...params, time: e.target.value })}
-              className="w-full px-3 py-2.5 bg-slate-50 border-0 border-b-2 border-slate-300 rounded-t-lg text-slate-800 focus:outline-none focus:border-primary focus:bg-white transition-all font-body text-sm"
-            />
-          </div>
+          <input
+            id="search-time"
+            type="time"
+            step={60}
+            value={params.time}
+            onChange={(e) => onChange({ ...params, time: e.target.value })}
+            onClick={(e) => {
+              const el = e.currentTarget;
+              if ('showPicker' in el && typeof (el as HTMLInputElement & { showPicker: () => void }).showPicker === 'function') {
+                (el as HTMLInputElement & { showPicker: () => void }).showPicker();
+              }
+            }}
+            className={m3Field}
+            autoComplete="off"
+          />
         </div>
       </div>
 
@@ -178,16 +209,15 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
 
       <button
         type="submit"
-        className={`w-full py-3.5 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-primary/30 font-heading ${shaking ? 'animate-shake' : ''}`}
+        className={`w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-primary/30 font-heading ${shaking ? 'animate-shake' : ''}`}
         aria-label="Search journeys"
       >
         {loading ? (
-          <span className="inline-flex items-center justify-center gap-2">
-            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-            </svg>
-            Searching...
+          <span className="inline-flex items-center justify-center gap-2.5">
+            <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden" aria-hidden="true">
+              <SpinnerIcon />
+            </span>
+            <span>Searching…</span>
           </span>
         ) : (
           'Search journeys'

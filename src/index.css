@@ -26,4 +26,21 @@
   .animate-shake {
     animation: shake 0.5s ease-in-out;
   }
+
+  /* Avoid flex baseline/layout shift while rotating (spinners drifting vertically). */
+  @keyframes ttt-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .ttt-spinner {
+    display: block;
+    flex: none;
+    animation: ttt-spin 0.75s linear infinite;
+    transform-origin: center center;
+  }
 }

@@ -14,6 +14,19 @@ interface Props {
   locating?: boolean;
 }
 
+function SpinnerIcon({ className = 'h-4 w-4 text-primary' }: { className?: string }) {
+  return (
+    <svg className={`ttt-spinner ${className}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  );
+}
+
 export default function StationInput({ label, value, onChange, placeholder, id, showLocationButton, onLocate, locating }: Props) {
   const [query, setQuery] = useState(value?.name ?? '');
   const [results, setResults] = useState<Station[]>([]);
@@ -84,9 +97,9 @@ export default function StationInput({ label, value, onChange, placeholder, id, 
       <label htmlFor={id} className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5">
         {label}
       </label>
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-stretch gap-1.5">
         <div className="relative flex-1 min-w-0">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" aria-hidden="true">
             <MapPin size={18} />
           </span>
           <input
@@ -98,6 +111,10 @@ export default function StationInput({ label, value, onChange, placeholder, id, 
               if (results.length > 0) setOpen(true);
             }}
             placeholder={placeholder}
+            spellCheck={false}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
             aria-label={label}
             aria-expanded={open}
             aria-autocomplete="list"
@@ -107,6 +124,7 @@ export default function StationInput({ label, value, onChange, placeholder, id, 
           />
           {query && !loading && (
             <button
+              type="button"
               onClick={clear}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
               aria-label={`Clear ${label}`}
@@ -115,11 +133,8 @@ export default function StationInput({ label, value, onChange, placeholder, id, 
             </button>
           )}
           {loading && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2" aria-label="Loading">
-              <svg className="animate-spin h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden" aria-label="Loading">
+              <SpinnerIcon />
             </span>
           )}
         </div>
@@ -128,15 +143,14 @@ export default function StationInput({ label, value, onChange, placeholder, id, 
             type="button"
             onClick={onLocate}
             disabled={locating}
-            className="shrink-0 p-3 rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95 disabled:opacity-50"
+            className="shrink-0 self-stretch min-h-[2.75rem] min-w-[2.75rem] inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95 disabled:opacity-50"
             aria-label="Use my location"
             title="Find nearby stations"
           >
             {locating ? (
-              <svg className="animate-spin h-[18px] w-[18px] text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
+              <span className="inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center overflow-hidden">
+                <SpinnerIcon className="h-[18px] w-[18px] text-primary" />
+              </span>
             ) : (
               <Locate size={18} />
             )}
@@ -153,16 +167,17 @@ export default function StationInput({ label, value, onChange, placeholder, id, 
         <ul
           id={`${id}-listbox`}
           role="listbox"
-          className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto"
+          className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto overflow-x-hidden"
         >
           {results.map((s) => (
             <li key={s.id} role="option" aria-selected={false}>
               <button
+                type="button"
                 onClick={() => select(s)}
-                className="w-full text-left px-4 py-2.5 hover:bg-primary/5 transition-colors text-sm text-slate-700 flex items-center gap-2"
+                className="w-full text-left px-4 py-2.5 hover:bg-primary/5 transition-colors text-sm text-slate-700 flex items-center gap-2 min-w-0"
               >
                 <MapPin size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
-                <span className="truncate">{s.name}</span>
+                <span className="whitespace-nowrap overflow-x-auto max-w-[85vw] sm:max-w-none min-w-0 font-body">{s.name}</span>
               </button>
             </li>
           ))}

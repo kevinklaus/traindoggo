@@ -78,12 +78,14 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1.5 mt-2 flex-wrap">{lineBadges}</div>
+            <div className="flex items-center gap-1.5 mt-2 flex-nowrap overflow-x-auto max-w-full pb-0.5 [-webkit-overflow-scrolling:touch]">
+              {lineBadges}
+            </div>
           </div>
 
           <div className="text-right shrink-0">
             <div className="text-xl sm:text-2xl font-bold text-primary font-heading whitespace-nowrap">
-              &euro;{price.totalPrice.toFixed(2)}
+              €{price.totalPrice.toFixed(2)}
             </div>
             {dogMode !== 'none' && (
               <div className="text-xs text-slate-500 mt-0.5 whitespace-nowrap">
