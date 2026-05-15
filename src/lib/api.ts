@@ -1,7 +1,6 @@
 import { searchJourneysMock, searchStationsByCoordsMock, searchStationsMock } from './mockApi';
 import type { JourneysResponse, Station } from './types';
 
-const BASE_URL = 'https://v6.db.transport.rest';
 let useMockApi = import.meta.env.VITE_USE_MOCK_API === 'true';
 
 export function setMockApiMode(enabled: boolean) {
@@ -39,7 +38,6 @@ const TOP_STATIONS: Record<string, number> = {
   '8000174': 52, '8000200': 51, '8000216': 50,
 };
 
-/** Prefer API names with proper German letters (e.g. München over Muenchen). */
 function germanNameScore(name: string): number {
   let score = 0;
   if (/[äöüÄÖÜß]/.test(name)) score += 20;
@@ -55,26 +53,16 @@ function pickBetterStationName(a: Station, b: Station): Station {
 
 function umlautToAscii(s: string): string {
   return s
-    .replace(/ä/g, 'ae')
-    .replace(/ö/g, 'oe')
-    .replace(/ü/g, 'ue')
-    .replace(/ß/g, 'ss')
-    .replace(/Ä/g, 'Ae')
-    .replace(/Ö/g, 'Oe')
-    .replace(/Ü/g, 'Ue');
+    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+    .replace(/Ä/g, 'Ae').replace(/Ö/g, 'Oe').replace(/Ü/g, 'Ue');
 }
 
 function asciiPairsToUmlauts(s: string): string {
   return s
-    .replace(/Ue/g, 'Ü')
-    .replace(/ue/g, 'ü')
-    .replace(/Oe/g, 'Ö')
-    .replace(/oe/g, 'ö')
-    .replace(/Ae/g, 'Ä')
-    .replace(/ae/g, 'ä');
+    .replace(/Ue/g, 'Ü').replace(/ue/g, 'ü').replace(/Oe/g, 'Ö').replace(/oe/g, 'ö')
+    .replace(/Ae/g, 'Ä').replace(/ae/g, 'ä');
 }
 
-/** Same search reliability for München / Muenchen etc.; UI keeps API spelling with umlauts when available. */
 function expandGermanStationQueries(raw: string): string[] {
   const q = raw.trim();
   if (q.length < 2) return [];
@@ -107,12 +95,7 @@ function mapResultToStation(entry: StationResult): Station {
 }
 
 function isApiErrorBody(data: unknown): boolean {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'message' in data &&
-    typeof (data as { message?: unknown }).message === 'string'
-  );
+  return (typeof data === 'object' && data !== null && 'message' in data);
 }
 
 function isStationResult(v: unknown): v is StationResult {
@@ -124,39 +107,27 @@ function parseStationsPayload(data: unknown): Station[] {
   if (Array.isArray(data)) {
     return (data as unknown[]).filter(isStationResult).map(mapResultToStation).filter((s) => s.id && s.name);
   }
-  if (data && typeof data === 'object' && !Array.isArray(data)) {
-    return Object.values(data as Record<string, unknown>)
-      .filter(isStationResult)
-      .map(mapResultToStation)
-      .filter((s) => s.id && s.name);
-  }
   return [];
 }
 
+/** 1. STATION SEARCH (via stationProxy.ts) */
 async function fetchStationsForQuery(query: string): Promise<Station[]> {
-  const url = `${BASE_URL}/stations?query=${encodeURIComponent(query)}&limit=8&fuzzy=true`;
-  const res = await fetch(url);
+  const res = await fetch(`/api/stations?query=${encodeURIComponent(query)}&limit=8`);
   if (!res.ok) throw new Error('Station search failed');
-  const data: unknown = await res.json();
-  return parseStationsPayload(data);
+  return parseStationsPayload(await res.json());
 }
 
-/** Free-text fallback (returns an array on v6). */
 async function fetchStationsViaLocationsQuery(query: string): Promise<Station[]> {
-  const url = `${BASE_URL}/locations?query=${encodeURIComponent(query)}&results=10`;
-  const res = await fetch(url);
+  const res = await fetch(`/api/stations?query=${encodeURIComponent(query)}`);
   if (!res.ok) return [];
-  const data: unknown = await res.json();
-  return parseStationsPayload(data);
+  return parseStationsPayload(await res.json());
 }
 
 export async function searchStations(query: string): Promise<Station[]> {
   if (useMockApi) return searchStationsMock(query);
-
   const queries = expandGermanStationQueries(query);
   if (queries.length === 0) return [];
 
-  let encounteredError = false;
   const merged = new Map<string, Station>();
   for (const q of queries) {
     try {
@@ -167,8 +138,7 @@ export async function searchStations(query: string): Promise<Station[]> {
       }
       if (merged.size >= 8) break;
     } catch (error) {
-      encounteredError = true;
-      console.warn('Station search query failed:', error);
+      console.warn('Search failed:', error);
     }
   }
 
@@ -176,48 +146,34 @@ export async function searchStations(query: string): Promise<Station[]> {
   if (list.length === 0) {
     try {
       list = rankStations(await fetchStationsViaLocationsQuery(query.trim()));
-    } catch (error) {
-      encounteredError = true;
-      console.warn('Station location fallback failed:', error);
+    } catch {
       list = [];
     }
   }
-
-  if (encounteredError && list.length === 0) {
-    return [];
-  }
-
   return list.slice(0, 8);
 }
 
-/**
- * v6 returns 404 for `/stations/nearby`; use `/locations/nearby` instead.
- * Prefer parent `station` when the API returns a stop tied to a main station.
- */
+/** 2. NEARBY SEARCH (via nearbyProxy.ts) */
 export async function searchStationsByCoords(lat: number, lon: number): Promise<Station[]> {
   if (useMockApi) return searchStationsByCoordsMock(lat, lon);
 
   try {
-    const latEnc = encodeURIComponent(String(lat));
-    const lonEnc = encodeURIComponent(String(lon));
-    const res = await fetch(`${BASE_URL}/locations/nearby?latitude=${latEnc}&longitude=${lonEnc}&results=10`);
-    if (!res.ok) throw new Error('Location search failed');
+    const res = await fetch(`/api/nearby?latitude=${lat}&longitude=${lon}`);
+    if (!res.ok) throw new Error('Nearby search failed');
     const data: unknown = await res.json();
-    if (isApiErrorBody(data)) return [];
     const rows = Array.isArray(data) ? (data as unknown[]).filter(isStationResult) : [];
     const merged = new Map<string, Station>();
     for (const item of rows) {
       const s = mapResultToStation(item);
-      if (!s.id || !s.name) continue;
-      merged.set(s.id, s);
+      if (s.id && s.name) merged.set(s.id, s);
     }
     return rankStations([...merged.values()]).slice(0, 8);
-  } catch (error) {
-    console.warn('Station-by-coords lookup failed:', error);
+  } catch {
     return [];
   }
 }
 
+/** 3. JOURNEY SEARCH (via journeyProxy.ts) */
 export async function searchJourneys(
   fromId: string,
   toId: string,
@@ -227,25 +183,21 @@ export async function searchJourneys(
   if (useMockApi) return searchJourneysMock(fromId, toId, departure, results);
 
   try {
-    const qs = [
-      `from=${encodeURIComponent(fromId)}`,
-      `to=${encodeURIComponent(toId)}`,
-      `departure=${encodeURIComponent(departure)}`,
-      `results=${encodeURIComponent(String(results))}`,
-      `stopovers=${encodeURIComponent('true')}`,
-      `tickets=${encodeURIComponent('true')}`,
-      `routingMode=${encodeURIComponent('HYBRID')}`,
-    ].join('&');
+    const params = new URLSearchParams({
+      from: fromId,
+      to: toId,
+      departure,
+      results: String(results),
+      stopovers: 'true',
+      tickets: 'true',
+      routingMode: 'HYBRID'
+    });
 
-    const res = await fetch(`${BASE_URL}/journeys?${qs}`);
+    const res = await fetch(`/api/journeys?${params.toString()}`);
     if (!res.ok) throw new Error('Journey search failed');
-    const data: unknown = await res.json();
-    if (isApiErrorBody(data)) {
-      throw new Error((data as { message: string }).message || 'Journey search failed');
-    }
-    return data as JourneysResponse;
+    return await res.json() as JourneysResponse;
   } catch (error) {
-    console.warn('Journey search failed:', error);
-    throw new Error('Live timetable API unavailable. Enable offline mock mode to continue.');
+    console.error('Journey search error:', error);
+    throw new Error('Live timetable API unavailable. Check your connection or try again.');
   }
 }

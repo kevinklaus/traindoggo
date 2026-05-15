@@ -7,7 +7,7 @@ const GITHUB_PAGES_REPOSITORY = 'ticket-to-tail';
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: command === 'build' ? `/${GITHUB_PAGES_REPOSITORY}/` : '/',
+  base: '/',
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
