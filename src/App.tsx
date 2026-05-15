@@ -32,6 +32,7 @@ function WaveDivider() {
     <svg viewBox="0 0 1440 72" className="w-full block h-12 sm:h-16 -mb-px text-secondary" preserveAspectRatio="none" aria-hidden="true">
       <path
         fill="currentColor"
+        transform="translate(0 72) scale(1 -1)"
         d="M0,48 C240,72 480,24 720,48 C960,72 1200,24 1440,52 L1440,0 L0,0 Z"
       />
     </svg>
