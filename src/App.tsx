@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Dog, Github, Mail, Linkedin, TrainFront } from 'lucide-react';
-import type { Journey, SearchParams, DogMode } from './lib/types';
-import { searchJourneys } from './lib/api';
+import type { Journey, SearchParams } from './lib/types';
+import { searchJourneys, setMockApiMode } from './lib/api';
 import SearchForm from './components/SearchForm';
 import JourneyResults from './components/JourneyResults';
 
@@ -51,6 +51,12 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
+  const [useMockApi, setUseMockApi] = useState(import.meta.env.VITE_USE_MOCK_API === 'true');
+  const [apiUnavailable, setApiUnavailable] = useState(false);
+
+  useEffect(() => {
+    setMockApiMode(useMockApi);
+  }, [useMockApi]);
 
   const handleSearch = useCallback(async () => {
     if (!params.from || !params.to) return;
@@ -66,9 +72,12 @@ export default function App() {
       if (!result.journeys?.length) {
         setError('No journeys found for this route and time.');
       }
+      setApiUnavailable(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Search failed. Please try again.');
+      const message = err instanceof Error ? err.message : 'Search failed. Please try again.';
+      setError(message);
       setJourneys([]);
+      setApiUnavailable(!useMockApi);
     } finally {
       setLoading(false);
     }
@@ -98,6 +107,38 @@ export default function App() {
           )}
         </div>
       </header>
+
+      {apiUnavailable && !useMockApi && (
+        <div className="max-w-3xl mx-auto px-4 mt-4">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-sm font-medium">
+              Live timetable API unavailable. Enable offline mock mode to continue testing without network access.
+            </p>
+            <button
+              type="button"
+              onClick={() => setUseMockApi(true)}
+              className="inline-flex items-center justify-center rounded-xl bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-amber-200/60 hover:bg-amber-700 transition-all"
+            >
+              Enable offline mock mode
+            </button>
+          </div>
+        </div>
+      )}
+
+      {useMockApi && (
+        <div className="max-w-3xl mx-auto px-4 mt-4">
+          <div className="rounded-2xl border border-slate-200 bg-slate-100 text-slate-800 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-sm font-medium">Offline mock mode is active. Live timetable API calls are disabled.</p>
+            <button
+              type="button"
+              onClick={() => setUseMockApi(false)}
+              className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all"
+            >
+              Switch back to live mode
+            </button>
+          </div>
+        </div>
+      )}
 
       <main className="max-w-3xl mx-auto px-4 py-8 space-y-8 w-full flex-1 min-w-0">
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">

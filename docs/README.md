@@ -46,27 +46,56 @@ Run the development server with:
 VITE_USE_MOCK_API=true npm run dev
 ```
 
+Or toggle mock mode manually in the UI when the live API becomes unavailable.
+
 ### What mock mode does
 
 - Uses `src/lib/mockData.ts` as the source of station and journey data.
 - Overrides API calls in `src/lib/api.ts` with mock helpers.
 - Returns example station autocomplete results and journey routes even when the network or API is unavailable.
+- Station search supports umlaut characters (e.g., searching "münchen" finds "München Hbf").
 
 ### Mock data included
 
 The mock data currently includes:
 
-- `München Hbf`
-- `Berlin Hbf`
-- `Augsburg Hbf`
-- `Nürnberg Hbf`
-- `Frankfurt(Main)Hbf`
+**Stations (13 total):**
+- München Hbf
+- Berlin Hbf
+- Augsburg Hbf
+- Nürnberg Hbf
+- Frankfurt (Main) Hbf
+- Köln Hbf
+- Düsseldorf Hbf
+- Hamburg Hbf
+- Hannover Hbf
+- Stuttgart Hbf
+- Munich East Station
+- Dresden Hbf
+- Ingolstadt Hbf
 
-Example mock journeys include:
+**Example routes and train types:**
 
-- Direct `ICE 574` from Munich to Berlin
-- A transfer route via Nürnberg
-- A regional `RE 5874` from Munich to Augsburg
+*Munich to Berlin (4 routes):*
+- Direct `ICE 574` (fast, 5h)
+- `ICE 612` → `ICE 178` via Nürnberg (transfer)
+- `IC 289` via Ingolstadt & Nürnberg (slower regional option)
+- `RE 5874` → `ICE 505` budget option (transfer)
+
+*Munich to Augsburg (3 routes):*
+- `RE 5874`, `RE 5884`, `RE 5894` (short regional, ~50 min)
+
+*Munich to Cologne (2 routes):*
+- `ICE 803` and `ICE 813` via Frankfurt (long distance, ~6h)
+
+*Berlin to Hamburg (2 routes):*
+- `ICE 501`, `ICE 511` (direct, ~2h)
+
+*Generic fallback routes:*
+- `ICE 100` (direct)
+- `IC 200` (direct alternative)
+
+Train types included: **ICE**, **IC**, **RE** (Regional Express), and multi-leg journeys with transfers.
 
 ## Project structure
 
