@@ -1,6 +1,8 @@
+import { searchJourneysMock, searchStationsByCoordsMock, searchStationsMock } from './mockApi';
 import type { JourneysResponse, Station } from './types';
 
 const BASE_URL = 'https://v6.db.transport.rest';
+const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API === 'true';
 
 interface StationResult {
   id: string;
@@ -145,6 +147,8 @@ async function fetchStationsViaLocationsQuery(query: string): Promise<Station[]>
 }
 
 export async function searchStations(query: string): Promise<Station[]> {
+  if (USE_MOCK_API) return searchStationsMock(query);
+
   const queries = expandGermanStationQueries(query);
   if (queries.length === 0) return [];
 
@@ -174,6 +178,8 @@ export async function searchStations(query: string): Promise<Station[]> {
  * Prefer parent `station` when the API returns a stop tied to a main station.
  */
 export async function searchStationsByCoords(lat: number, lon: number): Promise<Station[]> {
+  if (USE_MOCK_API) return searchStationsByCoordsMock(lat, lon);
+
   const latEnc = encodeURIComponent(String(lat));
   const lonEnc = encodeURIComponent(String(lon));
   const res = await fetch(`${BASE_URL}/locations/nearby?latitude=${latEnc}&longitude=${lonEnc}&results=10`);
@@ -196,6 +202,8 @@ export async function searchJourneys(
   departure: string,
   results = 5
 ): Promise<JourneysResponse> {
+  if (USE_MOCK_API) return searchJourneysMock(fromId, toId, departure, results);
+
   const qs = [
     `from=${encodeURIComponent(fromId)}`,
     `to=${encodeURIComponent(toId)}`,

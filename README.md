@@ -1,3 +1,12 @@
 # ticket-to-tail
 
-[![Open in Bolt](https://bolt.new/static/open-in-bolt.svg)](https://bolt.new/~/sb1-gmfuwbup)
+A lightweight train journey planner built for dog-friendly travel in Germany.
+
+- **Search stations** with autocomplete.
+- **Compare journey options** with route details and timing.
+- **Estimate dog ticket pricing** for small or large dogs.
+- **Offline mock mode** for testing without the transport API.
+
+## Documentation
+
+- [App overview and feature docs](./docs/README.md)
