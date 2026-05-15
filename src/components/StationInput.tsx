@@ -12,6 +12,8 @@ interface Props {
   showLocationButton?: boolean;
   onLocate?: () => void;
   locating?: boolean;
+  /** Match sibling controls (e.g. swap button) to the geo button. */
+  iconButtonClassName?: string;
 }
 
 function SpinnerIcon({ className = 'h-4 w-4 text-primary' }: { className?: string }) {
@@ -27,7 +29,17 @@ function SpinnerIcon({ className = 'h-4 w-4 text-primary' }: { className?: strin
   );
 }
 
-export default function StationInput({ label, value, onChange, placeholder, id, showLocationButton, onLocate, locating }: Props) {
+export default function StationInput({
+  label,
+  value,
+  onChange,
+  placeholder,
+  id,
+  showLocationButton,
+  onLocate,
+  locating,
+  iconButtonClassName = 'box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95 disabled:opacity-50',
+}: Props) {
   const [query, setQuery] = useState(value?.name ?? '');
   const [results, setResults] = useState<Station[]>([]);
   const [open, setOpen] = useState(false);
@@ -97,7 +109,7 @@ export default function StationInput({ label, value, onChange, placeholder, id, 
       <label htmlFor={id} className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5">
         {label}
       </label>
-      <div className="flex items-stretch gap-1.5">
+      <div className="flex items-center gap-1.5">
         <div className="relative flex-1 min-w-0">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" aria-hidden="true">
             <MapPin size={18} />
@@ -143,7 +155,7 @@ export default function StationInput({ label, value, onChange, placeholder, id, 
             type="button"
             onClick={onLocate}
             disabled={locating}
-            className="shrink-0 self-stretch min-h-[2.75rem] min-w-[2.75rem] inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95 disabled:opacity-50"
+            className={iconButtonClassName}
             aria-label="Use my location"
             title="Find nearby stations"
           >

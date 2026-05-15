@@ -4,11 +4,13 @@ import type { Leg } from '../lib/types';
 import {
   formatTime,
   getTransferMinutes,
-  getLegLabel,
+  getLegBadgeLabel,
+  getLegDescription,
   getLineStyle,
   isWalking,
   countTransfers,
   getTrainType,
+  abbreviateStationName,
 } from '../lib/helpers';
 
 interface Props {
@@ -140,7 +142,7 @@ function CarriageChip({
 function CarriageLayout({ leg }: { leg: Leg }) {
   const sections = getCompositionSections(leg);
   const lineName = leg.line?.name ?? 'Train';
-  const direction = leg.direction ?? '';
+  const direction = leg.direction ? abbreviateStationName(leg.direction) : '';
 
   return (
     <div className="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
@@ -149,7 +151,7 @@ function CarriageLayout({ leg }: { leg: Leg }) {
         <span className="whitespace-nowrap">Composition (example)</span>
         <span className="text-slate-500 font-medium whitespace-nowrap">
           {lineName}
-          {direction ? ` → ${direction}` : ''}
+          {direction ? ` — ${direction}` : ''}
         </span>
       </div>
 
@@ -243,7 +245,8 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
         <div className="mt-3 space-y-0" role="list" aria-label="Journey legs">
           {legs.map((leg, i) => {
             const walking = isWalking(leg);
-            const legLabel = getLegLabel(leg);
+            const legLabel = getLegBadgeLabel(leg);
+            const legTitle = getLegDescription(leg);
             const style = getLineStyle(leg);
             const transferMin = i > 0 ? getTransferMinutes(legs[i - 1], leg) : null;
             const riskyTransfer = transferMin !== null && transferMin < 10 && transferMin > 0;
@@ -288,7 +291,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                       <span
                         className="text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap shrink-0 max-w-full truncate"
                         style={{ backgroundColor: style.bg, color: style.text }}
-                        title={legLabel}
+                        title={legTitle}
                       >
                         {legLabel}
                       </span>
@@ -302,7 +305,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                       )}
                     </div>
                     <div className="text-sm text-slate-600 mt-0.5 whitespace-nowrap overflow-x-auto max-w-full">
-                      {leg.origin.name}
+                      {abbreviateStationName(leg.origin.name)}
                     </div>
                   </div>
                 </div>
@@ -328,7 +331,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                       )}
                     </div>
                     <div className="text-sm text-slate-600 mt-0.5 font-semibold whitespace-nowrap overflow-x-auto max-w-full">
-                      {leg.destination.name}
+                      {abbreviateStationName(leg.destination.name)}
                       <span className="font-normal text-slate-400 ml-1 whitespace-nowrap">Get off</span>
                     </div>
                   </div>
@@ -340,7 +343,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                       onClick={() => setExpandedCarriageLeg(showCarriage ? null : i)}
                       className="flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-primary transition-colors"
                       aria-expanded={showCarriage}
-                      aria-label={`Train composition for ${legLabel}`}
+                      aria-label={`Train composition for ${legTitle}`}
                     >
                       {showCarriage ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                       <LayoutGrid size={12} aria-hidden="true" />

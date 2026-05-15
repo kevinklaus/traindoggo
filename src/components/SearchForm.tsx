@@ -11,6 +11,10 @@ interface Props {
   loading: boolean;
 }
 
+/** Same footprint as geo button in `StationInput` (fixed square, no stretch). */
+const iconButtonClass =
+  'box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95 disabled:opacity-50';
+
 function SpinnerIcon({ className = 'h-4 w-4 text-white' }: { className?: string }) {
   return (
     <svg className={`ttt-spinner ${className}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -91,8 +95,8 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-      <div className="space-y-0">
-        <div className="flex gap-2 items-stretch">
+      <div className="space-y-3">
+        <div className="flex gap-1.5">
           <div className="flex-1 min-w-0">
             <StationInput
               id="station-from"
@@ -103,23 +107,12 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
               showLocationButton
               onLocate={handleLocate}
               locating={locating}
+              iconButtonClassName={iconButtonClass}
             />
           </div>
         </div>
 
-        <div className="flex justify-center py-1.5">
-          <button
-            type="button"
-            onClick={swap}
-            className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full border-2 border-slate-200 bg-white text-slate-500 shadow-sm hover:text-primary hover:border-primary/40 hover:bg-violet-50/40 transition-all active:scale-95"
-            aria-label="Swap departure and destination"
-            title="Swap direction"
-          >
-            <ArrowDownUp size={18} strokeWidth={2.25} />
-          </button>
-        </div>
-
-        <div className="flex gap-2 items-stretch">
+        <div className="flex gap-1.5 items-start">
           <div className="flex-1 min-w-0">
             <StationInput
               id="station-to"
@@ -128,6 +121,20 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
               onChange={(s: Station | null) => onChange({ ...params, to: s })}
               placeholder="z. B. Berlin Hbf"
             />
+          </div>
+          <div className="flex flex-col shrink-0">
+            <span className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5 opacity-0 pointer-events-none select-none" aria-hidden="true">
+              &nbsp;
+            </span>
+            <button
+              type="button"
+              onClick={swap}
+              className={iconButtonClass}
+              aria-label="Swap departure and destination"
+              title="Swap direction"
+            >
+              <ArrowDownUp size={18} strokeWidth={2.25} />
+            </button>
           </div>
         </div>
       </div>

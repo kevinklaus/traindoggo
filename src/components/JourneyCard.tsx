@@ -1,6 +1,15 @@
 import { Clock, ArrowRight, AlertTriangle } from 'lucide-react';
 import type { Journey, DogMode } from '../lib/types';
-import { formatTime, formatDuration, getLineStyle, getLegLabel, isWalking, countTransfers, filterValidLegs } from '../lib/helpers';
+import {
+  formatTime,
+  formatDuration,
+  getLineStyle,
+  countTransfers,
+  filterValidLegs,
+  getLegDurationMinutes,
+  getLegBadgeLabel,
+  getLegDescription,
+} from '../lib/helpers';
 import { estimatePrice } from '../lib/pricing';
 import JourneyTimeline from './JourneyTimeline';
 
@@ -32,20 +41,11 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
     return min > 0 && min < 10;
   });
 
-  const lineBadges = legs
-    .filter((l) => !isWalking(l))
-    .map((l, i) => {
-      const style = getLineStyle(l);
-      return (
-        <span
-          key={i}
-          className="text-xs font-bold px-2 py-0.5 rounded-md whitespace-nowrap"
-          style={{ backgroundColor: style.bg, color: style.text }}
-        >
-          {getLegLabel(l)}
-        </span>
-      );
-    });
+  const barSegments = legs.map((leg) => ({
+    leg,
+    minutes: getLegDurationMinutes(leg),
+  }));
+  const totalMinutes = barSegments.reduce((sum, s) => sum + s.minutes, 0) || 1;
 
   return (
     <div
@@ -67,7 +67,9 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
             <div className="flex items-center gap-2 mt-1.5 text-sm text-slate-500 flex-wrap">
               <Clock size={14} aria-hidden="true" />
               <span className="whitespace-nowrap">{duration}</span>
-              <span className="text-slate-300" aria-hidden="true">&middot;</span>
+              <span className="text-slate-300" aria-hidden="true">
+                &middot;
+              </span>
               <span className="whitespace-nowrap">
                 {transfers === 0 ? 'Direct' : `${transfers} change${transfers > 1 ? 's' : ''}`}
               </span>
@@ -78,8 +80,32 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1.5 mt-2 flex-nowrap overflow-x-auto max-w-full pb-0.5 [-webkit-overflow-scrolling:touch]">
-              {lineBadges}
+
+            <div
+              className="flex w-full min-h-[1.625rem] mt-2 rounded-md overflow-hidden border border-slate-200/90 shadow-inner"
+              role="img"
+              aria-label={`Trip segments by time: ${barSegments.map((s) => `${getLegBadgeLabel(s.leg)} ${s.minutes}min`).join(', ')}`}
+            >
+              {barSegments.map(({ leg, minutes }, i) => {
+                const style = getLineStyle(leg);
+                const pct = (minutes / totalMinutes) * 100;
+                return (
+                  <div
+                    key={`${leg.tripId ?? 'seg'}-${i}`}
+                    title={`${getLegDescription(leg)} · ${minutes} min (${pct.toFixed(0)}%)`}
+                    className="flex min-w-0 items-center justify-center px-0.5 py-0.5 text-[10px] sm:text-xs font-bold leading-tight text-center overflow-hidden"
+                    style={{
+                      flexGrow: minutes,
+                      flexShrink: 1,
+                      flexBasis: 0,
+                      backgroundColor: style.bg,
+                      color: style.text,
+                    }}
+                  >
+                    <span className="truncate max-w-full">{getLegBadgeLabel(leg)}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 

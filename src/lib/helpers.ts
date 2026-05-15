@@ -33,13 +33,61 @@ export function getLineName(leg: Leg): string {
   return leg.line?.name ?? leg.line?.product ?? 'Unknown';
 }
 
-export function getLegLabel(leg: Leg): string {
+/** Station / direction text: Hauptbahnhof→Hbf, drop Bahnhof, shorten bracketed rivers (Main)→(M). */
+export function abbreviateStationName(name: string | undefined | null): string {
+  let s = String(name ?? '').trim();
+  if (!s) return '';
+  s = s.replace(/\bhauptbahnhof\b/gi, 'Hbf');
+  s = s.replace(/\bbahnhof\b/gi, '');
+  s = s.replace(/\(\s*([^)]+?)\s*\)/g, (_, inner: string) => {
+    const word = inner.trim();
+    if (/^[A-Za-zÄÖÜäöüß]+$/.test(word) && word.length >= 4) {
+      const ch = word[0].toUpperCase();
+      return `(${ch})`;
+    }
+    return `(${word})`;
+  });
+  s = s.replace(/\s{2,}/g, ' ').replace(/\s+,/g, ',').replace(/,\s*/g, ', ').trim();
+  s = s.replace(/^,\s*|,\s*$/g, '');
+  return s.trim();
+}
+
+/** Leg duration in minutes (at least 1) for bar width math. */
+export function getLegDurationMinutes(leg: Leg): number {
+  const dep = leg.departure ?? leg.plannedDeparture;
+  const arr = leg.arrival ?? leg.plannedArrival;
+  if (!dep || !arr) return 1;
+  const m = Math.round((new Date(arr).getTime() - new Date(dep).getTime()) / 60000);
+  return Math.max(1, m);
+}
+
+/** Line name for badges: keep a space between type and number (e.g. ICE 507), no destination. */
+export function compactLineName(leg: Leg): string {
   if (leg.walking) return 'Walk';
-  const lineName = leg.line?.name ?? '';
-  const direction = leg.direction ?? '';
-  if (lineName && direction) return `${lineName} to ${direction}`;
-  if (lineName) return lineName;
-  return 'Unknown';
+  const name = (leg.line?.name ?? '').replace(/\s+/g, ' ').trim();
+  if (!name) return (leg.line?.product ?? '—').toUpperCase();
+  return name;
+}
+
+/** Short label for pills / bars (no "to", no direction). */
+export function getLegBadgeLabel(leg: Leg): string {
+  if (leg.walking) return 'Walk';
+  const n = compactLineName(leg);
+  return n || '—';
+}
+
+/** Longer description for tooltips (direction abbreviated, no literal " to "). */
+export function getLegDescription(leg: Leg): string {
+  if (leg.walking) return 'Walking';
+  const line = (leg.line?.name ?? '').trim();
+  const dir = leg.direction ? abbreviateStationName(leg.direction) : '';
+  if (line && dir) return `${line} — ${dir}`;
+  if (line) return line;
+  return getLegBadgeLabel(leg);
+}
+
+export function getLegLabel(leg: Leg): string {
+  return getLegBadgeLabel(leg);
 }
 
 interface LineStyle {

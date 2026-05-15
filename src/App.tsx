@@ -1,10 +1,9 @@
 import { useState, useCallback } from 'react';
-import { Dog, Github, Mail, Linkedin, PawPrint } from 'lucide-react';
+import { Dog, Github, Mail, Linkedin, TrainFront } from 'lucide-react';
 import type { Journey, SearchParams, DogMode } from './lib/types';
 import { searchJourneys } from './lib/api';
 import SearchForm from './components/SearchForm';
 import JourneyResults from './components/JourneyResults';
-import { TrainDogLogo } from './components/TrainDogLogo';
 
 function getDefaultDate(): string {
   return new Date().toISOString().split('T')[0];
@@ -17,12 +16,13 @@ function getDefaultTime(): string {
 
 function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
   const wrap = size === 'large' ? 'w-16 h-16 rounded-2xl' : 'w-12 h-12 rounded-xl';
+  const iconSize = size === 'large' ? 34 : 26;
   return (
     <div
       className={`relative flex items-center justify-center bg-primary shadow-lg shadow-primary/25 ${wrap}`}
       aria-hidden="true"
     >
-      <TrainDogLogo className={size === 'large' ? 'w-11 h-11' : 'w-9 h-9'} />
+      <TrainFront size={iconSize} className="text-white" strokeWidth={2} />
     </div>
   );
 }
@@ -44,7 +44,7 @@ export default function App() {
     to: null,
     date: getDefaultDate(),
     time: getDefaultTime(),
-    dogMode: 'none',
+    dogMode: 'large',
   });
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,8 @@ export default function App() {
     setSearched(true);
 
     try {
-      const departure = `${params.date}T${params.time}:00+02:00`;
+      // v6 accepts local wall time without a fixed offset (avoids wrong DST vs hardcoded +02:00).
+      const departure = `${params.date}T${params.time}:00`;
       const result = await searchJourneys(params.from.id, params.to.id, departure);
       setJourneys(result.journeys ?? []);
       if (!result.journeys?.length) {
@@ -79,7 +80,7 @@ export default function App() {
           <LogoMark />
           <div className="min-w-0 flex-1">
             <h1 className="text-[clamp(1.05rem,4vw,1.35rem)] font-bold text-slate-900 tracking-tight font-heading leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
-              „Ticket to Tail.“
+              Ticket to Tail
             </h1>
             <p className="text-xs sm:text-[13px] text-slate-500 font-body leading-snug mt-0.5">
               Trains for you and your dog
@@ -134,7 +135,9 @@ export default function App() {
       <footer className="bg-secondary text-white relative" role="contentinfo">
         <div className="max-w-3xl mx-auto px-4 pt-2 pb-10">
           <div className="flex flex-col items-center text-center gap-6">
-            <PawPrint size={56} strokeWidth={1.75} className="text-accent drop-shadow-sm" aria-hidden="true" />
+            <div className="flex items-center justify-center rounded-2xl bg-white/10 border border-white/15 p-4" aria-hidden="true">
+              <TrainFront size={52} className="text-white" strokeWidth={1.75} />
+            </div>
             <div className="space-y-2 max-w-md">
               <p className="font-heading font-bold text-xl tracking-tight text-white">Ticket to Tail</p>
               <p className="text-sm text-white/85 font-body leading-relaxed">

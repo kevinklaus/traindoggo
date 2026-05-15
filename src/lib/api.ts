@@ -14,6 +14,7 @@ interface StationResult {
   products?: Record<string, boolean>;
   federalState?: string;
   operator?: { id: string; name: string };
+  station?: StationResult;
 }
 
 const TOP_STATIONS: Record<string, number> = {
@@ -88,58 +89,105 @@ function rankStations(stations: Station[]): Station[] {
   });
 }
 
+function mapResultToStation(entry: StationResult): Station {
+  const core = entry.station?.id ? entry.station : entry;
+  return {
+    type: core.type ?? 'stop',
+    id: core.id,
+    name: typeof core.name === 'string' ? core.name : '',
+    location: core.location,
+    products: core.products,
+  };
+}
+
+function isApiErrorBody(data: unknown): boolean {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'message' in data &&
+    typeof (data as { message?: unknown }).message === 'string'
+  );
+}
+
+function isStationResult(v: unknown): v is StationResult {
+  return Boolean(v && typeof v === 'object' && typeof (v as StationResult).id === 'string');
+}
+
+function parseStationsPayload(data: unknown): Station[] {
+  if (isApiErrorBody(data)) return [];
+  if (Array.isArray(data)) {
+    return (data as unknown[]).filter(isStationResult).map(mapResultToStation).filter((s) => s.id && s.name);
+  }
+  if (data && typeof data === 'object' && !Array.isArray(data)) {
+    return Object.values(data as Record<string, unknown>)
+      .filter(isStationResult)
+      .map(mapResultToStation)
+      .filter((s) => s.id && s.name);
+  }
+  return [];
+}
+
 async function fetchStationsForQuery(query: string): Promise<Station[]> {
   const url = `${BASE_URL}/stations?query=${encodeURIComponent(query)}&limit=8&fuzzy=true`;
   const res = await fetch(url);
   if (!res.ok) throw new Error('Station search failed');
-  const data: Record<string, StationResult> = await res.json();
-  return Object.values(data).map((s) => ({
-    type: s.type ?? 'stop',
-    id: s.id,
-    name: s.name,
-    location: s.location,
-    products: s.products,
-  }));
+  const data: unknown = await res.json();
+  return parseStationsPayload(data);
+}
+
+/** Free-text fallback (returns an array on v6). */
+async function fetchStationsViaLocationsQuery(query: string): Promise<Station[]> {
+  const url = `${BASE_URL}/locations?query=${encodeURIComponent(query)}&results=10`;
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const data: unknown = await res.json();
+  return parseStationsPayload(data);
 }
 
 export async function searchStations(query: string): Promise<Station[]> {
   const queries = expandGermanStationQueries(query);
   if (queries.length === 0) return [];
 
-  const batches = await Promise.all(
-    queries.map(async (q) => {
-      try {
-        return await fetchStationsForQuery(q);
-      } catch {
-        return [];
-      }
-    })
-  );
-
   const merged = new Map<string, Station>();
-  for (const stations of batches) {
-    for (const s of stations) {
-      const existing = merged.get(s.id);
-      merged.set(s.id, existing ? pickBetterStationName(existing, s) : s);
+  for (const q of queries) {
+    try {
+      const batch = await fetchStationsForQuery(q);
+      for (const s of batch) {
+        const existing = merged.get(s.id);
+        merged.set(s.id, existing ? pickBetterStationName(existing, s) : s);
+      }
+      if (merged.size >= 8) break;
+    } catch {
+      /* try next variant */
     }
   }
 
-  return rankStations([...merged.values()]);
+  let list = rankStations([...merged.values()]);
+  if (list.length === 0) {
+    list = rankStations(await fetchStationsViaLocationsQuery(query.trim()));
+  }
+  return list.slice(0, 8);
 }
 
+/**
+ * v6 returns 404 for `/stations/nearby`; use `/locations/nearby` instead.
+ * Prefer parent `station` when the API returns a stop tied to a main station.
+ */
 export async function searchStationsByCoords(lat: number, lon: number): Promise<Station[]> {
   const latEnc = encodeURIComponent(String(lat));
   const lonEnc = encodeURIComponent(String(lon));
-  const res = await fetch(`${BASE_URL}/stations/nearby?latitude=${latEnc}&longitude=${lonEnc}&results=5`);
+  const res = await fetch(`${BASE_URL}/locations/nearby?latitude=${latEnc}&longitude=${lonEnc}&results=10`);
   if (!res.ok) throw new Error('Location search failed');
-  const data: StationResult[] = await res.json();
-  return data.map((s) => ({
-    type: s.type ?? 'stop',
-    id: s.id,
-    name: s.name,
-    location: s.location,
-    products: s.products,
-  }));
+  const data: unknown = await res.json();
+  if (isApiErrorBody(data)) return [];
+  const rows = Array.isArray(data) ? (data as unknown[]).filter(isStationResult) : [];
+  const merged = new Map<string, Station>();
+  for (const item of rows) {
+    const s = mapResultToStation(item);
+    if (!s.id || !s.name) continue;
+    merged.set(s.id, s);
+  }
+  return rankStations([...merged.values()]).slice(0, 8);
 }
 
 export async function searchJourneys(
@@ -160,5 +208,9 @@ export async function searchJourneys(
 
   const res = await fetch(`${BASE_URL}/journeys?${qs}`);
   if (!res.ok) throw new Error('Journey search failed');
-  return res.json();
+  const data: unknown = await res.json();
+  if (isApiErrorBody(data)) {
+    throw new Error((data as { message: string }).message || 'Journey search failed');
+  }
+  return data as JourneysResponse;
 }
