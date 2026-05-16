@@ -31,12 +31,21 @@ export default function StationInput({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // NEW: State to keep track of the currently highlighted item index via keyboard
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (value) setQuery(value.name);
   }, [value]);
+
+  // Reset the keyboard focus index whenever results change
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [results]);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -83,7 +92,35 @@ export default function StationInput({
     setError(null);
   }
 
-  // Define Layout Elements for our Parent `<Input />` Frame
+  // NEW: Intercepts form actions, tracks active pointer updates, and captures Enter commits
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!open || results.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault(); // Stop page scroll
+        setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
+        break;
+      case 'ArrowUp':
+        e.preventDefault(); // Stop page scroll
+        setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
+        break;
+      case 'Enter':
+        e.preventDefault(); // Stop immediate form submissions
+        if (activeIndex >= 0 && activeIndex < results.length) {
+          select(results[activeIndex]);
+        } else if (results.length > 0) {
+          select(results[0]); // Select first item if nothing is highlighted explicitly
+        }
+        break;
+      case 'Escape':
+        setOpen(false);
+        break;
+      default:
+        break;
+    }
+  }
+
   const leftIcon = <MapPin size={18} />;
 
   const rightElement = (
@@ -124,6 +161,7 @@ export default function StationInput({
           value={query}
           onChange={(e) => handleInput(e.target.value)}
           onFocus={() => { if (results.length > 0) setOpen(true); }}
+          onKeyDown={handleKeyDown} // Attached the keyboard interception module
           placeholder={placeholder}
           spellCheck={false}
           autoComplete="off"
@@ -132,6 +170,7 @@ export default function StationInput({
           aria-expanded={open}
           aria-autocomplete="list"
           aria-controls={`${id}-listbox`}
+          aria-activedescendant={activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
           role="combobox"
           className={`${TOKENS.inputs.base} ${TOKENS.inputs.iconPadding}`}
         />
@@ -140,18 +179,31 @@ export default function StationInput({
       {/* Autocomplete Dynamic Results Overlay */}
       {open && results.length > 0 && (
         <ul id={`${id}-listbox`} role="listbox" className={TOKENS.layouts.popoverList}>
-          {results.map((s) => (
-            <li key={s.id} role="option" aria-selected={false}>
-              <button
-                type="button"
-                onClick={() => select(s)}
-                className="w-full text-left px-4 py-2.5 hover:bg-primary/5 transition-colors text-sm text-slate-700 flex items-center gap-2 min-w-0 font-body"
+          {results.map((s, i) => {
+            const isHighlighted = i === activeIndex;
+            return (
+              <li 
+                key={s.id} 
+                id={`${id}-option-${i}`}
+                role="option" 
+                aria-selected={isHighlighted}
               >
-                <MapPin size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
-                <span className="whitespace-nowrap overflow-x-auto max-w-[85vw] sm:max-w-none min-w-0">{s.name}</span>
-              </button>
-            </li>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => select(s)}
+                  onMouseEnter={() => setActiveIndex(i)} // Sync pointer tracking naturally
+                  className={`w-full text-left px-4 py-2.5 transition-colors text-sm flex items-center gap-2 min-w-0 font-body ${
+                    isHighlighted 
+                      ? 'bg-primary/10 text-primary font-medium' 
+                      : 'text-slate-700 hover:bg-primary/5'
+                  }`}
+                >
+                  <MapPin size={14} className={isHighlighted ? 'text-primary' : 'text-slate-400 shrink-0'} aria-hidden="true" />
+                  <span className="whitespace-nowrap overflow-x-auto max-w-[85vw] sm:max-w-none min-w-0">{s.name}</span>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
