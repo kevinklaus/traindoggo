@@ -27,6 +27,7 @@ function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
   );
 }
 
+// Visual separator dividing the main screen content from the foot layout frame
 function WaveDivider() {
   return (
     <svg viewBox="0 0 1440 72" className="w-full block h-12 sm:h-16 -mb-px text-secondary" preserveAspectRatio="none" aria-hidden="true">
@@ -52,7 +53,6 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
   
-  // Default active locally in dev mode, hard-locked to false in production builds
   const [useMockApi, setUseMockApi] = useState(import.meta.env.DEV);
   const [apiUnavailable, setApiUnavailable] = useState(false);
 
@@ -86,8 +86,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-primary/[0.03] flex flex-col">
-      <header className="bg-white/85 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3 min-w-0">
+      {/* App Main Floating Header Layer */}
+      <header className="bg-white/85 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 h-[73px] flex items-center">
+        <div className="max-w-3xl mx-auto px-4 w-full flex items-center gap-3 min-w-0">
           <LogoMark />
           <div className="min-w-0 flex-1">
             <h1 className="text-[clamp(1.05rem,4vw,1.35rem)] font-bold text-slate-900 tracking-tight font-heading leading-tight whitespace-nowrap overflow-hidden text-ellipsis">
@@ -109,9 +110,9 @@ export default function App() {
         </div>
       </header>
 
-      {/* Only allow the API Unavailable Mock Banner to render inside Development environments */}
+      {/* Dev Mode Banner Controls */}
       {import.meta.env.DEV && apiUnavailable && !useMockApi && (
-        <div className="max-w-3xl mx-auto px-4 mt-4">
+        <div className="max-w-3xl mx-auto px-4 mt-4 w-full">
           <div className="rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm font-medium">
               Live timetable API unavailable. Enable offline mock mode to continue testing without network access.
@@ -127,9 +128,8 @@ export default function App() {
         </div>
       )}
 
-      {/* Only allow the Active Mock Indicator Banner to render inside Development environments */}
       {import.meta.env.DEV && useMockApi && (
-        <div className="max-w-3xl mx-auto px-4 mt-4">
+        <div className="max-w-3xl mx-auto px-4 mt-4 w-full">
           <div className="rounded-2xl border border-slate-200 bg-slate-100 text-slate-800 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm font-medium">Offline mock mode is active. Live timetable API calls are disabled.</p>
             <button
@@ -143,40 +143,26 @@ export default function App() {
         </div>
       )}
 
-      <main className="max-w-3xl mx-auto px-4 py-8 space-y-8 w-full flex-1 min-w-0">
+      {/* UX REFACTOR: Enforced min-h-[calc(100vh-73px)] on main.
+        This forces the search field layout context to fill the initial screen viewport view,
+        smoothly pushing the high-contrast footer entirely below the fold.
+      */}
+      <main className="max-w-3xl mx-auto px-4 py-8 space-y-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">
           <SearchForm params={params} onChange={setParams} onSearch={handleSearch} loading={loading} />
         </section>
 
         {searched && (
-          <section>
+          <section className="animate-fade-in">
             <JourneyResults journeys={journeys} dogMode={params.dogMode} loading={loading} error={error} />
           </section>
         )}
-
-        {!searched && (
-          <div className="text-center py-16 space-y-4 px-1">
-            <div className="inline-flex items-center justify-center" aria-hidden="true">
-              <LogoMark size="large" />
-            </div>
-            <div>
-              <p className="text-slate-600 font-medium font-body">Plan a journey with your dog in mind</p>
-              <p className="text-slate-400 text-sm mt-1 font-body max-w-md mx-auto">
-                Pick stations, then review legs, example carriage layouts, and dog-friendly Großraum areas before you reserve.
-              </p>
-            </div>
-            <div className="flex items-center justify-center gap-6 pt-4 text-xs text-slate-400 font-body flex-wrap">
-              <span className="flex items-center gap-1.5 whitespace-nowrap">
-                <Dog size={14} aria-hidden="true" />
-                Dog-first planning
-              </span>
-              <span className="whitespace-nowrap">Live timetable data</span>
-            </div>
-          </div>
-        )}
       </main>
 
+      {/* Decorative Wave Transition Layer */}
       <WaveDivider />
+      
+      {/* Global Context Footer Board */}
       <footer className="bg-secondary text-white relative" role="contentinfo">
         <div className="max-w-3xl mx-auto px-4 pt-2 pb-10">
           <div className="flex flex-col items-center text-center gap-6">

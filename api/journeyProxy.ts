@@ -11,13 +11,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     });
 
-    const targetUrl = `https://v6.db.transport.rest/journeys?${params.toString()}`;
-    console.log(`[PROXY JOURNEYS] Outgoing journey fetch target: ${targetUrl}`);
+    let targetUrl = `https://v6.db.transport.rest/journeys?${params.toString()}`;
+    console.log(`[PROXY JOURNEYS] Attempting primary fetch: ${targetUrl}`);
 
-    const response = await fetch(targetUrl, { headers: { 'User-Agent': 'TicketToTail-App/1.0.0' } });
+    let response = await fetch(targetUrl, { headers: { 'User-Agent': 'TicketToTail-App/1.0.0' } });
+    
+    // SELF-HEALING HOOK: If the upstream pricing engine fails (503/500), automatically retry without tickets
+    if (!response.ok && params.get('tickets') === 'true') {
+      console.warn(`[PROXY RESILIENCE] Upstream failed with status ${response.status}. Dropping ticket requirement and retrying...`);
+      
+      params.set('tickets', 'false');
+      targetUrl = `https://v6.db.transport.rest/journeys?${params.toString()}`;
+      
+      response = await fetch(targetUrl, { headers: { 'User-Agent': 'TicketToTail-App/1.0.0' } });
+    }
+
+    // Final fallback handler if the secondary timetable lookup is also completely down
     if (!response.ok) {
       const errBody = await response.text();
-      console.error(`[PROXY ERROR] Upstream down. Code: ${response.status}. Body: ${errBody}`);
+      console.error(`[PROXY ERROR] Upstream completely down. Code: ${response.status}. Body: ${errBody}`);
       return res.status(response.status).json({ error: 'Upstream connection rejected', details: errBody });
     }
 
