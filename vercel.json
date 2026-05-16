@@ -1,11 +1,6 @@
 {
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/api/stations", "destination": "/api/stationProxy.ts" },
-    { "source": "/api/nearby", "destination": "/api/nearbyProxy.ts" },
-    { "source": "/api/journeys", "destination": "/api/journeyProxy.ts" },
-    { 
-      "source": "/((?!api|src|@vite|@react-refresh|node_modules|favicon.ico|vite.svg).*)", 
-      "destination": "/index.html" 
-    }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
