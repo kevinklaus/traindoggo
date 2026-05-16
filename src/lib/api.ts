@@ -1,7 +1,8 @@
 import { searchJourneysMock, searchStationsByCoordsMock, searchStationsMock } from './mockApi';
 import type { JourneysResponse, Station } from './types';
 
-let useMockApi = import.meta.env.VITE_USE_MOCK_API === 'true';
+// CHANGED: Default to true during local development, always false in production
+let useMockApi = import.meta.env.DEV;
 
 export function setMockApiMode(enabled: boolean) {
   useMockApi = enabled;
@@ -110,7 +111,6 @@ function parseStationsPayload(data: unknown): Station[] {
   return [];
 }
 
-// Client-Side Telemetry Guard: Inspects responses safely to identify configuration errors
 async function safeParseJson(res: Response) {
   const text = await res.text();
   try {

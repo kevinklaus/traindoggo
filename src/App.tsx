@@ -51,7 +51,9 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
-  const [useMockApi, setUseMockApi] = useState(import.meta.env.VITE_USE_MOCK_API === 'true');
+  
+  // Default active locally in dev mode, hard-locked to false in production builds
+  const [useMockApi, setUseMockApi] = useState(import.meta.env.DEV);
   const [apiUnavailable, setApiUnavailable] = useState(false);
 
   useEffect(() => {
@@ -65,7 +67,6 @@ export default function App() {
     setSearched(true);
 
     try {
-      // v6 accepts local wall time without a fixed offset (avoids wrong DST vs hardcoded +02:00).
       const departure = `${params.date}T${params.time}:00`;
       const result = await searchJourneys(params.from.id, params.to.id, departure);
       setJourneys(result.journeys ?? []);
@@ -81,7 +82,7 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }, [params]);
+  }, [params, useMockApi]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-primary/[0.03] flex flex-col">
@@ -108,7 +109,8 @@ export default function App() {
         </div>
       </header>
 
-      {apiUnavailable && !useMockApi && (
+      {/* Only allow the API Unavailable Mock Banner to render inside Development environments */}
+      {import.meta.env.DEV && apiUnavailable && !useMockApi && (
         <div className="max-w-3xl mx-auto px-4 mt-4">
           <div className="rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm font-medium">
@@ -125,7 +127,8 @@ export default function App() {
         </div>
       )}
 
-      {useMockApi && (
+      {/* Only allow the Active Mock Indicator Banner to render inside Development environments */}
+      {import.meta.env.DEV && useMockApi && (
         <div className="max-w-3xl mx-auto px-4 mt-4">
           <div className="rounded-2xl border border-slate-200 bg-slate-100 text-slate-800 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm font-medium">Offline mock mode is active. Live timetable API calls are disabled.</p>
