@@ -83,13 +83,6 @@ export default function StationInput({
     setError(null);
   }
 
-  function clear() {
-    onChange(null);
-    setQuery('');
-    setResults([]);
-    setError(null);
-  }
-
   return (
     <div ref={wrapRef} className="relative">
       <label htmlFor={id} className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5">
@@ -115,12 +108,12 @@ export default function StationInput({
             aria-autocomplete="list"
             aria-controls={`${id}-listbox`}
             role="combobox"
-            className={`${TOKENS.input} pl-10 pr-9`}
+            className={`${TOKENS.inputs.base} ${TOKENS.inputs.iconPadding}`}
           />
           {query && !loading && (
             <button
               type="button"
-              onClick={clear}
+              onClick={() => { onChange(null); setQuery(''); setResults([]); setError(null); }}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
               aria-label={`Clear ${label}`}
             >
@@ -146,7 +139,7 @@ export default function StationInput({
         </p>
       )}
       {open && results.length > 0 && (
-        <ul id={`${id}-listbox`} role="listbox" className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto overflow-x-hidden">
+        <ul id={`${id}-listbox`} role="listbox" className={TOKENS.layouts.popoverList}>
           {results.map((s) => (
             <li key={s.id} role="option" aria-selected={false}>
               <button

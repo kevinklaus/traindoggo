@@ -3,15 +3,13 @@ import type { Journey, DogMode } from '../lib/types';
 import {
   formatTime,
   formatDuration,
-  getLineStyle,
   countTransfers,
   filterValidLegs,
   getLegDurationMinutes,
-  getLegBadgeLabel,
-  getLegDescription,
 } from '../lib/helpers';
 import { estimatePrice } from '../lib/pricing';
 import JourneyTimeline from './JourneyTimeline';
+import JourneyTimelineBar from './ui/JourneyTimelineBar';
 import { TOKENS } from './ui/Primitives';
 
 interface Props {
@@ -45,10 +43,11 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
   const totalMinutes = barSegments.reduce((sum, s) => sum + s.minutes, 0) || 1;
 
   return (
-    <div className={`${TOKENS.card} transition-all overflow-hidden`} style={{ animationDelay: `${index * 80}ms` }}>
+    <div className={TOKENS.layouts.card} style={{ animationDelay: `${index * 80}ms` }}>
       <div className="p-4 sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
+            {/* Direct Timings Header Row */}
             <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
               <span className="text-xl sm:text-2xl font-bold text-slate-900 tabular-nums font-heading whitespace-nowrap">
                 {formatTime(firstLeg?.departure)}
@@ -58,6 +57,8 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
                 {formatTime(lastLeg?.arrival)}
               </span>
             </div>
+
+            {/* Metabar Context */}
             <div className="flex items-center gap-2 mt-1.5 text-sm text-slate-500 flex-wrap">
               <Clock size={14} aria-hidden="true" />
               <span className="whitespace-nowrap">{duration}</span>
@@ -72,25 +73,11 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
               )}
             </div>
 
-            {/* Visual Timeline Bar */}
-            <div className="flex w-full min-h-[1.625rem] mt-2 rounded-md overflow-hidden border border-slate-200/90 shadow-inner" role="img" aria-label={`Trip segments by time: ${barSegments.map((s) => `${getLegBadgeLabel(s.leg)} ${s.minutes}min`).join(', ')}`}>
-              {barSegments.map(({ leg, minutes }, i) => {
-                const style = getLineStyle(leg);
-                const pct = (minutes / totalMinutes) * 100;
-                return (
-                  <div
-                    key={`${leg.tripId ?? 'seg'}-${i}`}
-                    title={`${getLegDescription(leg)} · ${minutes} min (${pct.toFixed(0)}%)`}
-                    className="flex min-w-0 items-center justify-center px-0.5 py-0.5 text-[10px] sm:text-xs font-bold leading-tight text-center overflow-hidden"
-                    style={{ flexGrow: minutes, flexShrink: 1, flexBasis: 0, backgroundColor: style.bg, color: style.text }}
-                  >
-                    <span className="truncate max-w-full">{getLegBadgeLabel(leg)}</span>
-                  </div>
-                );
-              })}
-            </div>
+            {/* Atomic Visual Progress Abstraction */}
+            <JourneyTimelineBar segments={barSegments} totalMinutes={totalMinutes} />
           </div>
 
+          {/* Fare Presentation Column */}
           <div className="text-right shrink-0">
             <div className="text-xl sm:text-2xl font-bold text-primary font-heading whitespace-nowrap">
               €{price.totalPrice.toFixed(2)}
@@ -104,6 +91,7 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
         </div>
 
         <JourneyTimeline legs={legs} dogMode={dogMode} />
+        
         <div className="mt-3 pt-3 border-t border-slate-100">
           <span className="text-xs text-slate-400 truncate block">{price.breakdown}</span>
         </div>
