@@ -7,6 +7,9 @@ export const TOKENS = {
   inputs: {
     base: "w-full py-3 px-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all font-body text-sm",
     iconPadding: "pl-10 pr-9",
+    // ADDED: Centralized wrapper typography and error tokens
+    label: "block text-xs font-semibold text-slate-600 tracking-wide mb-1.5 select-none",
+    error: "mt-1.5 text-xs text-red-600 flex items-center gap-1 font-medium select-none animate-fade-in"
   },
   buttons: {
     iconButton: "box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95 disabled:opacity-50",

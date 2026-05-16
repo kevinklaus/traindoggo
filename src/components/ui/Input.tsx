@@ -23,15 +23,13 @@ export default function Input({
 }: InputProps) {
   return (
     <div className="w-full min-w-0">
-      {/* 1. Standardized Structural Form Header */}
-      <label htmlFor={id} className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5 select-none">
+      {/* Used global input label design token */}
+      <label htmlFor={id} className={TOKENS.inputs.label}>
         {label}
       </label>
 
-      {/* 2. Interactive Input Component Wrapper Layout */}
       <div className="flex items-center gap-1.5">
         <div className="relative flex-1 min-w-0 group">
-          {/* Absolute Left-Aligned Icon Overlay */}
           {leftIcon && (
             <span 
               className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-primary transition-colors pointer-events-none z-10" 
@@ -41,10 +39,8 @@ export default function Input({
             </span>
           )}
 
-          {/* Primitive Field Elements (Passed dynamically by specialized sub-components) */}
           {children}
 
-          {/* Absolute Right-Aligned Clear Controls / Loading Spinners */}
           {rightElement && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center gap-1.5">
               {rightElement}
@@ -52,7 +48,6 @@ export default function Input({
           )}
         </div>
 
-        {/* Optional Context Action Block (e.g., GPS Locate Element) */}
         {actionButton && (
           <div className="shrink-0 flex items-center">
             {actionButton}
@@ -60,9 +55,9 @@ export default function Input({
         )}
       </div>
 
-      {/* 3. Universal Realtime Validation Diagnostics Error Message */}
+      {/* Used global input error diagnostics design token */}
       {error && (
-        <p className="mt-1.5 text-xs text-red-600 flex items-center gap-1 font-medium select-none animate-fade-in" role="alert">
+        <p className={TOKENS.inputs.error} role="alert">
           <AlertCircle size={12} className="shrink-0" />
           <span>{error}</span>
         </p>
