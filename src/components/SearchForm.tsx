@@ -3,29 +3,13 @@ import { ArrowDownUp, Dog } from 'lucide-react';
 import type { SearchParams, Station, DogMode } from '../lib/types';
 import { searchStationsByCoords } from '../lib/api';
 import StationInput from './StationInput';
+import { Spinner, TOKENS, IconButton } from './ui/Primitives';
 
 interface Props {
   params: SearchParams;
   onChange: (params: SearchParams) => void;
   onSearch: () => void;
   loading: boolean;
-}
-
-/** Same footprint as geo button in `StationInput` (fixed square, no stretch). */
-const iconButtonClass =
-  'box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95 disabled:opacity-50';
-
-function SpinnerIcon({ className = 'h-4 w-4 text-white' }: { className?: string }) {
-  return (
-    <svg className={`ttt-spinner ${className}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      />
-    </svg>
-  );
 }
 
 export default function SearchForm({ params, onChange, onSearch, loading }: Props) {
@@ -38,9 +22,11 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
     onChange({ ...params, from: params.to, to: params.from });
   }
 
-  function setDog(mode: DogMode) {
-    onChange({ ...params, dogMode: mode });
-  }
+  const dogModes: { key: DogMode; label: string; desc: string; icon: React.ReactNode }[] = [
+    { key: 'none', label: 'No dog', desc: 'Standard ticket', icon: null },
+    { key: 'small', label: 'Small dog', desc: 'Free in carrier', icon: <Dog size={14} /> },
+    { key: 'large', label: 'Large dog', desc: 'Dog ticket required', icon: <Dog size={16} /> },
+  ];
 
   async function handleLocate() {
     if (!navigator.geolocation) return;
@@ -48,18 +34,9 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
-          const stations = await searchStationsByCoords(
-            pos.coords.latitude,
-            pos.coords.longitude
-          );
-          if (stations.length > 0) {
-            onChange({ ...params, from: stations[0] });
-          }
-        } catch {
-          // silently fail
-        } finally {
-          setLocating(false);
-        }
+          const stations = await searchStationsByCoords(pos.coords.latitude, pos.coords.longitude);
+          if (stations.length > 0) onChange({ ...params, from: stations[0] });
+        } catch { /* silently fail */ } finally { setLocating(false); }
       },
       () => setLocating(false),
       { timeout: 8000 }
@@ -73,9 +50,7 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
       setValidationMsg(
         !params.from && !params.to
           ? 'Please select departure and destination stations'
-          : !params.from
-            ? 'Please select a departure station'
-            : 'Please select a destination station'
+          : !params.from ? 'Please select a departure station' : 'Please select a destination station'
       );
       setTimeout(() => setShaking(false), 500);
       return;
@@ -83,15 +58,6 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
     setValidationMsg(null);
     onSearch();
   }
-
-  const dogModes: { key: DogMode; label: string; desc: string; icon: React.ReactNode }[] = [
-    { key: 'none', label: 'No dog', desc: 'Standard ticket', icon: null },
-    { key: 'small', label: 'Small dog', desc: 'Free in carrier', icon: <Dog size={14} /> },
-    { key: 'large', label: 'Large dog', desc: 'Dog ticket required', icon: <Dog size={16} /> },
-  ];
-
-  const m3Field =
-    'w-full min-w-0 py-3 px-3 rounded-t-xl bg-slate-100/90 border-0 border-b-2 border-slate-400/80 text-slate-900 font-body text-sm tracking-tight tabular-nums placeholder:text-slate-400/90 focus:outline-none focus:bg-violet-50/50 focus:border-primary transition-colors';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
@@ -102,12 +68,11 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
               id="station-from"
               label="From"
               value={params.from}
-              onChange={(s: Station | null) => onChange({ ...params, from: s })}
+              onChange={(s) => onChange({ ...params, from: s })}
               placeholder="z. B. München Hbf"
               showLocationButton
               onLocate={handleLocate}
               locating={locating}
-              iconButtonClassName={iconButtonClass}
             />
           </div>
         </div>
@@ -118,84 +83,58 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
               id="station-to"
               label="To"
               value={params.to}
-              onChange={(s: Station | null) => onChange({ ...params, to: s })}
+              onChange={(s) => onChange({ ...params, to: s })}
               placeholder="z. B. Berlin Hbf"
             />
           </div>
           <div className="flex flex-col shrink-0">
-            <span className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5 opacity-0 pointer-events-none select-none" aria-hidden="true">
-              &nbsp;
-            </span>
-            <button
-              type="button"
-              onClick={swap}
-              className={iconButtonClass}
-              aria-label="Swap departure and destination"
-              title="Swap direction"
-            >
+            <span className="block text-xs font-semibold text-slate-600 tracking-wide mb-1.5 opacity-0 pointer-events-none select-none" aria-hidden="true">&nbsp;</span>
+            <IconButton onClick={swap} aria-label="Swap departure and destination" title="Swap direction">
               <ArrowDownUp size={18} strokeWidth={2.25} />
-            </button>
+            </IconButton>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 min-w-0">
         <div className="min-w-0 w-full">
-          <label htmlFor="search-date" className="block text-xs font-semibold text-slate-600 tracking-wide mb-1">
-            Date
-          </label>
+          <label htmlFor="search-date" className="block text-xs font-semibold text-slate-600 tracking-wide mb-1">Date</label>
           <input
             id="search-date"
             type="date"
             value={params.date}
             min={today}
             onChange={(e) => onChange({ ...params, date: e.target.value })}
-            onClick={(e) => {
-              const el = e.currentTarget;
-              if ('showPicker' in el && typeof (el as HTMLInputElement & { showPicker: () => void }).showPicker === 'function') {
-                (el as HTMLInputElement & { showPicker: () => void }).showPicker();
-              }
-            }}
-            className={m3Field}
+            onClick={(e) => 'showPicker' in e.currentTarget && e.currentTarget.showPicker()}
+            className={TOKENS.input}
             autoComplete="off"
           />
         </div>
         <div className="min-w-0 w-full">
-          <label htmlFor="search-time" className="block text-xs font-semibold text-slate-600 tracking-wide mb-1">
-            Time
-          </label>
+          <label htmlFor="search-time" className="block text-xs font-semibold text-slate-600 tracking-wide mb-1">Time</label>
           <input
             id="search-time"
             type="time"
             step={60}
             value={params.time}
             onChange={(e) => onChange({ ...params, time: e.target.value })}
-            onClick={(e) => {
-              const el = e.currentTarget;
-              if ('showPicker' in el && typeof (el as HTMLInputElement & { showPicker: () => void }).showPicker === 'function') {
-                (el as HTMLInputElement & { showPicker: () => void }).showPicker();
-              }
-            }}
-            className={m3Field}
+            onClick={(e) => 'showPicker' in e.currentTarget && e.currentTarget.showPicker()}
+            className={TOKENS.input}
             autoComplete="off"
           />
         </div>
       </div>
 
       <div>
-        <span className="block text-xs font-semibold text-slate-600 tracking-wide mb-2">
-          Dog logistics
-        </span>
+        <span className="block text-xs font-semibold text-slate-600 tracking-wide mb-2">Dog logistics</span>
         <div className="grid grid-cols-3 gap-2">
           {dogModes.map(({ key, label, desc, icon }) => (
             <button
               key={key}
               type="button"
-              onClick={() => setDog(key)}
+              onClick={() => onChange({ ...params, dogMode: key })}
               className={`p-3 rounded-xl border-2 text-center transition-all active:scale-[0.97] ${
-                params.dogMode === key
-                  ? 'border-primary bg-primary/5 text-primary'
-                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                params.dogMode === key ? 'border-primary bg-primary/5 text-primary' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
               }`}
               aria-pressed={params.dogMode === key}
               aria-label={`${label}: ${desc}`}
@@ -221,14 +160,10 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
       >
         {loading ? (
           <span className="inline-flex items-center justify-center gap-2.5">
-            <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden" aria-hidden="true">
-              <SpinnerIcon />
-            </span>
+            <Spinner className="h-4 w-4 text-white" />
             <span>Searching…</span>
           </span>
-        ) : (
-          'Search journeys'
-        )}
+        ) : 'Search journeys'}
       </button>
     </form>
   );
