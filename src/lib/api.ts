@@ -22,9 +22,6 @@ interface StationResult {
   station?: StationResult;
 }
 
-const BASE_URL = 'https://v6.db.transport.rest';
-
-// RESTORED: Your complete priority station list
 const TOP_STATIONS: Record<string, number> = {
   '8011160': 100, '8002549': 99, '8000261': 98, '8000105': 97,
   '8000207': 96, '8000290': 95, '8000085': 94, '8000068': 93,
@@ -41,7 +38,6 @@ const TOP_STATIONS: Record<string, number> = {
   '8000174': 52, '8000200': 51, '8000216': 50,
 };
 
-// RESTORED: German spelling and variant calculations
 function germanNameScore(name: string): number {
   let score = 0;
   if (/[äöüÄÖÜß]/.test(name)) score += 20;
@@ -114,27 +110,27 @@ function parseStationsPayload(data: unknown): Station[] {
   return [];
 }
 
-// Safety Inspector: Prevents empty-token crashes and reveals actual HTML contents
+// Client-Side Telemetry Guard: Inspects responses safely to identify configuration errors
 async function safeParseJson(res: Response) {
   const text = await res.text();
   try {
     return JSON.parse(text);
   } catch (e) {
-    console.error("CRITICAL API WARNING: Expected JSON response, received alternative payload instead. Content view:");
-    console.error(text);
-    throw new Error(`Public interface delivered alternative body format (Status ${res.status})`);
+    console.error(`[CLIENT TELEMETRY] Parse error on route ${res.url}. Expected JSON, received string body instead.`);
+    console.error("[RAW BODY VIEW]:", text);
+    throw new Error(`Invalid server payload format (HTTP Status ${res.status})`);
   }
 }
 
-/** 1. DIRECT STATION SEARCH */
+/** 1. PROXIED STATION SEARCH */
 async function fetchStationsForQuery(query: string): Promise<Station[]> {
-  const res = await fetch(`${BASE_URL}/locations?query=${encodeURIComponent(query)}&results=8`);
-  if (!res.ok) throw new Error('Station search failed');
+  const res = await fetch(`/api/stations?query=${encodeURIComponent(query)}&limit=8`);
+  if (!res.ok) throw new Error(`Station gateway returned code ${res.status}`);
   return parseStationsPayload(await safeParseJson(res));
 }
 
 async function fetchStationsViaLocationsQuery(query: string): Promise<Station[]> {
-  const res = await fetch(`${BASE_URL}/locations?query=${encodeURIComponent(query)}`);
+  const res = await fetch(`/api/stations?query=${encodeURIComponent(query)}`);
   if (!res.ok) return [];
   return parseStationsPayload(await safeParseJson(res));
 }
@@ -154,7 +150,7 @@ export async function searchStations(query: string): Promise<Station[]> {
       }
       if (merged.size >= 8) break;
     } catch (error) {
-      console.warn('Search failed:', error);
+      console.warn('Search iteration bypassed:', error);
     }
   }
 
@@ -169,13 +165,13 @@ export async function searchStations(query: string): Promise<Station[]> {
   return list.slice(0, 8);
 }
 
-/** 2. DIRECT NEARBY SEARCH */
+/** 2. PROXIED NEARBY SEARCH */
 export async function searchStationsByCoords(lat: number, lon: number): Promise<Station[]> {
   if (useMockApi) return searchStationsByCoordsMock(lat, lon);
 
   try {
-    const res = await fetch(`${BASE_URL}/locations/nearby?latitude=${lat}&longitude=${lon}&results=8`);
-    if (!res.ok) throw new Error('Nearby search failed');
+    const res = await fetch(`/api/nearby?latitude=${lat}&longitude=${lon}`);
+    if (!res.ok) throw new Error(`Nearby gateway returned code ${res.status}`);
     const data = await safeParseJson(res);
     const rows = Array.isArray(data) ? (data as unknown[]).filter(isStationResult) : [];
     const merged = new Map<string, Station>();
@@ -189,7 +185,7 @@ export async function searchStationsByCoords(lat: number, lon: number): Promise<
   }
 }
 
-/** 3. DIRECT JOURNEY SEARCH */
+/** 3. PROXIED JOURNEY SEARCH */
 export async function searchJourneys(
   fromId: string,
   toId: string,
@@ -208,11 +204,11 @@ export async function searchJourneys(
       tickets: 'true'
     });
 
-    const res = await fetch(`${BASE_URL}/journeys?${params.toString()}`);
-    if (!res.ok) throw new Error('Journey search failed');
+    const res = await fetch(`/api/journeys?${params.toString()}`);
+    if (!res.ok) throw new Error(`Journey gateway returned code ${res.status}`);
     return await safeParseJson(res) as JourneysResponse;
   } catch (error) {
-    console.error('Journey search error:', error);
+    console.error('Journey tracking loop failure:', error);
     throw new Error('Live timetable API unavailable. Check your connection or try again.');
   }
 }
