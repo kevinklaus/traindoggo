@@ -7,12 +7,11 @@ export const TOKENS = {
   inputs: {
     base: "w-full py-3 px-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all font-body text-sm",
     iconPadding: "pl-10 pr-9",
-    // ADDED: Centralized wrapper typography and error tokens
     label: "block text-xs font-semibold text-slate-600 tracking-wide mb-1.5 select-none",
     error: "mt-1.5 text-xs text-red-600 flex items-center gap-1 font-medium select-none animate-fade-in"
   },
   buttons: {
-    iconButton: "box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-95 disabled:opacity-50",
+    iconButton: "box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-[0.95] disabled:opacity-50",
     dogChip: "p-3 rounded-xl border-2 text-center transition-all active:scale-[0.97] text-sm font-semibold",
     primarySubmit: "w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-primary/30 font-heading",
   },
@@ -23,9 +22,117 @@ export const TOKENS = {
 };
 
 // ============================================================================
+// CENTRALIZED TRANSPORT BRAND COLOR ENGINE
+// ============================================================================
+export interface LegThemeResult {
+  badge: string;
+  border: string;
+  dot: string;
+  bgHex: string;
+  textHex: string;
+}
+
+export function getLegColorTheme(product?: string, name?: string, isWalking?: boolean): LegThemeResult {
+  const prod = (product || '').toLowerCase();
+  const trName = (name || '').toLowerCase();
+
+  if (isWalking) {
+    return {
+      badge: 'bg-slate-100 text-slate-600',
+      border: 'border-dashed border-slate-200',
+      dot: 'border-slate-300 bg-slate-100',
+      bgHex: '#f1f5f9',   // slate-100
+      textHex: '#475569', // slate-600
+    };
+  }
+
+  // ICE, IC, and EC long-distance line identifiers
+  if (
+    prod === 'ice' || 
+    prod === 'ic' || 
+    prod === 'ec' || 
+    trName.startsWith('ice') || 
+    trName.startsWith('ic') || 
+    trName.startsWith('ec')
+  ) {
+    return {
+      badge: 'bg-red-600 text-white',
+      border: 'border-solid border-red-600/40',
+      dot: 'border-red-600 bg-white shadow-sm',
+      bgHex: '#dc2626',   // red-600
+      textHex: '#ffffff',
+    };
+  }
+
+  // FlixTrain / Flix lines explicitly
+  if (trName.startsWith('flx')) {
+    return {
+      badge: 'bg-lime-500 text-slate-900 font-extrabold',
+      border: 'border-solid border-lime-500/40',
+      dot: 'border-lime-500 bg-white shadow-sm',
+      bgHex: '#84cc16',   // lime-500
+      textHex: '#0f172a', // slate-900
+    };
+  }
+
+  // CHANGED: Standard Bus / SEV (Verkehrspurpur) isolated from green Flix items
+  if (
+    prod === 'bus' || 
+    prod === 'sev' || 
+    trName.startsWith('bus') || 
+    trName.startsWith('sev')
+  ) {
+    return {
+      badge: 'bg-purple-600 text-white',
+      border: 'border-solid border-purple-600/40',
+      dot: 'border-purple-600 bg-white shadow-sm',
+      bgHex: '#9333ea',   // purple-600
+      textHex: '#ffffff',
+    };
+  }
+  
+  // Regional networks (RE, RB, MEX, etc.)
+  if (
+    prod === 'regionalexpress' || 
+    prod === 're' || 
+    prod === 'nationalexpress' ||  
+    prod === 'regional' || 
+    prod === 'rb' || 
+    trName.startsWith('rb') || 
+    trName.startsWith('mex') || 
+    trName.startsWith('re')  
+  ) {
+    return {
+      badge: 'bg-blue-600 text-white',
+      border: 'border-solid border-blue-600/40',
+      dot: 'border-blue-600 bg-white shadow-sm',
+      bgHex: '#2563eb',   // blue-600
+      textHex: '#ffffff',
+    };
+  }
+  
+  if (prod === 'suburban' || prod === 's' || trName.startsWith('s ')) {
+    return {
+      badge: 'bg-emerald-600 text-white',
+      border: 'border-solid border-emerald-600/40',
+      dot: 'border-emerald-600 bg-white shadow-sm',
+      bgHex: '#059669',   // emerald-600
+      textHex: '#ffffff',
+    };
+  }
+
+  return {
+    badge: 'bg-slate-700 text-white',
+    border: 'border-solid border-slate-300',
+    dot: 'border-slate-500 bg-white shadow-sm',
+    bgHex: '#334155',     // slate-700
+    textHex: '#ffffff',
+  };
+}
+
+// ============================================================================
 // ATOMIC COMPONENTS
 // ============================================================================
-
 export function Spinner({ className = 'h-5 w-5 text-primary' }: { className?: string }) {
   return (
     <svg className={`ttt-spinner ${className}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">

@@ -18,7 +18,6 @@ interface Props {
   index: number;
 }
 
-// 1. HELPER: Aggregates the worst-case passenger crowding rank across all transit legs
 function getJourneyLoadFactor(legs: any[]): string | null {
   const nonWalking = legs.filter(l => !l.walking);
   if (nonWalking.length === 0) return null;
@@ -46,43 +45,18 @@ function getJourneyLoadFactor(legs: any[]): string | null {
   return maxFactor;
 }
 
-// 2. CONFIGURATION: Maps API loadFactor keys to dog-centric design tokens
 function getLoadFactorConfig(factor: string | null) {
   if (!factor) return null;
 
   const mapping: Record<string, { label: string; desc: string; styles: string }> = {
-    'low': {
-      label: 'Quiet Train',
-      desc: 'Great for dogs',
-      styles: 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
-    },
-    'low-to-medium': {
-      label: 'Moderate Load',
-      desc: 'Comfortable for dogs',
-      styles: 'bg-blue-50 text-blue-700 border-blue-200/60'
-    },
-    'medium': {
-      label: 'Medium Load',
-      desc: 'Standard spacing',
-      styles: 'bg-slate-50 text-slate-700 border-slate-200/60'
-    },
-    'high': {
-      label: 'Crowded Train',
-      desc: 'Stressful for dogs',
-      styles: 'bg-orange-50 text-orange-700 border-orange-200/60'
-    },
-    'very-high': {
-      label: 'Very Crowded',
-      desc: 'Avoid with dogs if possible',
-      styles: 'bg-red-50 text-red-700 border-red-200/60 animate-pulse'
-    }
+    'low': { label: 'Quiet Train', desc: 'Great for dogs', styles: 'bg-emerald-50 text-emerald-700 border-emerald-200/60' },
+    'low-to-medium': { label: 'Moderate Load', desc: 'Comfortable for dogs', styles: 'bg-blue-50 text-blue-700 border-blue-200/60' },
+    'medium': { label: 'Medium Load', desc: 'Standard spacing', styles: 'bg-slate-50 text-slate-700 border-slate-200/60' },
+    'high': { label: 'Crowded Train', desc: 'Stressful for dogs', styles: 'bg-orange-50 text-orange-700 border-orange-200/60' },
+    'very-high': { label: 'Very Crowded', desc: 'Avoid with dogs if possible', styles: 'bg-red-50 text-red-700 border-red-200/60 animate-pulse' }
   };
 
-  return mapping[factor] || {
-    label: 'Unknown Load',
-    desc: 'Check boards',
-    styles: 'bg-slate-50 text-slate-500 border-slate-200'
-  };
+  return mapping[factor] || { label: 'Unknown Load', desc: 'Check boards', styles: 'bg-slate-50 text-slate-500 border-slate-200' };
 }
 
 export default function JourneyCard({ journey, dogMode, index }: Props) {
@@ -97,7 +71,6 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
   
   const price = calculateJourneyPrice(journey, dogMode);
 
-  // Extract aggregated passenger load parameters
   const worstLoadFactor = getJourneyLoadFactor(legs);
   const loadConfig = getLoadFactorConfig(worstLoadFactor);
 
@@ -116,10 +89,10 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
 
   return (
     <div className={TOKENS.layouts.card} style={{ animationDelay: `${index * 80}ms` }}>
-      <div className="p-4 sm:p-5">
+      <div className="p-4 sm:p-5 space-y-3.5">
+        
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            {/* Direct Timings Header Row */}
             <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
               <span className="text-xl sm:text-2xl font-bold text-slate-900 tabular-nums font-heading whitespace-nowrap">
                 {formatTime(firstLeg?.departure)}
@@ -130,16 +103,10 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
               </span>
             </div>
 
-            {/* Metabar Content */}
             <div className="flex items-center gap-2 mt-1.5 text-sm text-slate-500 flex-wrap">
               <Clock size={14} aria-hidden="true" />
               <span className="whitespace-nowrap">{duration}</span>
-              <span className="text-slate-300" aria-hidden="true">&middot;</span>
-              <span className="whitespace-nowrap">
-                {transfers === 0 ? 'Direct' : `${transfers} change${transfers > 1 ? 's' : ''}`}
-              </span>
               
-              {/* Premium Crowding Token Indicator Layout */}
               {loadConfig && (
                 <>
                   <span className="text-slate-300" aria-hidden="true">&middot;</span>
@@ -159,12 +126,8 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
                 </span>
               )}
             </div>
-
-            {/* Atomic Visual Progress Abstraction */}
-            <JourneyTimelineBar segments={barSegments} totalMinutes={totalMinutes} />
           </div>
 
-          {/* Fare Presentation Column */}
           <div className="text-right shrink-0">
             <div className="text-xl sm:text-2xl font-bold text-primary font-heading whitespace-nowrap">
               €{price.totalPrice.toFixed(2)}
@@ -177,11 +140,9 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
           </div>
         </div>
 
+        <JourneyTimelineBar segments={barSegments} totalMinutes={totalMinutes} />
+
         <JourneyTimeline legs={legs} dogMode={dogMode} />
-        
-        <div className="mt-3 pt-3 border-t border-slate-100">
-          <span className="text-xs text-slate-400 truncate block">{price.breakdown}</span>
-        </div>
       </div>
     </div>
   );

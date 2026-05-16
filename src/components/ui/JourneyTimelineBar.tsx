@@ -1,5 +1,6 @@
-import { getLineStyle, getLegBadgeLabel, getLegDescription } from '../../lib/helpers';
+import { getLegBadgeLabel, getLegDescription } from '../../lib/helpers';
 import type { Leg } from '../../lib/types';
+import { getLegColorTheme } from './Primitives';
 
 interface BarSegment {
   leg: Leg;
@@ -14,13 +15,13 @@ interface JourneyTimelineBarProps {
 export default function JourneyTimelineBar({ segments, totalMinutes }: JourneyTimelineBarProps) {
   return (
     <div
-      // Added `gap-x-0.5` (2px space between blocks) and changed background to slate-100 to make dividers crisp
-      className="flex w-full min-h-[1.625rem] mt-2 rounded-md overflow-hidden gap-x-0.5 bg-slate-100"
+      className="flex w-full min-h-[1.625rem] mt-2 rounded-md overflow-hidden gap-x-0.5 bg-slate-100 select-none"
       role="img"
       aria-label={`Trip segments by time: ${segments.map((s) => `${getLegBadgeLabel(s.leg)} ${s.minutes}min`).join(', ')}`}
     >
       {segments.map(({ leg, minutes }, i) => {
-        const style = getLineStyle(leg);
+        const colors = getLegColorTheme(leg.line?.product, leg.line?.name, leg.walking);
+        
         return (
           <div
             key={`${leg.tripId ?? 'seg'}-${i}`}
@@ -30,8 +31,8 @@ export default function JourneyTimelineBar({ segments, totalMinutes }: JourneyTi
               flexGrow: minutes,
               flexShrink: 1,
               flexBasis: 0,
-              backgroundColor: style.bg,
-              color: style.text,
+              backgroundColor: colors.bgHex,
+              color: colors.textHex,
             }}
           >
             <span className="truncate max-w-full">{getLegBadgeLabel(leg)}</span>
