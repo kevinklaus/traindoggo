@@ -141,26 +141,20 @@ export async function searchStations(query: string): Promise<Station[]> {
   if (queries.length === 0) return [];
 
   const merged = new Map<string, Station>();
+  
   for (const q of queries) {
-    try {
-      const batch = await fetchStationsForQuery(q);
-      for (const s of batch) {
-        const existing = merged.get(s.id);
-        merged.set(s.id, existing ? pickBetterStationName(existing, s) : s);
-      }
-      if (merged.size >= 8) break;
-    } catch (error) {
-      console.warn('Search iteration bypassed:', error);
+    // REMOVED: Internal try/catch block that was hiding the 503 error from the UI component
+    const batch = await fetchStationsForQuery(q);
+    for (const s of batch) {
+      const existing = merged.get(s.id);
+      merged.set(s.id, existing ? pickBetterStationName(existing, s) : s);
     }
+    if (merged.size >= 8) break;
   }
 
   let list = rankStations([...merged.values()]);
   if (list.length === 0) {
-    try {
-      list = rankStations(await fetchStationsViaLocationsQuery(query.trim()));
-    } catch {
-      list = [];
-    }
+    list = rankStations(await fetchStationsViaLocationsQuery(query.trim()));
   }
   return list.slice(0, 8);
 }

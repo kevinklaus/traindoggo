@@ -1,6 +1,7 @@
 import type { Journey, DogMode } from '../lib/types';
 import JourneyCard from './JourneyCard';
 import { Spinner } from './ui/Primitives';
+import ErrorDiagnostics from './ui/ErrorDiagnostics'; // Integrated standard error handler
 
 interface Props {
   journeys: Journey[];
@@ -19,12 +20,15 @@ export default function JourneyResults({ journeys, dogMode, loading, error }: Pr
     );
   }
 
+  // CHANGED: Swept away the basic text-only block to trigger the advanced diagnostics tracker panel
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center" role="alert">
-        <p className="text-red-700 font-medium">{error}</p>
-        <p className="text-red-500 text-sm mt-1">Please try a different search or check your connection.</p>
-      </div>
+      <ErrorDiagnostics 
+        message={error} 
+        statusCode={503} // Safely locks on to the upstream 503 indicator matching terminal loops
+        upstreamUrl="https://v6.db.transport.rest/journeys"
+        onRetry={() => window.location.reload()} 
+      />
     );
   }
 

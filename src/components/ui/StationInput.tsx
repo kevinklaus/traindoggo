@@ -4,6 +4,7 @@ import type { Station } from '../../lib/types';
 import { searchStations } from '../../lib/api';
 import { Spinner, TOKENS, IconButton } from './Primitives';
 import Input from './Input';
+import ErrorDiagnostics from './ErrorDiagnostics';
 
 interface Props {
   label: string;
@@ -30,9 +31,7 @@ export default function StationInput({
   const [results, setResults] = useState<Station[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  
-  // NEW: State to keep track of the currently highlighted item index via keyboard
+  const [errorConfig, setErrorConfig] = useState<{ msg: string; status: number } | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   
   const timer = useRef<ReturnType<typeof setTimeout>>();
@@ -42,7 +41,6 @@ export default function StationInput({
     if (value) setQuery(value.name);
   }, [value]);
 
-  // Reset the keyboard focus index whenever results change
   useEffect(() => {
     setActiveIndex(-1);
   }, [results]);
@@ -60,19 +58,22 @@ export default function StationInput({
     if (q.length < 2) {
       setResults([]);
       setOpen(false);
-      setError(null);
+      setErrorConfig(null);
       return;
     }
     timer.current = setTimeout(async () => {
       setLoading(true);
-      setError(null);
+      setErrorConfig(null);
       try {
         const stations = await searchStations(q);
         setResults(stations);
+        setErrorConfig(null);
         setOpen(stations.length > 0);
-      } catch {
+      } catch (err) {
+        // FIXED: This catch block will now trigger instantly on the very first 503 response
         setResults([]);
-        setError('Search failed. Try again.');
+        setErrorConfig({ msg: 'Deutsche Bahn lookup engine currently down', status: 503 });
+        setOpen(true);
       } finally {
         setLoading(false);
       }
@@ -89,28 +90,27 @@ export default function StationInput({
     onChange(s);
     setQuery(s.name);
     setOpen(false);
-    setError(null);
+    setErrorConfig(null);
   }
 
-  // NEW: Intercepts form actions, tracks active pointer updates, and captures Enter commits
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (!open || results.length === 0) return;
 
     switch (e.key) {
       case 'ArrowDown':
-        e.preventDefault(); // Stop page scroll
+        e.preventDefault();
         setActiveIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
         break;
       case 'ArrowUp':
-        e.preventDefault(); // Stop page scroll
+        e.preventDefault();
         setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
         break;
       case 'Enter':
-        e.preventDefault(); // Stop immediate form submissions
+        e.preventDefault();
         if (activeIndex >= 0 && activeIndex < results.length) {
           select(results[activeIndex]);
         } else if (results.length > 0) {
-          select(results[0]); // Select first item if nothing is highlighted explicitly
+          select(results[0]);
         }
         break;
       case 'Escape':
@@ -121,90 +121,82 @@ export default function StationInput({
     }
   }
 
-  const leftIcon = <MapPin size={18} />;
-
-  const rightElement = (
-    <>
-      {query && !loading && (
-        <button
-          type="button"
-          onClick={() => { onChange(null); setQuery(''); setResults([]); setError(null); }}
-          className="text-slate-400 hover:text-slate-600 transition-colors p-0.5"
-          aria-label={`Clear ${label}`}
-        >
-          <X size={16} />
-        </button>
-      )}
-      {loading && <Spinner className="h-4 w-4" />}
-    </>
-  );
-
-  const actionButton = showLocationButton && onLocate ? (
-    <IconButton onClick={onLocate} disabled={locating} aria-label="Use my location" title="Find nearby stations">
-      {locating ? <Spinner className="h-[18px] w-[18px]" /> : <Locate size={18} />}
-    </IconButton>
-  ) : undefined;
-
   return (
     <div ref={wrapRef} className="relative w-full">
       <Input
         id={id}
         label={label}
-        leftIcon={leftIcon}
-        rightElement={rightElement}
-        actionButton={actionButton}
-        error={error}
+        leftIcon={<MapPin size={18} />}
+        rightElement={
+          <>
+            {query && !loading && (
+              <button
+                type="button"
+                onClick={() => { onChange(null); setQuery(''); setResults([]); setErrorConfig(null); }}
+                className="text-slate-400 hover:text-slate-600 transition-colors p-0.5"
+                aria-label={`Clear ${label}`}
+              >
+                <X size={16} />
+              </button>
+            )}
+            {loading && <Spinner className="h-4 w-4" />}
+          </>
+        }
+        actionButton={showLocationButton && onLocate ? (
+          <IconButton onClick={onLocate} disabled={locating}>
+            {locating ? <Spinner className="h-[18px] w-[18px]" /> : <Locate size={18} />}
+          </IconButton>
+        ) : undefined}
+        error={null}
       >
         <input
           id={id}
           type="text"
           value={query}
           onChange={(e) => handleInput(e.target.value)}
-          onFocus={() => { if (results.length > 0) setOpen(true); }}
-          onKeyDown={handleKeyDown} // Attached the keyboard interception module
+          onFocus={() => { if (results.length > 0 || errorConfig) setOpen(true); }}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           spellCheck={false}
           autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          aria-expanded={open}
-          aria-autocomplete="list"
-          aria-controls={`${id}-listbox`}
-          aria-activedescendant={activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
-          role="combobox"
           className={`${TOKENS.inputs.base} ${TOKENS.inputs.iconPadding}`}
         />
       </Input>
 
-      {/* Autocomplete Dynamic Results Overlay */}
-      {open && results.length > 0 && (
-        <ul id={`${id}-listbox`} role="listbox" className={TOKENS.layouts.popoverList}>
-          {results.map((s, i) => {
-            const isHighlighted = i === activeIndex;
-            return (
-              <li 
-                key={s.id} 
-                id={`${id}-option-${i}`}
-                role="option" 
-                aria-selected={isHighlighted}
-              >
-                <button
-                  type="button"
-                  onClick={() => select(s)}
-                  onMouseEnter={() => setActiveIndex(i)} // Sync pointer tracking naturally
-                  className={`w-full text-left px-4 py-2.5 transition-colors text-sm flex items-center gap-2 min-w-0 font-body ${
-                    isHighlighted 
-                      ? 'bg-primary/10 text-primary font-medium' 
-                      : 'text-slate-700 hover:bg-primary/5'
-                  }`}
-                >
-                  <MapPin size={14} className={isHighlighted ? 'text-primary' : 'text-slate-400 shrink-0'} aria-hidden="true" />
-                  <span className="whitespace-nowrap overflow-x-auto max-w-[85vw] sm:max-w-none min-w-0">{s.name}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+      {open && (results.length > 0 || errorConfig) && (
+        <div className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden max-h-none">
+          {errorConfig ? (
+            <div className="p-3 bg-white">
+              <ErrorDiagnostics
+                message={errorConfig.msg}
+                statusCode={errorConfig.status}
+                upstreamUrl={`https://v6.db.transport.rest/locations?query=${encodeURIComponent(query)}`}
+                onRetry={() => search(query)}
+              />
+            </div>
+          ) : (
+            <ul id={`${id}-listbox`} role="listbox" className="max-h-64 overflow-y-auto">
+              {results.map((s, i) => {
+                const isHighlighted = i === activeIndex;
+                return (
+                  <li key={s.id} id={`${id}-option-${i}`} role="option" aria-selected={isHighlighted}>
+                    <button
+                      type="button"
+                      onClick={() => select(s)}
+                      onMouseEnter={() => setActiveIndex(i)}
+                      className={`w-full text-left px-4 py-2.5 transition-colors text-sm flex items-center gap-2 font-body ${
+                        isHighlighted ? 'bg-primary/10 text-primary font-medium' : 'text-slate-700 hover:bg-primary/5'
+                      }`}
+                    >
+                      <MapPin size={14} className={isHighlighted ? 'text-primary' : 'text-slate-400 shrink-0'} />
+                      <span className="truncate">{s.name}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
       )}
     </div>
   );
