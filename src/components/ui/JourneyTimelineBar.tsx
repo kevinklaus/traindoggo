@@ -1,6 +1,7 @@
-import { getLegBadgeLabel, getLegDescription } from '../../lib/helpers';
+import { getLegBadgeLabel, getLegDescription, isWalking } from '../../lib/helpers';
 import type { Leg } from '../../lib/types';
 import { getLegColorTheme } from './Primitives';
+import { Footprints } from 'lucide-react';
 
 interface BarSegment {
   leg: Leg;
@@ -21,21 +22,26 @@ export default function JourneyTimelineBar({ segments, totalMinutes }: JourneyTi
     >
       {segments.map(({ leg, minutes }, i) => {
         const colors = getLegColorTheme(leg.line?.product, leg.line?.name, leg.walking);
+        const walking = isWalking(leg);
         
         return (
           <div
             key={`${leg.tripId ?? 'seg'}-${i}`}
             title={`${getLegDescription(leg)} · ${minutes} min`}
-            className="flex min-w-0 items-center justify-center px-0.5 py-0.5 text-[10px] sm:text-xs font-bold leading-tight text-center overflow-hidden"
+            // Dynamische Mindestbreite: Schmaler für Fußwege, breiter für Zugbezeichnungen
+            className={`flex items-center justify-center px-1.5 py-0.5 text-[10px] sm:text-xs font-bold leading-tight text-center overflow-hidden shrink-0 ${walking ? 'min-w-[1.5rem]' : 'min-w-[2.5rem]'}`}
             style={{
               flexGrow: minutes,
-              flexShrink: 1,
               flexBasis: 0,
               backgroundColor: colors.bgHex,
               color: colors.textHex,
             }}
           >
-            <span className="truncate max-w-full">{getLegBadgeLabel(leg)}</span>
+            {walking ? (
+              <Footprints size={14} strokeWidth={2.5} className="animate-fade-in" />
+            ) : (
+              <span className="truncate">{getLegBadgeLabel(leg)}</span>
+            )}
           </div>
         );
       })}

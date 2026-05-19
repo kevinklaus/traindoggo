@@ -2,13 +2,6 @@ import type { Journey, Leg, Station } from './types';
 
 export const MOCK_STATIONS: Station[] = [
   {
-    id: '8000261',
-    type: 'station',
-    name: 'München Hbf',
-    location: { type: 'location', latitude: 48.1402, longitude: 11.5589 },
-    products: { national: true, suburban: true },
-  },
-  {
     id: '8011160',
     type: 'station',
     name: 'Berlin Hbf',
@@ -16,18 +9,25 @@ export const MOCK_STATIONS: Station[] = [
     products: { national: true, suburban: true },
   },
   {
-    id: '8000143',
+    id: '8000250',
     type: 'station',
-    name: 'Augsburg Hbf',
-    location: { type: 'location', latitude: 48.3698, longitude: 10.8989 },
+    name: 'Wiesbaden Hbf',
+    location: { type: 'location', latitude: 50.0708, longitude: 8.2435 },
     products: { national: true, suburban: true },
   },
   {
-    id: '8000264',
+    id: '8070003',
     type: 'station',
-    name: 'Nürnberg Hbf',
-    location: { type: 'location', latitude: 49.4452, longitude: 11.0851 },
-    products: { national: true, suburban: true },
+    name: 'Frankfurt(M) Flughafen Fernbf',
+    location: { type: 'location', latitude: 50.0532, longitude: 8.5705 },
+    products: { national: true, suburban: false },
+  },
+  {
+    id: '8070004',
+    type: 'station',
+    name: 'Frankfurt(M) Flughafen Regionalbf',
+    location: { type: 'location', latitude: 50.0514, longitude: 8.5721 },
+    products: { national: false, suburban: true },
   },
   {
     id: '8000105',
@@ -35,69 +35,18 @@ export const MOCK_STATIONS: Station[] = [
     name: 'Frankfurt (Main) Hbf',
     location: { type: 'location', latitude: 50.1072, longitude: 8.6638 },
     products: { national: true, suburban: true },
-  },
-  {
-    id: '8000089',
-    type: 'station',
-    name: 'Köln Hbf',
-    location: { type: 'location', latitude: 50.9426, longitude: 6.9603 },
-    products: { national: true, suburban: true },
-  },
-  {
-    id: '8000191',
-    type: 'station',
-    name: 'Düsseldorf Hbf',
-    location: { type: 'location', latitude: 51.3214, longitude: 7.1101 },
-    products: { national: true, suburban: true },
-  },
-  {
-    id: '8002553',
-    type: 'station',
-    name: 'Hamburg Hbf',
-    location: { type: 'location', latitude: 53.5527, longitude: 10.0066 },
-    products: { national: true, suburban: true },
-  },
-  {
-    id: '8000207',
-    type: 'station',
-    name: 'Hannover Hbf',
-    location: { type: 'location', latitude: 52.3765, longitude: 9.7408 },
-    products: { national: true, suburban: true },
-  },
-  {
-    id: '8000290',
-    type: 'station',
-    name: 'Stuttgart Hbf',
-    location: { type: 'location', latitude: 48.7844, longitude: 9.1813 },
-    products: { national: true, suburban: true },
-  },
-  {
-    id: '8000260',
-    type: 'station',
-    name: 'Munich East Station',
-    location: { type: 'location', latitude: 48.1239, longitude: 11.5951 },
-    products: { national: true, suburban: true },
-  },
-  {
-    id: '8000085',
-    type: 'station',
-    name: 'Dresden Hbf',
-    location: { type: 'location', latitude: 51.0399, longitude: 13.6455 },
-    products: { national: true, suburban: true },
-  },
-  {
-    id: '8000159',
-    type: 'station',
-    name: 'Ingolstadt Hbf',
-    location: { type: 'location', latitude: 48.7633, longitude: 11.4233 },
-    products: { national: true, suburban: true },
-  },
+  }
 ];
 
 const stationMap = new Map<string, Station>(MOCK_STATIONS.map((station) => [station.id, station]));
 
 function timestamp(date: string, time: string): string {
   return `${date}T${time}:00`;
+}
+
+// Hilfsfunktion für spontane Stationen in Mock-Routen, ohne sie in die globale Suche zu packen
+function inlineStation(id: string, name: string): Station {
+  return { id, type: 'station', name, location: { type: 'location', latitude: 0, longitude: 0 }, products: {} } as Station;
 }
 
 function buildLeg(overrides: Partial<Leg>, date: string, time: string): Leg {
@@ -115,8 +64,8 @@ function buildLeg(overrides: Partial<Leg>, date: string, time: string): Leg {
     arrivalDelay: overrides.arrivalDelay,
     arrivalPlatform: overrides.arrivalPlatform,
     plannedArrivalPlatform: overrides.plannedArrivalPlatform,
-    origin: overrides.origin ?? stationMap.get('8000261')!, // fallback
-    destination: overrides.destination ?? stationMap.get('8011160')!,
+    origin: overrides.origin ?? stationMap.get('8011160')!,
+    destination: overrides.destination ?? stationMap.get('8000250')!,
     stopovers: overrides.stopovers,
     distance: overrides.distance,
     walking: overrides.walking,
@@ -147,7 +96,7 @@ export function findMockStations(query: string): Station[] {
 }
 
 export function findMockStationsByCoords(): Station[] {
-  return [stationMap.get('8000261')!, stationMap.get('8000143')!];
+  return [stationMap.get('8011160')!, stationMap.get('8000250')!];
 }
 
 export function findMockJourneys(fromId: string, toId: string, departure: string): Journey[] {
@@ -157,355 +106,259 @@ export function findMockJourneys(fromId: string, toId: string, departure: string
 
   if (!from || !to) return [];
 
-  // Munich to Berlin - Direct, 1 transfer, and 3+ transfers with mixed train types
-  if (fromId === '8000261' && toId === '8011160') {
+  if (fromId === '8011160' && toId === '8000250') {
     return [
-      // Direct ICE (fastest)
+      // SCENARIO 1: Walk Edge-Case (Walk kürzer als Gesamtumstieg)
       buildMockJourney([
         buildLeg(
           {
-            tripId: 'ICE 574',
-            direction: 'Berlin Hbf',
-            line: { type: 'line', name: 'ICE 574', product: 'ice', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000261'),
-            destination: stationMap.get('8011160'),
-            departurePlatform: '11',
-            arrivalPlatform: '12',
-            arrival: `${date}T13:15:00`,
+            tripId: 'ICE 1003',
+            direction: 'München Hbf',
+            line: { type: 'line', name: 'ICE 1003', product: 'ice', operator: { name: 'Deutsche Bahn' } },
+            origin: stationMap.get('8011160'),
+            destination: stationMap.get('8070003'),
+            departurePlatform: '1',
+            arrivalPlatform: 'Fern 6',
+            arrival: `${date}T09:08:00`,
+          },
+          date,
+          '06:24'
+        ),
+        buildLeg(
+          {
+            walking: true,
+            origin: stationMap.get('8070003'),
+            destination: stationMap.get('8070004'),
+            arrival: `${date}T09:23:00`,
+          },
+          date,
+          '09:08'
+        ),
+        buildLeg(
+          {
+            tripId: 'S 8',
+            direction: 'Wiesbaden Hbf',
+            line: { type: 'line', name: 'S 8', product: 'suburban', operator: { name: 'Deutsche Bahn' } },
+            origin: stationMap.get('8070004'),
+            destination: stationMap.get('8000250'),
+            departurePlatform: 'Regio 3',
+            arrivalPlatform: '2',
+            arrival: `${date}T10:13:00`,
+          },
+          date,
+          '09:30'
+        ),
+      ]),
+
+      // SCENARIO 2: Die bunte "Regenbogen"-Route für UI/Color Tests
+      buildMockJourney([
+        buildLeg(
+          {
+            tripId: 'FLX 35',
+            direction: 'Stuttgart Hbf',
+            line: { type: 'line', name: 'FLX 35', product: 'nationalExpress', operator: { name: 'FlixTrain' } },
+            origin: stationMap.get('8011160'),
+            destination: inlineStation('8000096', 'Stuttgart Hbf'),
+            departurePlatform: '3',
+            arrivalPlatform: '5',
+            arrival: `${date}T12:45:00`,
+          },
+          date,
+          '07:15'
+        ),
+        buildLeg(
+          {
+            tripId: 'IC 2045',
+            direction: 'Tübingen Hbf',
+            line: { type: 'line', name: 'IC 2045', product: 'ic', operator: { name: 'DB Fernverkehr' } },
+            origin: inlineStation('8000096', 'Stuttgart Hbf'),
+            destination: inlineStation('8000044', 'Heilbronn Hbf'),
+            departurePlatform: '6',
+            arrivalPlatform: '2',
+            arrival: `${date}T13:40:00`,
+          },
+          date,
+          '13:05'
+        ),
+        buildLeg(
+          {
+            tripId: 'MEX 12',
+            direction: 'Mannheim Hbf',
+            line: { type: 'line', name: 'MEX 12', product: 'regional', operator: { name: 'SWEG' } },
+            origin: inlineStation('8000044', 'Heilbronn Hbf'),
+            destination: inlineStation('8000244', 'Mannheim Hbf'),
+            departurePlatform: '3',
+            arrivalPlatform: '9',
+            arrival: `${date}T14:35:00`,
+          },
+          date,
+          '13:55'
+        ),
+        buildLeg(
+          {
+            tripId: 'RE 14',
+            direction: 'Frankfurt (Main) Hbf',
+            line: { type: 'line', name: 'RE 14', product: 'regionalExpress', operator: { name: 'DB Regio' } },
+            origin: inlineStation('8000244', 'Mannheim Hbf'),
+            destination: stationMap.get('8000105'),
+            departurePlatform: '10',
+            arrivalPlatform: '18',
+            arrival: `${date}T15:30:00`,
+          },
+          date,
+          '14:45'
+        ),
+        buildLeg(
+          {
+            tripId: 'RB 10',
+            direction: 'Wiesbaden Hbf',
+            line: { type: 'line', name: 'RB 10', product: 'regional', operator: { name: 'VIAS' } },
+            origin: stationMap.get('8000105'),
+            destination: stationMap.get('8000250'),
+            departurePlatform: '22',
+            arrivalPlatform: '4',
+            arrival: `${date}T16:20:00`,
+          },
+          date,
+          '15:45'
+        )
+      ]),
+
+      // SCENARIO 3: Schienenersatzverkehr (SEV) / Bus Edge-Case
+      buildMockJourney([
+        buildLeg(
+          {
+            tripId: 'ICE 591',
+            direction: 'Frankfurt (Main) Hbf',
+            line: { type: 'line', name: 'ICE 591', product: 'ice', operator: { name: 'Deutsche Bahn' } },
+            origin: stationMap.get('8011160'),
+            destination: stationMap.get('8000105'),
+            departurePlatform: '3',
+            arrivalPlatform: '9',
+            arrival: `${date}T11:45:00`,
+          },
+          date,
+          '07:30'
+        ),
+        buildLeg(
+          {
+            tripId: 'SEV 12',
+            direction: 'Wiesbaden Hbf',
+            line: { type: 'line', name: 'Bus SEV', product: 'bus', operator: { name: 'SEV' } },
+            origin: stationMap.get('8000105'),
+            destination: stationMap.get('8000250'),
+            departurePlatform: 'Vorplatz',
+            arrivalPlatform: 'Busbahnhof',
+            arrival: `${date}T13:10:00`,
+          },
+          date,
+          '11:55'
+        ),
+      ]),
+
+      // SCENARIO 4: Normale Direktverbindung (Baseline)
+      buildMockJourney([
+        buildLeg(
+          {
+            tripId: 'ICE 1095',
+            direction: 'Wiesbaden Hbf',
+            line: { type: 'line', name: 'ICE 1095', product: 'ice', operator: { name: 'Deutsche Bahn' } },
+            origin: stationMap.get('8011160'),
+            destination: stationMap.get('8000250'),
+            departurePlatform: '13',
+            arrivalPlatform: '4',
+            arrival: `${date}T12:45:00`,
           },
           date,
           '08:30'
         ),
       ]),
-      // One transfer: ICE → ICE via Nürnberg
+      
+      // SCENARIO 5: Walk zu Beginn (z.B. vom Hotel zum Bahnhof)
       buildMockJourney([
         buildLeg(
           {
-            tripId: 'ICE 612',
-            direction: 'Nürnberg Hbf',
-            line: { type: 'line', name: 'ICE 612', product: 'ice', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000261'),
-            destination: stationMap.get('8000264'),
-            departurePlatform: '11',
-            arrivalPlatform: '14',
-            arrival: `${date}T10:05:00`,
+            walking: true,
+            origin: stationMap.get('8011160'),
+            destination: inlineStation('8089021', 'Berlin Friedrichstraße'),
+            arrival: `${date}T06:40:00`,
           },
           date,
-          '07:20'
+          '06:25' // 15 Min Walk
         ),
         buildLeg(
           {
-            tripId: 'ICE 178',
-            direction: 'Berlin Hbf',
-            line: { type: 'line', name: 'ICE 178', product: 'ice', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000264'),
-            destination: stationMap.get('8011160'),
-            departurePlatform: '14',
-            arrivalPlatform: '12',
-            arrival: `${date}T14:30:00`,
+            tripId: 'ICE 104',
+            direction: 'Basel SBB',
+            line: { type: 'line', name: 'ICE 104', product: 'ice', operator: { name: 'Deutsche Bahn' } },
+            origin: inlineStation('8089021', 'Berlin Friedrichstraße'),
+            destination: stationMap.get('8000105'),
+            departurePlatform: '3',
+            arrivalPlatform: '7',
+            arrival: `${date}T10:50:00`,
           },
           date,
-          '10:15'
+          '06:50'
+        ),
+        buildLeg(
+          {
+            tripId: 'S 9',
+            direction: 'Wiesbaden Hbf',
+            line: { type: 'line', name: 'S 9', product: 'suburban', operator: { name: 'Deutsche Bahn' } },
+            origin: stationMap.get('8000105'),
+            destination: stationMap.get('8000250'),
+            departurePlatform: '103',
+            arrivalPlatform: '2',
+            arrival: `${date}T11:40:00`,
+          },
+          date,
+          '11:00'
         ),
       ]),
-      // Two transfers: IC → RE → ICE
+      
+      // SCENARIO 6: Walk am Ende (z.B. von einer Vorort-Station zur finalen Zieladresse)
       buildMockJourney([
         buildLeg(
           {
-            tripId: 'IC 289',
-            direction: 'Ingolstadt Hbf',
-            line: { type: 'line', name: 'IC 289', product: 'ic', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000261'),
-            destination: stationMap.get('8000159'),
-            departurePlatform: '7',
-            arrivalPlatform: '5',
-            arrival: `${date}T10:45:00`,
+            tripId: 'ICE 934',
+            direction: 'Frankfurt (Main) Hbf',
+            line: { type: 'line', name: 'ICE 934', product: 'ice', operator: { name: 'Deutsche Bahn' } },
+            origin: stationMap.get('8011160'),
+            destination: inlineStation('8000240', 'Mainz Hbf'),
+            departurePlatform: '13',
+            arrivalPlatform: '4',
+            arrival: `${date}T13:15:00`,
           },
           date,
           '09:00'
         ),
         buildLeg(
           {
-            tripId: 'RE 3847',
-            direction: 'Nürnberg Hbf',
-            line: { type: 'line', name: 'RE 3847', product: 'regionalExpress', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000159'),
-            destination: stationMap.get('8000264'),
-            departurePlatform: '3',
-            arrivalPlatform: '9',
-            arrival: `${date}T12:30:00`,
-          },
-          date,
-          '11:05'
-        ),
-        buildLeg(
-          {
-            tripId: 'ICE 505',
-            direction: 'Berlin Hbf',
-            line: { type: 'line', name: 'ICE 505', product: 'ice', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000264'),
-            destination: stationMap.get('8011160'),
-            departurePlatform: '4',
-            arrivalPlatform: '12',
-            arrival: `${date}T16:00:00`,
-          },
-          date,
-          '13:00'
-        ),
-      ]),
-      // Three transfers: FLX → RE → S → ICE
-      buildMockJourney([
-        buildLeg(
-          {
-            tripId: 'FLX 309',
-            direction: 'Augsburg Hbf',
-            line: { type: 'line', name: 'FLX 309', product: 'bus', operator: { name: 'FlixBus' } },
-            origin: stationMap.get('8000261'),
-            destination: stationMap.get('8000143'),
-            departurePlatform: 'Platform 4',
-            arrivalPlatform: 'Platform 1',
-            arrival: `${date}T09:50:00`,
-          },
-          date,
-          '08:00'
-        ),
-        buildLeg(
-          {
-            tripId: 'RE 5888',
-            direction: 'Ingolstadt Hbf',
-            line: { type: 'line', name: 'RE 5888', product: 'regionalExpress', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000143'),
-            destination: stationMap.get('8000159'),
-            departurePlatform: '2',
-            arrivalPlatform: '4',
-            arrival: `${date}T11:15:00`,
-          },
-          date,
-          '10:20'
-        ),
-        buildLeg(
-          {
-            tripId: 'S 4',
-            direction: 'Nürnberg Hbf',
-            line: { type: 'line', name: 'S 4', product: 'suburban', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000159'),
-            destination: stationMap.get('8000264'),
-            departurePlatform: '1',
-            arrivalPlatform: '8',
-            arrival: `${date}T12:50:00`,
-          },
-          date,
-          '11:45'
-        ),
-        buildLeg(
-          {
-            tripId: 'ICE 178',
-            direction: 'Berlin Hbf',
-            line: { type: 'line', name: 'ICE 178', product: 'ice', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000264'),
-            destination: stationMap.get('8011160'),
-            departurePlatform: '9',
-            arrivalPlatform: '12',
-            arrival: `${date}T17:30:00`,
-          },
-          date,
-          '13:15'
-        ),
-      ]),
-    ];
-  }
-
-  // Munich to Augsburg - Direct, 1 transfer, 2 transfers with FLX
-  if (fromId === '8000261' && toId === '8000143') {
-    return [
-      // Direct RE
-      buildMockJourney([
-        buildLeg(
-          {
-            tripId: 'RE 5874',
-            direction: 'Augsburg Hbf',
-            line: { type: 'line', name: 'RE 5874', product: 'regionalExpress', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000261'),
-            destination: stationMap.get('8000143'),
-            departurePlatform: '16',
-            arrivalPlatform: '4',
-            arrival: `${date}T09:05:00`,
-          },
-          date,
-          '08:20'
-        ),
-      ]),
-      // One transfer: S → RE
-      buildMockJourney([
-        buildLeg(
-          {
-            tripId: 'S 7',
-            direction: 'Ingolstadt Hbf',
-            line: { type: 'line', name: 'S 7', product: 'suburban', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000261'),
-            destination: stationMap.get('8000159'),
-            departurePlatform: '1',
-            arrivalPlatform: '2',
-            arrival: `${date}T09:30:00`,
-          },
-          date,
-          '08:50'
-        ),
-        buildLeg(
-          {
-            tripId: 'RE 5880',
-            direction: 'Augsburg Hbf',
-            line: { type: 'line', name: 'RE 5880', product: 'regionalExpress', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000159'),
-            destination: stationMap.get('8000143'),
-            departurePlatform: '3',
-            arrivalPlatform: '2',
-            arrival: `${date}T10:45:00`,
-          },
-          date,
-          '09:50'
-        ),
-      ]),
-      // Two transfers: FLX → S → RE
-      buildMockJourney([
-        buildLeg(
-          {
-            tripId: 'FLX 204',
-            direction: 'Ingolstadt Hbf',
-            line: { type: 'line', name: 'FLX 204', product: 'bus', operator: { name: 'FlixBus' } },
-            origin: stationMap.get('8000261'),
-            destination: stationMap.get('8000159'),
-            departurePlatform: 'Platform 2',
-            arrivalPlatform: 'Platform 1',
-            arrival: `${date}T10:00:00`,
-          },
-          date,
-          '08:45'
-        ),
-        buildLeg(
-          {
-            tripId: 'S 2',
-            direction: 'Augsburg Hbf',
-            line: { type: 'line', name: 'S 2', product: 'suburban', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000159'),
-            destination: stationMap.get('8000143'),
-            departurePlatform: '1',
-            arrivalPlatform: '1',
-            arrival: `${date}T11:25:00`,
-          },
-          date,
-          '10:30'
-        ),
-      ]),
-    ];
-  }
-
-  // Berlin to Hamburg - Direct, 1 transfer, 2 transfers
-  if (fromId === '8011160' && toId === '8002553') {
-    return [
-      // Direct ICE
-      buildMockJourney([
-        buildLeg(
-          {
-            tripId: 'ICE 501',
-            direction: 'Hamburg Hbf',
-            line: { type: 'line', name: 'ICE 501', product: 'ice', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8011160'),
-            destination: stationMap.get('8002553'),
-            departurePlatform: '12',
-            arrivalPlatform: '7',
-            arrival: `${date}T12:05:00`,
-          },
-          date,
-          '08:05'
-        ),
-      ]),
-      // One transfer: RE → ICE via Hannover
-      buildMockJourney([
-        buildLeg(
-          {
-            tripId: 'RE 3040',
-            direction: 'Hannover Hbf',
-            line: { type: 'line', name: 'RE 3040', product: 'regionalExpress', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8011160'),
-            destination: stationMap.get('8000207'),
+            tripId: 'RB 75',
+            direction: 'Wiesbaden Hbf',
+            line: { type: 'line', name: 'RB 75', product: 'regional', operator: { name: 'HLB' } },
+            origin: inlineStation('8000240', 'Mainz Hbf'),
+            destination: inlineStation('8004144', 'Wiesbaden Ost'),
             departurePlatform: '5',
-            arrivalPlatform: '6',
-            arrival: `${date}T10:30:00`,
+            arrivalPlatform: '3',
+            arrival: `${date}T13:35:00`,
           },
           date,
-          '08:45'
+          '13:25'
         ),
         buildLeg(
           {
-            tripId: 'ICE 206',
-            direction: 'Hamburg Hbf',
-            line: { type: 'line', name: 'ICE 206', product: 'ice', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000207'),
-            destination: stationMap.get('8002553'),
-            departurePlatform: '4',
-            arrivalPlatform: '7',
-            arrival: `${date}T12:50:00`,
+            walking: true,
+            origin: inlineStation('8004144', 'Wiesbaden Ost'),
+            destination: stationMap.get('8000250'),
+            arrival: `${date}T13:55:00`,
           },
           date,
-          '10:50'
-        ),
-      ]),
-      // Two transfers: S → RE → ICE
-      buildMockJourney([
-        buildLeg(
-          {
-            tripId: 'S 25',
-            direction: 'Hannover Hbf',
-            line: { type: 'line', name: 'S 25', product: 'suburban', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8011160'),
-            destination: stationMap.get('8000207'),
-            departurePlatform: '1',
-            arrivalPlatform: '10',
-            arrival: `${date}T11:05:00`,
-          },
-          date,
-          '10:15'
-        ),
-        buildLeg(
-          {
-            tripId: 'RE 3050',
-            direction: 'Hamburg Hbf',
-            line: { type: 'line', name: 'RE 3050', product: 'regionalExpress', operator: { name: 'Deutsche Bahn' } },
-            origin: stationMap.get('8000207'),
-            destination: stationMap.get('8002553'),
-            departurePlatform: '7',
-            arrivalPlatform: '4',
-            arrival: `${date}T13:20:00`,
-          },
-          date,
-          '11:30'
+          '13:35' // 20 Min Walk ans Ziel
         ),
       ]),
     ];
   }
 
-  // Generic fallback
-  const depTime = departure.split('T')[1].slice(0, 5);
-  const depHour = Number(depTime.slice(0, 2));
-  const arrivalHour = (depHour + 3) % 24;
-
-  return [
-    buildMockJourney([
-      buildLeg(
-        {
-          tripId: 'ICE 100',
-          direction: to.name,
-          line: { type: 'line', name: 'ICE 100', product: 'ice', operator: { name: 'Deutsche Bahn' } },
-          origin: from,
-          destination: to,
-          departurePlatform: '8',
-          arrivalPlatform: '2',
-          arrival: `${date}T${String(arrivalHour).padStart(2, '0')}:15:00`,
-        },
-        date,
-        depTime
-      ),
-    ]),
-  ];
+  return [];
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowDownUp, Dog } from 'lucide-react';
 import type { SearchParams, DogMode } from '../lib/types';
-import { searchStationsByCoords } from '../lib/api';
+// import { searchStationsByCoords } from '../lib/api'; // <-- 1. Auskommentiert
 import StationInput from './ui/StationInput';
 import DateTimeInput from './ui/DateTimeInput';
 import { Spinner, TOKENS, IconButton } from './ui/Primitives';
@@ -16,7 +16,7 @@ interface Props {
 export default function SearchForm({ params, onChange, onSearch, loading }: Props) {
   const [shaking, setShaking] = useState(false);
   const [validationMsg, setValidationMsg] = useState<string | null>(null);
-  const [locating, setLocating] = useState(false);
+  // const [locating, setLocating] = useState(false); // <-- 2. Auskommentiert
   const today = new Date().toISOString().split('T')[0];
 
   const dogModes: { key: DogMode; label: string; desc: string; icon: React.ReactNode }[] = [
@@ -25,6 +25,7 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
     { key: 'large', label: 'Large dog', desc: 'Dog ticket required', icon: <Dog size={16} /> },
   ];
 
+  /* 3. Funktion komplett auskommentiert
   async function handleLocate() {
     if (!navigator.geolocation) return;
     setLocating(true);
@@ -33,12 +34,13 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
         try {
           const stations = await searchStationsByCoords(pos.coords.latitude, pos.coords.longitude);
           if (stations.length > 0) onChange({ ...params, from: stations[0] });
-        } catch { /* fail silently */ } finally { setLocating(false); }
+        } catch { } finally { setLocating(false); }
       },
       () => setLocating(false),
       { timeout: 8000 }
     );
   }
+  */
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -66,9 +68,9 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
           value={params.from}
           onChange={(s) => onChange({ ...params, from: s })}
           placeholder="z. B. München Hbf"
-          showLocationButton
-          onLocate={handleLocate}
-          locating={locating}
+          // showLocationButton       // <-- 4. Auskommentiert
+          // onLocate={handleLocate}  // <-- 4. Auskommentiert
+          // locating={locating}      // <-- 4. Auskommentiert
         />
 
         <div className="flex gap-1.5 items-start">

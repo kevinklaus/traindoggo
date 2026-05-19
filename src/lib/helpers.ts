@@ -72,8 +72,57 @@ export function compactLineName(leg: Leg): string {
 /** Short label for pills / bars (no "to", no direction). */
 export function getLegBadgeLabel(leg: Leg): string {
   if (leg.walking) return 'Walk';
-  const n = compactLineName(leg);
-  return n || '—';
+  
+  const rawName = leg.line?.name || leg.line?.product || 'Train';
+
+  // 1. Entfernt "(Zug-Nr. 12345)" etc.
+  let cleanName = rawName.replace(/\s*\(\s*zug-nr\.?\s*\d+\s*\)/i, '').trim();
+
+  // 2. Entfernt "DB " am Anfang (z.B. "DB S8" -> "S8")
+  cleanName = cleanName.replace(/^DB\s+/i, '');
+
+  // 3. Filtert doppelte Präfixe wie "S S7" -> "S7"
+  cleanName = cleanName.replace(/^([A-Za-z]+)\s+\1/i, '$1');
+
+  // 4. Ein Leerzeichen zwischen Buchstaben und Zahlen erzwingen (z.B. "S8" -> "S 8")
+  cleanName = cleanName.replace(/^([a-zA-Z]+)(\d+)/, '$1 $2');
+
+  return cleanName;
+}
+
+// Baut Direktlinks für bahnhof.de und fängt bekannte DB-Sonderfälle wie Berlin Hbf ab
+export function getStationUrl(stationName: string): string {
+  let slug = stationName;
+
+  // 1. Typische DB-Abkürzungen sofort ausschreiben
+  slug = slug.replace(/Fernbf\.?/ig, ' Fernbahnhof ');
+  slug = slug.replace(/Regionalbf\.?/ig, ' Regionalbahnhof ');
+
+  // 2. Spezifische ÖPNV-Zusätze wie (T), (S), (S-Bahn) komplett entfernen
+  slug = slug.replace(/\s*\(\s*(t|s|s-bahn)\s*\)/ig, '').trim();
+  
+  // 3. Geografische Zusätze wie (Main) oder (Neckar) behalten, aber Klammern entfernen
+  slug = slug.replace(/[()]/g, ' ').trim();
+  
+  // 4. Kleinschreibung und Umlaute anpassen
+  slug = slug.toLowerCase();
+  slug = slug.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
+  
+  // 5. Leerzeichen und Sonderzeichen zu sauberen Bindestrichen machen
+  slug = slug.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  
+  // 6. Hardcoded-Sonderfälle der DB abfangen
+  if (slug === 'berlin-hbf') {
+    slug = 'berlin-hauptbahnhof';
+  }
+  if (slug === 'frankfurt-m-flughafen-regionalbahnhof') {
+    slug = 'frankfurt-main-flughafen-regionalbahnhof';
+  }
+  if (slug === 'frankfurt-m-flughafen-fernbahnhof') {
+    slug = 'frankfurt-am-main-flughafen-fernbahnhof';
+  }
+  
+  return `https://www.bahnhof.de/${slug}`;
 }
 
 /** Longer description for tooltips (direction abbreviated, no literal " to "). */

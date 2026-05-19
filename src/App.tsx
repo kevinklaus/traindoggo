@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { Dog, Github, Mail, Linkedin, TrainFront } from 'lucide-react';
 import type { Journey, SearchParams } from './lib/types';
 import { searchJourneys, setMockApiMode } from './lib/api';
@@ -27,7 +27,6 @@ function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
   );
 }
 
-// Visual separator dividing the main screen content from the foot layout frame
 function WaveDivider() {
   return (
     <svg viewBox="0 0 1440 72" className="w-full block h-12 sm:h-16 -mb-px text-secondary" preserveAspectRatio="none" aria-hidden="true">
@@ -40,35 +39,58 @@ function WaveDivider() {
   );
 }
 
+// Dev-Mode Prefill Data
+const DEV_INITIAL_FROM = {
+  id: '8011160',
+  type: 'station' as const,
+  name: 'Berlin Hbf',
+  location: { type: 'location' as const, latitude: 52.5251, longitude: 13.3694 },
+  products: { national: true, suburban: true },
+};
+
+const DEV_INITIAL_TO = {
+  id: '8000250',
+  type: 'station' as const,
+  name: 'Wiesbaden Hbf',
+  location: { type: 'location' as const, latitude: 50.0708, longitude: 8.2435 },
+  products: { national: true, suburban: true },
+};
+
 export default function App() {
+  const isDev = import.meta.env.DEV;
+  
   const [params, setParams] = useState<SearchParams>({
-    from: null,
-    to: null,
+    from: isDev ? DEV_INITIAL_FROM : null,
+    to: isDev ? DEV_INITIAL_TO : null,
     date: getDefaultDate(),
-    time: getDefaultTime(),
+    time: isDev ? '06:00' : getDefaultTime(), // Setzt im Dev Mode die Zeit auf 06:00 Uhr
     dogMode: 'large',
   });
+  
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
   
-  const [useMockApi, setUseMockApi] = useState(import.meta.env.DEV);
+  const [useMockApi, setUseMockApi] = useState(isDev);
   const [apiUnavailable, setApiUnavailable] = useState(false);
+
+  // Verhindert doppeltes Ausführen im React StrictMode
+  const hasAutoSearched = useRef(false);
 
   useEffect(() => {
     setMockApiMode(useMockApi);
   }, [useMockApi]);
 
-  const handleSearch = useCallback(async () => {
-    if (!params.from || !params.to) return;
+  const handleSearch = useCallback(async (searchParams = params) => {
+    if (!searchParams.from || !searchParams.to) return;
     setLoading(true);
     setError(null);
     setSearched(true);
 
     try {
-      const departure = `${params.date}T${params.time}:00`;
-      const result = await searchJourneys(params.from.id, params.to.id, departure);
+      const departure = `${searchParams.date}T${searchParams.time}:00`;
+      const result = await searchJourneys(searchParams.from.id, searchParams.to.id, departure);
       setJourneys(result.journeys ?? []);
       if (!result.journeys?.length) {
         setError('No journeys found for this route and time.');
@@ -84,9 +106,16 @@ export default function App() {
     }
   }, [params, useMockApi]);
 
+  // Auto-Search im Dev-Mode
+  useEffect(() => {
+    if (isDev && !hasAutoSearched.current) {
+      hasAutoSearched.current = true;
+      handleSearch(params);
+    }
+  }, [isDev, handleSearch, params]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-primary/[0.03] flex flex-col">
-      {/* App Main Floating Header Layer */}
       <header className="bg-white/85 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 h-[73px] flex items-center">
         <div className="max-w-3xl mx-auto px-4 w-full flex items-center gap-3 min-w-0">
           <LogoMark />
@@ -110,8 +139,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Dev Mode Banner Controls */}
-      {import.meta.env.DEV && apiUnavailable && !useMockApi && (
+      {isDev && apiUnavailable && !useMockApi && (
         <div className="max-w-3xl mx-auto px-4 mt-4 w-full">
           <div className="rounded-2xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="text-sm font-medium">
@@ -128,10 +156,10 @@ export default function App() {
         </div>
       )}
 
-      {import.meta.env.DEV && useMockApi && (
+      {isDev && useMockApi && (
         <div className="max-w-3xl mx-auto px-4 mt-4 w-full">
           <div className="rounded-2xl border border-slate-200 bg-slate-100 text-slate-800 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-sm font-medium">Offline mock mode is active. Live timetable API calls are disabled.</p>
+            <p className="text-sm font-medium">Offline mock mode is active. Auto-testing initial route.</p>
             <button
               type="button"
               onClick={() => setUseMockApi(false)}
@@ -143,13 +171,9 @@ export default function App() {
         </div>
       )}
 
-      {/* UX REFACTOR: Enforced min-h-[calc(100vh-73px)] on main.
-        This forces the search field layout context to fill the initial screen viewport view,
-        smoothly pushing the high-contrast footer entirely below the fold.
-      */}
       <main className="max-w-3xl mx-auto px-4 py-8 space-y-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
         <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">
-          <SearchForm params={params} onChange={setParams} onSearch={handleSearch} loading={loading} />
+          <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={loading} />
         </section>
 
         {searched && (
@@ -159,10 +183,8 @@ export default function App() {
         )}
       </main>
 
-      {/* Decorative Wave Transition Layer */}
       <WaveDivider />
       
-      {/* Global Context Footer Board */}
       <footer className="bg-secondary text-white relative" role="contentinfo">
         <div className="max-w-3xl mx-auto px-4 pt-2 pb-10">
           <div className="flex flex-col items-center text-center gap-6">
@@ -177,31 +199,9 @@ export default function App() {
             </div>
             <p className="text-sm font-semibold text-white/95 font-heading">Kevin Klaus</p>
             <div className="flex items-center justify-center gap-4">
-              <a
-                href="https://github.com/kevinklaus"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"
-                aria-label="Kevin Klaus on GitHub"
-              >
-                <Github size={22} strokeWidth={2} />
-              </a>
-              <a
-                href="mailto:kevintheklaus@gmail.com"
-                className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"
-                aria-label="Email Kevin Klaus"
-              >
-                <Mail size={22} strokeWidth={2} />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/kevinklaus"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"
-                aria-label="Kevin Klaus on LinkedIn"
-              >
-                <Linkedin size={22} strokeWidth={2} />
-              </a>
+              <a href="https://github.com/kevinklaus" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"><Github size={22} strokeWidth={2} /></a>
+              <a href="mailto:kevintheklaus@gmail.com" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"><Mail size={22} strokeWidth={2} /></a>
+              <a href="https://www.linkedin.com/in/kevinklaus" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15"><Linkedin size={22} strokeWidth={2} /></a>
             </div>
           </div>
         </div>

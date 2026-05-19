@@ -129,12 +129,20 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
           </div>
 
           <div className="text-right shrink-0">
-            <div className="text-xl sm:text-2xl font-bold text-primary font-heading whitespace-nowrap">
-              €{price.totalPrice.toFixed(2)}
-            </div>
-            {dogMode !== 'none' && (
-              <div className="text-xs text-slate-500 mt-0.5 whitespace-nowrap">
-                {dogMode === 'large' ? 'incl. dog ticket' : 'small dog free'}
+            {price ? (
+              <>
+                <div className="text-xl sm:text-2xl font-bold text-primary font-heading whitespace-nowrap">
+                  €{price.totalPrice.toFixed(2)}
+                </div>
+                {dogMode !== 'none' && (
+                  <div className="text-xs text-slate-500 mt-0.5 whitespace-nowrap">
+                    {dogMode === 'large' ? 'incl. dog ticket' : 'small dog free'}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-sm font-medium text-slate-400 mt-1 whitespace-nowrap">
+                Check operator
               </div>
             )}
           </div>

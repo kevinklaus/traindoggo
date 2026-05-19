@@ -14,7 +14,7 @@ export default function JourneyResults({ journeys, dogMode, loading, error }: Pr
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4" role="status" aria-live="polite">
-        <Spinner className="h-10 w-10 border-[3px] border-primary border-t-transparent" />
+        <Spinner className="h-10 w-10 text-primary" />
         <p className="text-slate-500 font-medium font-body whitespace-nowrap">Searching for journeys…</p>
       </div>
     );

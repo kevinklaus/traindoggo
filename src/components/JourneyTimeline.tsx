@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, LayoutGrid, AlertTriangle } from 'lucide-react';
+import { ChevronDown, ChevronUp, LayoutGrid, AlertTriangle, Dog, Footprints, Info } from 'lucide-react';
 import { useState } from 'react';
 import type { Leg } from '../lib/types';
 import {
@@ -8,6 +8,8 @@ import {
   isWalking,
   countTransfers,
   abbreviateStationName,
+  getLegDurationMinutes,
+  getStationUrl,
 } from '../lib/helpers';
 import TrainComposition from './ui/TrainComposition';
 import { getLegColorTheme } from './ui/Primitives';
@@ -20,13 +22,23 @@ interface Props {
 export default function JourneyTimeline({ legs, dogMode }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [expandedCarriageLeg, setExpandedCarriageLeg] = useState<number | null>(null);
+  const [expandedStopsLeg, setExpandedStopsLeg] = useState<number | null>(null);
   const transfers = countTransfers(legs);
 
   const parsePlatformStr = (plat: string | null | undefined) => {
     if (!plat) return '';
     const clean = plat.trim();
     const rawNumber = clean.replace(/^(platform|pl\.?)\s*/i, '');
-    return `Platform ${rawNumber}`;
+    return `Pl. ${rawNumber}`;
+  };
+
+  const formatDurationFriendly = (mins: number) => {
+    if (mins >= 60) {
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return m > 0 ? `${h}h ${m}min` : `${h}h`;
+    }
+    return `${mins} min`;
   };
 
   return (
@@ -39,125 +51,251 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
         aria-expanded={expanded}
       >
         {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        {/* FIX 3: Stripped leg counter completely from the toggle display */}
         <span>{transfers === 0 ? 'Direct' : `${transfers} change${transfers > 1 ? 's' : ''}`}</span>
       </button>
 
       {/* Main Structural Loop Container */}
       {expanded && (
-        <div className="mt-4 space-y-2" role="list" aria-label="Journey legs">
+        <div className="mt-4 space-y-0" role="list" aria-label="Journey legs">
           {legs.map((leg, i) => {
             const walking = isWalking(leg);
-            const transferMin = i > 0 ? getTransferMinutes(legs[i - 1], leg) : null;
+            const prevLeg = i > 0 ? legs[i - 1] : null;
+            const nextLeg = legs[i + 1] || null;
+
+            const transferMin = prevLeg ? getTransferMinutes(prevLeg, leg) : null;
             const riskyTransfer = transferMin !== null && transferMin < 10 && transferMin > 0;
             const showDogWarning = riskyTransfer && dogMode !== 'none';
-            const showCarriageDropdown = expandedCarriageLeg === i && !walking;
+            const colors = getLegColorTheme(leg.line?.product, leg.line?.name, leg.walking);
 
             const depPlatform = parsePlatformStr(leg.departurePlatform);
             const arrPlatform = parsePlatformStr(leg.arrivalPlatform);
-            const colors = getLegColorTheme(leg.line?.product, leg.line?.name, leg.walking);
+
+            // --- SMART TRANSFER LOGIC ---
+            // Prüft, ob der Fußweg am exakt selben Bahnhof startet (wie die Ankunft davor) oder endet (wie die Abfahrt danach)
+            const mergesFromPrevTrain = walking && prevLeg && prevLeg.destination.name.trim().toLowerCase() === leg.origin.name.trim().toLowerCase();
+            const mergesIntoNextTrain = walking && nextLeg && leg.destination.name.trim().toLowerCase() === nextLeg.origin.name.trim().toLowerCase();
+
+            const hideDepartureNode = mergesFromPrevTrain;
+            const hideArrivalNode = mergesIntoNextTrain;
+
+            let blockDurationMin = getLegDurationMinutes(leg);
+            let showDogWarningInWalk = false;
+
+            if (walking && (mergesFromPrevTrain || mergesIntoNextTrain)) {
+              // Berechnet die GESAMTE Zeit von Ankunft Zug A bis Abfahrt Zug B
+              const startTime = mergesFromPrevTrain ? prevLeg.arrival : leg.departure;
+              const endTime = mergesIntoNextTrain ? nextLeg.departure : leg.arrival;
+              if (startTime && endTime) {
+                blockDurationMin = Math.round((new Date(endTime).getTime() - new Date(startTime).getTime()) / 60000);
+              }
+              
+              if (mergesFromPrevTrain && mergesIntoNextTrain) {
+                const bufferMin = blockDurationMin - getLegDurationMinutes(leg);
+                if (bufferMin < 10 && bufferMin > 0 && dogMode !== 'none') {
+                  showDogWarningInWalk = true;
+                }
+              }
+            }
+
+            // Wenn der vorherige Knoten ein gemergter Walk war, unterdrücken wir das normale Transfer-Pill, da der Walk es geschluckt hat!
+            const prevWasWalkingAndMerged = prevLeg && isWalking(prevLeg) && prevLeg.destination.name.trim().toLowerCase() === leg.origin.name.trim().toLowerCase();
+            const showTransferPill = i > 0 && transferMin !== null && transferMin > 0 && !prevWasWalkingAndMerged;
+            
+            const isRedundantWalkDuration = blockDurationMin === getLegDurationMinutes(leg);
 
             return (
               <div key={i} role="listitem" className="flex flex-col">
-                {/* Intermediate Connection/Transfer Notification Node */}
-                {i > 0 && transferMin !== null && transferMin > 0 && (
-                  <div className="flex items-center gap-3 pl-2.5 my-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-300 border-2 border-white shadow-sm shrink-0" />
-                    <div className={`text-xs font-semibold px-2 py-0.5 rounded-md flex items-center gap-1.5 select-none ${
-                      riskyTransfer ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-slate-100 text-slate-600'
-                    }`}>
-                      <span>{transferMin}m transfer connection</span>
+                
+                {/* Standard Transfer Pill (wird ausgeblendet, falls es mit dem Fußweg verschmolzen ist) */}
+                {showTransferPill && (
+                  <div className="flex items-center gap-3 pl-[3.75rem] my-3 relative z-10">
+                    <div className="w-4 flex justify-center shrink-0">
+                      <div className="w-2 h-2 rounded-full bg-slate-200 border border-white shadow-sm" />
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <div className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600 select-none">
+                        {transferMin} min transfer
+                      </div>
                       {showDogWarning && (
-                        <span className="inline-flex items-center gap-0.5 text-red-600 font-bold ml-1" role="alert">
-                          <AlertTriangle size={11} /> Tight window for dogs
-                        </span>
+                        <div className="inline-flex items-center gap-1.5 text-xs font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700 border border-orange-200" role="alert">
+                          <AlertTriangle size={13} strokeWidth={2.5} /> Tight window for dogs
+                        </div>
                       )}
                     </div>
                   </div>
                 )}
                 
-                <div className="flex items-stretch min-w-0 group">
-                  {/* Left Rail Column */}
-                  <div className="w-8 shrink-0 flex flex-col items-center relative select-none">
-                    <div className={`w-3.5 h-3.5 rounded-full border-2 z-10 shrink-0 mt-1 transition-colors ${colors.dot}`} />
-                    <div className={`w-0.5 flex-1 border-l-2 z-0 -my-1 transition-colors ${colors.border}`} />
-                    <div className={`w-3.5 h-3.5 rounded-full border-2 z-10 shrink-0 mb-1 transition-colors ${colors.dot}`} />
+                <div className="relative flex flex-col min-w-0 pb-1">
+                  
+                  {/* ABSOLUTE TRACK LINE - Passt sich dynamisch an ausgeblendete Knoten an */}
+                  <div className={`absolute ${hideDepartureNode ? 'top-0' : 'top-3'} ${hideArrivalNode ? 'bottom-0' : 'bottom-3'} left-[3.75rem] w-4 flex justify-center z-0`}>
+                    <div 
+                      className={`w-0.5 h-full ${walking ? 'border-dashed border-l-2' : 'bg-slate-300'}`}
+                      style={walking ? { borderColor: colors.bgHex, opacity: 0.5 } : { backgroundColor: colors.bgHex }}
+                    />
                   </div>
-
-                  {/* Right Content Stream */}
-                  <div className="flex-1 min-w-0 pb-6 pl-2.5 space-y-3">
-                    {/* Departure Node Information Frame */}
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 flex-wrap text-xs">
-                        <span className="text-sm font-bold text-slate-800 tabular-nums">{formatTime(leg.departure)}</span>
-                        
-                        <span className={`font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-[10px] transition-colors ${colors.badge}`}>
-                          {getLegBadgeLabel(leg)}
-                        </span>
-                        
+                  
+                  {/* Departure Node - Wird versteckt, wenn der Fußweg direkt nach einem Zug startet */}
+                  {!hideDepartureNode && (
+                    <div className="flex items-center gap-3 relative z-10 bg-white min-h-[24px]">
+                      <span className="text-sm font-bold text-slate-800 tabular-nums w-12 shrink-0 text-right">
+                        {formatTime(leg.departure)}
+                      </span>
+                      <div className="w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center bg-white" style={{ borderColor: colors.bgHex }}>
+                        {walking ? <Footprints size={8} className="text-slate-400" /> : <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.bgHex }} />}
+                      </div>
+                      <div className="flex-1 flex justify-between items-start min-w-0">
+                        <a 
+                          href={getStationUrl(leg.origin.name)} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-900 hover:text-primary transition-colors group"
+                          title={`View ${abbreviateStationName(leg.origin.name)} on bahnhof.de`}
+                        >
+                          <span className="line-clamp-2 group-hover:underline">{abbreviateStationName(leg.origin.name)}</span>
+                          <Info size={14} className="text-slate-400 group-hover:text-primary shrink-0" />
+                        </a>
                         {depPlatform && (
-                          <span className="font-semibold text-slate-500 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/60 select-none">
+                          <span className="text-sm font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded shrink-0 ml-2 tabular-nums">
                             {depPlatform}
                           </span>
                         )}
                       </div>
+                    </div>
+                  )}
 
-                      <p className="text-sm font-bold text-slate-700">{abbreviateStationName(leg.origin.name)}</p>
+                  <div className="flex items-stretch gap-3 relative z-10 py-3">
+                    <div className="w-12 shrink-0 text-right flex items-start justify-end select-none mt-0.5">
+                      <span className="text-xs text-slate-400 font-semibold tabular-nums block whitespace-nowrap">
+                        {formatDurationFriendly(walking && (mergesFromPrevTrain || mergesIntoNextTrain) ? blockDurationMin : getLegDurationMinutes(leg))}
+                      </span>
+                    </div>
+                    
+                    <div className="w-4 shrink-0" />
+                    
+                    <div className="flex-1 min-w-0">
+                      {!walking ? (
+                        <div className="space-y-2.5">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-[10px] transition-colors ${colors.badge}`}>
+                              {getLegBadgeLabel(leg)}
+                            </span>
+                            <span className="text-sm text-slate-700 font-medium">
+                              towards {leg.direction ? abbreviateStationName(leg.direction) : abbreviateStationName(leg.destination.name)}
+                            </span>
+                          </div>
 
-                      {/* FIX 1: Repositioned Tips Button down below the station text node layout block */}
-                      {!walking && (
-                        <div className="pt-1">
-                          <button
-                            type="button"
-                            onClick={() => setExpandedCarriageLeg(showCarriageDropdown ? null : i)}
-                            className={`inline-flex items-center gap-1 font-bold text-xs transition-all px-2.5 py-1 rounded-xl border ${
-                              showCarriageDropdown 
-                                ? 'bg-accent/10 border-accent/30 text-accent' 
-                                : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
-                            }`}
-                          >
-                            {showCarriageDropdown ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                            <LayoutGrid size={11} strokeWidth={2.5} />
-                            <span>Tips for dog owners & layout</span>
-                          </button>
+                          <div className="flex items-center gap-2 flex-wrap pt-0.5">
+                            <button
+                              type="button"
+                              onClick={() => setExpandedCarriageLeg(expandedCarriageLeg === i ? null : i)}
+                              className={`inline-flex items-center gap-1 font-bold text-xs transition-all px-2.5 py-1 rounded-xl border ${
+                                expandedCarriageLeg === i 
+                                  ? 'bg-accent/10 border-accent/30 text-accent' 
+                                  : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
+                              }`}
+                            >
+                              {expandedCarriageLeg === i ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                              <LayoutGrid size={11} strokeWidth={2.5} />
+                              <span>Dog tips & layout</span>
+                            </button>
+
+                            {leg.stopovers && leg.stopovers.length > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => setExpandedStopsLeg(expandedStopsLeg === i ? null : i)}
+                                className={`inline-flex items-center gap-1 font-bold text-xs transition-all px-2.5 py-1 rounded-xl border ${
+                                  expandedStopsLeg === i
+                                    ? 'bg-slate-100 border-slate-400 text-slate-700'
+                                    : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
+                                }`}
+                              >
+                                {expandedStopsLeg === i ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                                <span>{leg.stopovers.length} {leg.stopovers.length === 1 ? 'stop' : 'stops'}</span>
+                              </button>
+                            )}
+                          </div>
+
+                          {expandedCarriageLeg === i && (
+                            <div className="max-w-full animate-fade-in pt-1">
+                              <TrainComposition leg={leg} />
+                            </div>
+                          )}
+
+                          {expandedStopsLeg === i && leg.stopovers && (
+                            <div className="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 animate-fade-in max-w-md">
+                              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Stopovers</p>
+                              {leg.stopovers.map((stopover: any, idx: number) => (
+                                <div key={idx} className="flex justify-between items-center text-xs text-slate-600 py-0.5">
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    <span className="tabular-nums font-medium text-slate-400 w-9 text-right shrink-0">
+                                      {stopover.arrival ? formatTime(stopover.arrival) : formatTime(stopover.departure)}
+                                    </span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
+                                    <span className="truncate font-medium text-slate-700">{abbreviateStationName(stopover.stop?.name || 'Station')}</span>
+                                  </div>
+                                  {stopover.arrivalPlatform && (
+                                    <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded ml-2 shrink-0 tabular-nums">
+                                      Pl. {stopover.arrivalPlatform.replace(/^(platform|pl\.?)\s*/i, '')}
+                                    </span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="flex flex-col justify-center gap-1.5 py-1">
+                          <div className="flex items-center gap-2 text-slate-500 select-none">
+                            {dogMode !== 'none' ? <Dog size={15} strokeWidth={2.5} /> : <Footprints size={15} strokeWidth={2.5} />}
+                            <span className="text-sm font-semibold">
+                              {(mergesFromPrevTrain && mergesIntoNextTrain) ? 'Transfer' : 'Walk'} 
+                              {!isRedundantWalkDuration && (
+                                <span className="font-medium text-xs opacity-80 ml-1">
+                                  (incl. {getLegDurationMinutes(leg)} min)
+                                </span>
+                              )}
+                            </span>
+                          </div>
+                          {mergesFromPrevTrain && mergesIntoNextTrain && showDogWarningInWalk && (
+                            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700 border border-orange-200 w-fit" role="alert">
+                              <AlertTriangle size={12} strokeWidth={2.5} /> Tight window for dogs
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
+                  </div>
 
-                    {/* Integrated Composition Section Drawer Layout */}
-                    {showCarriageDropdown && (
-                      <div className="max-w-full animate-fade-in">
-                        <TrainComposition leg={leg} />
+                  {/* Arrival Terminal Node - Wird versteckt, wenn der Fußweg direkt in einen Zug übergeht */}
+                  {!hideArrivalNode && (
+                    <div className="flex items-center gap-3 relative z-10 bg-white min-h-[24px]">
+                      <span className="text-sm font-bold text-slate-800 tabular-nums w-12 shrink-0 text-right">
+                        {formatTime(leg.arrival)}
+                      </span>
+                      <div className="w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center bg-white" style={{ borderColor: colors.bgHex }}>
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: colors.bgHex }} />
                       </div>
-                    )}
-
-                    {/* Intermediate Travel Context Spacing Divider */}
-                    <div className="border-l border-slate-200 pl-3 py-1 my-0.5">
-                      <p className="text-xs text-slate-400 font-body">
-                        {/* FIX 2: Renamed string template prefix to cleanly read "Direction:" */}
-                        {walking ? 'Walk route transfer path' : `Direction: ${leg.direction || 'Terminal platform'}`}
-                      </p>
-                    </div>
-
-                    {/* Arrival Node Information Frame */}
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2 flex-wrap text-xs">
-                        <span className="text-sm font-bold text-slate-800 tabular-nums">{formatTime(leg.arrival)}</span>
-                        <span className="text-slate-400 font-medium font-body">Arrive</span>
-                        
+                      <div className="flex-1 flex justify-between items-end min-w-0">
+                        <a 
+                          href={getStationUrl(leg.destination.name)} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-900 hover:text-primary transition-colors group"
+                          title={`View ${abbreviateStationName(leg.destination.name)} on bahnhof.de`}
+                        >
+                          <span className="line-clamp-2 group-hover:underline">{abbreviateStationName(leg.destination.name)}</span>
+                          <Info size={14} className="text-slate-400 group-hover:text-primary shrink-0" />
+                        </a>
                         {arrPlatform && (
-                          <span className="font-semibold text-slate-500 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/60 select-none">
+                          <span className="text-sm font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded shrink-0 ml-2 tabular-nums">
                             {arrPlatform}
                           </span>
                         )}
                       </div>
-                      <p className="text-sm font-bold text-slate-700">
-                        {abbreviateStationName(leg.destination.name)}
-                        <span className="text-xs text-slate-400 font-normal ml-1.5">(Get off)</span>
-                      </p>
                     </div>
+                  )}
 
-                  </div>
                 </div>
               </div>
             );

@@ -5,6 +5,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "allowJs": true, /* NEU: Erlaubt das Einlesen von JS-Modulen aus node_modules */
 
     /* Bundler mode */
     "moduleResolution": "bundler",
