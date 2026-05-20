@@ -13,8 +13,9 @@ import LandingContent from './components/content/LandingContent';
 import Imprint from './components/content/Imprint';
 
 export default function App() {
-  const isDev = import.meta.env.DEV;  
-  // 1. Initial State (Greift jetzt auf die helper und mockData zurück)
+// Strikter Check: Nur Mock-Modus wenn explizit gewünscht UND auf localhost
+  const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+  const isDev = import.meta.env.VITE_USE_MOCK_API === 'true' && isLocalhost; 
   const [params, setParams] = useState<SearchParams>({
     from: isDev ? DEV_INITIAL_FROM : null,
     to: isDev ? DEV_INITIAL_TO : null,
