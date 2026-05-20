@@ -13,8 +13,7 @@ import LandingContent from './components/content/LandingContent';
 import Imprint from './components/content/Imprint';
 
 export default function App() {
-  const isDev = import.meta.env.DEV;
-  
+  const isDev = import.meta.env.DEV;  
   // 1. Initial State (Greift jetzt auf die helper und mockData zurück)
   const [params, setParams] = useState<SearchParams>({
     from: isDev ? DEV_INITIAL_FROM : null,
@@ -29,7 +28,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
   
-  const [useMockApi, setUseMockApi] = useState(isDev);
+  const [useMockApi, setUseMockApi] = useState(import.meta.env.VITE_USE_MOCK_API === 'true');
   const [apiUnavailable, setApiUnavailable] = useState(false);
   const [showImprint, setShowImprint] = useState(false);
 
