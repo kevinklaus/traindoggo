@@ -13,7 +13,7 @@ interface JourneyTimelineBarProps {
   totalMinutes: number;
 }
 
-export default function JourneyTimelineBar({ segments, totalMinutes }: JourneyTimelineBarProps) {
+export default function JourneyTimelineBar({ segments }: JourneyTimelineBarProps) {
   return (
     <div
       className="flex w-full min-h-[1.625rem] mt-2 rounded-md overflow-hidden gap-x-0.5 bg-slate-100 select-none"

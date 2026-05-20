@@ -1,5 +1,14 @@
 import type { Leg } from './types';
 
+export function getDefaultDate(): string {
+  return new Date().toISOString().split('T')[0];
+}
+
+export function getDefaultTime(): string {
+  const now = new Date();
+  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+}
+
 export function formatTime(iso: string | undefined): string {
   if (!iso) return '--:--';
   const d = new Date(iso);

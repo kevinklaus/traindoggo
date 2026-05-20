@@ -59,7 +59,7 @@ export async function searchJourneys(
   departure: string,
   results = 10 // <--- HIER WAR DER ÜBELTÄTER! Limit auf 10 erhöht.
 ): Promise<JourneysResponse> {
-  if (useMockApi) return searchJourneysMock(fromId, toId, departure, results);
+  if (useMockApi) return searchJourneysMock(fromId, toId, departure);
 
   const params = new URLSearchParams({
     from: fromId,

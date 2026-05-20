@@ -41,18 +41,32 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
     return `${mins} min`;
   };
 
+  const hasRiskyTransfer = legs.some((leg, i) => {
+    if (i === 0) return false;
+    const transferMin = getTransferMinutes(legs[i - 1], leg);
+    return transferMin !== null && transferMin < 10 && transferMin > 0;
+  });
+
   return (
     <div className="mt-3">
-      {/* Structural Toggle Controller */}
-      <button
-        type="button"
-        onClick={() => setExpanded(!expanded)}
-        className="flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors flex-wrap"
-        aria-expanded={expanded}
-      >
-        {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        <span>{transfers === 0 ? 'Direct' : `${transfers} change${transfers > 1 ? 's' : ''}`}</span>
-      </button>
+      {/* Structural Toggle Controller & Global Warning (Fluid Wrap) */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+        <button
+          type="button"
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+          aria-expanded={expanded}
+        >
+          {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          <span>{transfers === 0 ? 'Direct' : `${transfers} change${transfers > 1 ? 's' : ''}`}</span>
+        </button>
+
+        {hasRiskyTransfer && dogMode !== 'none' && (
+          <span className="inline-flex items-center gap-1 text-sm font-medium text-red-600" role="alert">
+            <AlertTriangle size={14} aria-hidden="true" /> Tight for dogs
+          </span>
+        )}
+      </div>
 
       {/* Main Structural Loop Container */}
       {expanded && (
@@ -70,8 +84,6 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
             const depPlatform = parsePlatformStr(leg.departurePlatform);
             const arrPlatform = parsePlatformStr(leg.arrivalPlatform);
 
-            // --- SMART TRANSFER LOGIC ---
-            // Prüft, ob der Fußweg am exakt selben Bahnhof startet (wie die Ankunft davor) oder endet (wie die Abfahrt danach)
             const mergesFromPrevTrain = walking && prevLeg && prevLeg.destination.name.trim().toLowerCase() === leg.origin.name.trim().toLowerCase();
             const mergesIntoNextTrain = walking && nextLeg && leg.destination.name.trim().toLowerCase() === nextLeg.origin.name.trim().toLowerCase();
 
@@ -82,7 +94,6 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
             let showDogWarningInWalk = false;
 
             if (walking && (mergesFromPrevTrain || mergesIntoNextTrain)) {
-              // Berechnet die GESAMTE Zeit von Ankunft Zug A bis Abfahrt Zug B
               const startTime = mergesFromPrevTrain ? prevLeg.arrival : leg.departure;
               const endTime = mergesIntoNextTrain ? nextLeg.departure : leg.arrival;
               if (startTime && endTime) {
@@ -97,7 +108,6 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
               }
             }
 
-            // Wenn der vorherige Knoten ein gemergter Walk war, unterdrücken wir das normale Transfer-Pill, da der Walk es geschluckt hat!
             const prevWasWalkingAndMerged = prevLeg && isWalking(prevLeg) && prevLeg.destination.name.trim().toLowerCase() === leg.origin.name.trim().toLowerCase();
             const showTransferPill = i > 0 && transferMin !== null && transferMin > 0 && !prevWasWalkingAndMerged;
             
@@ -106,7 +116,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
             return (
               <div key={i} role="listitem" className="flex flex-col">
                 
-                {/* Standard Transfer Pill (wird ausgeblendet, falls es mit dem Fußweg verschmolzen ist) */}
+                {/* Standard Transfer Pill */}
                 {showTransferPill && (
                   <div className="flex items-center gap-3 pl-[3.75rem] my-3 relative z-10">
                     <div className="w-4 flex justify-center shrink-0">
@@ -127,7 +137,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                 
                 <div className="relative flex flex-col min-w-0 pb-1">
                   
-                  {/* ABSOLUTE TRACK LINE - Passt sich dynamisch an ausgeblendete Knoten an */}
+                  {/* ABSOLUTE TRACK LINE */}
                   <div className={`absolute ${hideDepartureNode ? 'top-0' : 'top-3'} ${hideArrivalNode ? 'bottom-0' : 'bottom-3'} left-[3.75rem] w-4 flex justify-center z-0`}>
                     <div 
                       className={`w-0.5 h-full ${walking ? 'border-dashed border-l-2' : 'bg-slate-300'}`}
@@ -135,7 +145,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                     />
                   </div>
                   
-                  {/* Departure Node - Wird versteckt, wenn der Fußweg direkt nach einem Zug startet */}
+                  {/* Departure Node */}
                   {!hideDepartureNode && (
                     <div className="flex items-center gap-3 relative z-10 bg-white min-h-[24px]">
                       <span className="text-sm font-bold text-slate-800 tabular-nums w-12 shrink-0 text-right">
@@ -267,7 +277,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                     </div>
                   </div>
 
-                  {/* Arrival Terminal Node - Wird versteckt, wenn der Fußweg direkt in einen Zug übergeht */}
+                  {/* Arrival Terminal Node */}
                   {!hideArrivalNode && (
                     <div className="flex items-center gap-3 relative z-10 bg-white min-h-[24px]">
                       <span className="text-sm font-bold text-slate-800 tabular-nums w-12 shrink-0 text-right">

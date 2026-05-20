@@ -1,4 +1,4 @@
-import { Clock, ArrowRight, AlertTriangle, Users } from 'lucide-react';
+import { Clock, ArrowRight, Users } from 'lucide-react';
 import type { Journey, DogMode } from '../lib/types';
 import {
   formatTime,
@@ -63,7 +63,6 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
   const legs = filterValidLegs(journey.legs);
   const firstLeg = legs[0];
   const lastLeg = legs[legs.length - 1];
-  const transfers = countTransfers(legs);
 
   const departure = firstLeg?.departure ?? '';
   const arrival = lastLeg?.arrival ?? '';
@@ -73,16 +72,6 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
 
   const worstLoadFactor = getJourneyLoadFactor(legs);
   const loadConfig = getLoadFactorConfig(worstLoadFactor);
-
-  const hasRiskyTransfer = legs.some((leg, i) => {
-    if (i === 0) return false;
-    const prev = legs[i - 1];
-    const arr = prev.arrival;
-    const dep = leg.departure;
-    if (!arr || !dep) return false;
-    const min = Math.round((new Date(dep).getTime() - new Date(arr).getTime()) / 60000);
-    return min > 0 && min < 10;
-  });
 
   const barSegments = legs.map((leg) => ({ leg, minutes: getLegDurationMinutes(leg) }));
   const totalMinutes = barSegments.reduce((sum, s) => sum + s.minutes, 0) || 1;
@@ -118,12 +107,6 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
                     <span>{loadConfig.label}</span>
                   </div>
                 </>
-              )}
-
-              {hasRiskyTransfer && dogMode !== 'none' && (
-                <span className="inline-flex items-center gap-1 text-red-600 font-medium ml-auto sm:ml-0" role="alert">
-                  <AlertTriangle size={12} aria-hidden="true" /> Tight for dogs
-                </span>
               )}
             </div>
           </div>

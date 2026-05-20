@@ -38,6 +38,22 @@ export const MOCK_STATIONS: Station[] = [
   }
 ];
 
+export const DEV_INITIAL_FROM: Station = {
+  id: '8011160',
+  type: 'station',
+  name: 'Berlin Hbf',
+  location: { type: 'location', latitude: 52.5251, longitude: 13.3694 },
+  products: { national: true, suburban: true },
+};
+
+export const DEV_INITIAL_TO: Station = {
+  id: '8000250',
+  type: 'station',
+  name: 'Wiesbaden Hbf',
+  location: { type: 'location', latitude: 50.0708, longitude: 8.2435 },
+  products: { national: true, suburban: true },
+};
+
 const stationMap = new Map<string, Station>(MOCK_STATIONS.map((station) => [station.id, station]));
 
 function timestamp(date: string, time: string): string {

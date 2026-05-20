@@ -15,7 +15,6 @@ export async function searchJourneysMock(
   fromId: string,
   toId: string,
   departure: string,
-  results = 5 // Egal was hier reinkommt...
 ): Promise<JourneysResponse> {
   
   // HIER IST DER FIX: Das ".slice(0, results)" ist komplett gelöscht!
