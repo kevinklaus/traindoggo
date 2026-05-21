@@ -18,7 +18,7 @@ const deTranslations = {
       title: "Fernverkehr (ICE/IC)",
       bullet1: "<b>Kleine Hunde</b> (Katzengröße) reisen gratis in der Box.",
       bullet2: "<b>Große Hunde</b> zahlen den halben Ticketpreis.",
-      bullet3: "Es gilt strikte <b>Leinen- & Maulkorbpflicht</b>!"
+      bullet3: "Es gilt <b>Leinen- & Maulkorbpflicht</b>. In den meisten Fällen kann ein lieber Hund aber auch ohne angelegten Maulkorb einsteigen, wenn er brav ist."
     },
     nahverkehr: {
       title: "Nahverkehr & D-Ticket",
@@ -171,7 +171,7 @@ const enTranslations = {
       title: "Long-Distance (ICE/IC)",
       bullet1: "<b>Small dogs</b> (cat size) travel for free in a carrier.",
       bullet2: "<b>Large dogs</b> pay half the ticket fare.",
-      bullet3: "Strict <b>leash & muzzle requirements</b> apply!"
+      bullet3: "<b>Leash & muzzle are required</b>, but in most cases a well-behaved dog can board without a muzzle if they are calm."
     },
     nahverkehr: {
       title: "Local Transport & D-Ticket",
