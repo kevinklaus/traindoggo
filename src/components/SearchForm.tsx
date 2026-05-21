@@ -121,7 +121,7 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
       </div>
 
       {/* 3. Dog Logistics Parameter Matrices */}
-      <div>
+{/*       <div>
         <span className="block text-xs font-semibold text-slate-600 tracking-wide mb-2 select-none">
           Dog logistics
         </span>
@@ -148,7 +148,7 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
             );
           })}
         </div>
-      </div>
+      </div> */}
 
       {validationMsg && (
         <div className="text-sm text-red-600 font-medium" role="alert" aria-live="polite">

@@ -1,4 +1,4 @@
-import { Map, Info } from 'lucide-react';
+import { Map } from 'lucide-react';
 import mapSvgUrl from './content/VerbundsKarte.svg';
 
 export default function DogRulesMap() {

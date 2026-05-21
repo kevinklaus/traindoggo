@@ -34,7 +34,8 @@ export default function Header({ dogMode, onLogoClick }: Props) {
             </p>
           </div>
         </button>
-        {dogMode !== 'none' && (
+       {/* dogMode deactivated 
+         {dogMode !== 'none' && (
           <div
             className="ml-auto flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 whitespace-nowrap"
             aria-live="polite"
@@ -42,7 +43,7 @@ export default function Header({ dogMode, onLogoClick }: Props) {
             <Dog size={13} aria-hidden="true" />
             {dogMode === 'large' ? 'Large dog' : 'Small dog'}
           </div>
-        )}
+        )} */}
       </div>
     </header>
   );
