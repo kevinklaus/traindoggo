@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp, LayoutGrid, AlertTriangle, Dog, Footprints, Info } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Leg } from '../lib/types';
 import {
   formatTime,
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export default function JourneyTimeline({ legs, dogMode }: Props) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const [expandedCarriageLeg, setExpandedCarriageLeg] = useState<number | null>(null);
   const [expandedStopsLeg, setExpandedStopsLeg] = useState<number | null>(null);
@@ -58,12 +60,12 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
           aria-expanded={expanded}
         >
           {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          <span>{transfers === 0 ? 'Direct' : `${transfers} change${transfers > 1 ? 's' : ''}`}</span>
+          <span>{transfers === 0 ? t('journeys.timeline.direct') : transfers === 1 ? t('journeys.timeline.change_one') : t('journeys.timeline.change_other', { count: transfers })}</span>
         </button>
 
         {hasRiskyTransfer && dogMode !== 'none' && (
           <span className="inline-flex items-center gap-1 text-sm font-medium text-red-600" role="alert">
-            <AlertTriangle size={14} aria-hidden="true" /> Tight for dogs
+            <AlertTriangle size={14} aria-hidden="true" /> {t('journeys.timeline.tightDog')}
           </span>
         )}
       </div>
@@ -124,11 +126,11 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
                       <div className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600 select-none">
-                        {transferMin} min transfer
+                        {t('journeys.timeline.transferMin', { count: transferMin })}
                       </div>
                       {showDogWarning && (
                         <div className="inline-flex items-center gap-1.5 text-xs font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700 border border-orange-200" role="alert">
-                          <AlertTriangle size={13} strokeWidth={2.5} /> Tight window for dogs
+                          <AlertTriangle size={13} strokeWidth={2.5} /> {t('journeys.timeline.tightWindow')}
                         </div>
                       )}
                     </div>
@@ -191,7 +193,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                               {getLegBadgeLabel(leg)}
                             </span>
                             <span className="text-sm text-slate-700 font-medium">
-                              towards {leg.direction ? abbreviateStationName(leg.direction) : abbreviateStationName(leg.destination.name)}
+                              {t('journeys.timeline.towards')} {leg.direction ? abbreviateStationName(leg.direction) : abbreviateStationName(leg.destination.name)}
                             </span>
                           </div>
 
@@ -207,7 +209,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                             >
                               {expandedCarriageLeg === i ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                               <LayoutGrid size={11} strokeWidth={2.5} />
-                              <span>Dog tips & layout</span>
+                              <span>{t('journeys.timeline.dogTips')}</span>
                             </button>
 
                             {leg.stopovers && leg.stopovers.length > 0 && (
@@ -221,7 +223,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                                 }`}
                               >
                                 {expandedStopsLeg === i ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                                <span>{leg.stopovers.length} {leg.stopovers.length === 1 ? 'stop' : 'stops'}</span>
+                                <span>{leg.stopovers.length === 1 ? t('journeys.timeline.stop_one') : t('journeys.timeline.stop_other', { count: leg.stopovers.length })}</span>
                               </button>
                             )}
                           </div>
@@ -234,7 +236,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
 
                           {expandedStopsLeg === i && leg.stopovers && (
                             <div className="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 animate-fade-in max-w-md">
-                              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Stopovers</p>
+                              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">{t('journeys.timeline.stopovers')}</p>
                               {leg.stopovers.map((stopover: any, idx: number) => (
                                 <div key={idx} className="flex justify-between items-center text-xs text-slate-600 py-0.5">
                                   <div className="flex items-center gap-2 min-w-0">
@@ -242,7 +244,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                                       {stopover.arrival ? formatTime(stopover.arrival) : formatTime(stopover.departure)}
                                     </span>
                                     <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
-                                    <span className="truncate font-medium text-slate-700">{abbreviateStationName(stopover.stop?.name || 'Station')}</span>
+                                    <span className="truncate font-medium text-slate-700">{abbreviateStationName(stopover.stop?.name || t('journeys.timeline.station'))}</span>
                                   </div>
                                   {stopover.arrivalPlatform && (
                                     <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded ml-2 shrink-0 tabular-nums">
@@ -259,17 +261,17 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                           <div className="flex items-center gap-2 text-slate-500 select-none">
                             {dogMode !== 'none' ? <Dog size={15} strokeWidth={2.5} /> : <Footprints size={15} strokeWidth={2.5} />}
                             <span className="text-sm font-semibold">
-                              {(mergesFromPrevTrain && mergesIntoNextTrain) ? 'Transfer' : 'Walk'} 
+                              {(mergesFromPrevTrain && mergesIntoNextTrain) ? t('journeys.timeline.transfer') : t('journeys.timeline.walk')} 
                               {!isRedundantWalkDuration && (
                                 <span className="font-medium text-xs opacity-80 ml-1">
-                                  (incl. {getLegDurationMinutes(leg)} min)
+                                  {t('journeys.timeline.inclMin', { count: getLegDurationMinutes(leg) })}
                                 </span>
                               )}
                             </span>
                           </div>
                           {mergesFromPrevTrain && mergesIntoNextTrain && showDogWarningInWalk && (
                             <div className="inline-flex items-center gap-1.5 text-[11px] font-bold px-2 py-0.5 rounded bg-orange-100 text-orange-700 border border-orange-200 w-fit" role="alert">
-                              <AlertTriangle size={12} strokeWidth={2.5} /> Tight window for dogs
+                              <AlertTriangle size={12} strokeWidth={2.5} /> {t('journeys.timeline.tightWindow')}
                             </div>
                           )}
                         </div>

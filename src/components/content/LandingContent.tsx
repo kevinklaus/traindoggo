@@ -1,7 +1,10 @@
 import DogRulesMap from '../DogRulesMap';
 import { HelpCircle, MapPin, Compass } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function LandingContent() {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-8 mt-8 animate-fade-in w-full">
       {/* Zentrale Info Card */}
@@ -10,38 +13,34 @@ export default function LandingContent() {
           <div className="p-2.5 bg-green-50 text-green-600 rounded-xl">
             <HelpCircle size={24} strokeWidth={2} />
           </div>
-          <h2 className="text-xl font-bold text-slate-800 font-heading">Reisen mit Train Doggo</h2>
+          <h2 className="text-xl font-bold text-slate-800 font-heading">{t('landing.title')}</h2>
         </div>
         
         <div className="grid sm:grid-cols-2 gap-8 text-sm text-slate-600 leading-relaxed">
           {/* Linke Spalte */}
           <div className="space-y-3">
             <h3 className="font-bold text-slate-800 flex items-center gap-2 text-base">
-              <Compass size={18} className="text-primary" /> Fernverkehr (ICE/IC)
+              <Compass size={18} className="text-primary" /> {t('landing.fernverkehr.title')}
             </h3>
             <ul className="space-y-2 list-disc pl-5 marker:text-primary">
-              <li><b>Kleine Hunde</b> (Katzengröße) reisen gratis in der Box.</li>
-              <li><b>Große Hunde</b> zahlen den halben Ticketpreis.</li>
-              <li>Es gilt strikte <b>Leinen- & Maulkorbpflicht</b>!</li>
+              <li dangerouslySetInnerHTML={{ __html: t('landing.fernverkehr.bullet1') }} />
+              <li dangerouslySetInnerHTML={{ __html: t('landing.fernverkehr.bullet2') }} />
+              <li dangerouslySetInnerHTML={{ __html: t('landing.fernverkehr.bullet3') }} />
             </ul>
           </div>
           
-          {/* Rechte Spalte (Kombiniert mit Map-Intro) */}
+          {/* Rechte Spalte */}
           <div className="space-y-3">
             <h3 className="font-bold text-slate-800 flex items-center gap-2 text-base">
-              <MapPin size={18} className="text-primary" /> Nahverkehr & D-Ticket
+              <MapPin size={18} className="text-primary" /> {t('landing.nahverkehr.title')}
             </h3>
-            <p>
-              Die Regeln sind ein absoluter Flickenteppich! 🐶 In manchen Regionen fährt dein Hund kostenlos mit, in anderen wird ein Zusatzticket fällig. 
-            </p>
-            <p>
-              Ob dein Doggo gratis einsteigt, siehst du auf unserer <i>pfotenstarken</i> Übersichtskarte unten. 👇
-            </p>
+            <p>{t('landing.nahverkehr.text1')}</p>
+            <p dangerouslySetInnerHTML={{ __html: t('landing.nahverkehr.text2') }} />
           </div>
         </div>
       </div>
 
-      {/* Nur noch die Karte selbst */}
+      {/* Integrierte Karte */}
       <DogRulesMap />
     </div>
   );

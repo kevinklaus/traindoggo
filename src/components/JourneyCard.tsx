@@ -1,9 +1,10 @@
 import { Clock, ArrowRight, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 import type { Journey, DogMode } from '../lib/types';
 import {
   formatTime,
   formatDuration,
-  countTransfers,
   filterValidLegs,
   getLegDurationMinutes,
 } from '../lib/helpers';
@@ -45,21 +46,22 @@ function getJourneyLoadFactor(legs: any[]): string | null {
   return maxFactor;
 }
 
-function getLoadFactorConfig(factor: string | null) {
+function getLoadFactorConfig(factor: string | null, t: TFunction) {
   if (!factor) return null;
 
   const mapping: Record<string, { label: string; desc: string; styles: string }> = {
-    'low': { label: 'Quiet Train', desc: 'Great for dogs', styles: 'bg-emerald-50 text-emerald-700 border-emerald-200/60' },
-    'low-to-medium': { label: 'Moderate Load', desc: 'Comfortable for dogs', styles: 'bg-blue-50 text-blue-700 border-blue-200/60' },
-    'medium': { label: 'Medium Load', desc: 'Standard spacing', styles: 'bg-slate-50 text-slate-700 border-slate-200/60' },
-    'high': { label: 'Crowded Train', desc: 'Stressful for dogs', styles: 'bg-orange-50 text-orange-700 border-orange-200/60' },
-    'very-high': { label: 'Very Crowded', desc: 'Avoid with dogs if possible', styles: 'bg-red-50 text-red-700 border-red-200/60 animate-pulse' }
+    'low': { label: t('journeys.load.low'), desc: t('journeys.load.lowDesc'), styles: 'bg-emerald-50 text-emerald-700 border-emerald-200/60' },
+    'low-to-medium': { label: t('journeys.load.lowMed'), desc: t('journeys.load.lowMedDesc'), styles: 'bg-blue-50 text-blue-700 border-blue-200/60' },
+    'medium': { label: t('journeys.load.medium'), desc: t('journeys.load.mediumDesc'), styles: 'bg-slate-50 text-slate-700 border-slate-200/60' },
+    'high': { label: t('journeys.load.high'), desc: t('journeys.load.highDesc'), styles: 'bg-orange-50 text-orange-700 border-orange-200/60' },
+    'very-high': { label: t('journeys.load.veryHigh'), desc: t('journeys.load.veryHighDesc'), styles: 'bg-red-50 text-red-700 border-red-200/60 animate-pulse' }
   };
 
-  return mapping[factor] || { label: 'Unknown Load', desc: 'Check boards', styles: 'bg-slate-50 text-slate-500 border-slate-200' };
+  return mapping[factor] || { label: t('journeys.load.unknown'), desc: t('journeys.load.unknownDesc'), styles: 'bg-slate-50 text-slate-500 border-slate-200' };
 }
 
 export default function JourneyCard({ journey, dogMode, index }: Props) {
+  const { t } = useTranslation();
   const legs = filterValidLegs(journey.legs);
   const firstLeg = legs[0];
   const lastLeg = legs[legs.length - 1];
@@ -71,7 +73,7 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
   const price = calculateJourneyPrice(journey, dogMode);
 
   const worstLoadFactor = getJourneyLoadFactor(legs);
-  const loadConfig = getLoadFactorConfig(worstLoadFactor);
+  const loadConfig = getLoadFactorConfig(worstLoadFactor, t);
 
   const barSegments = legs.map((leg) => ({ leg, minutes: getLegDurationMinutes(leg) }));
   const totalMinutes = barSegments.reduce((sum, s) => sum + s.minutes, 0) || 1;
@@ -119,13 +121,13 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
                 </div>
                 {dogMode !== 'none' && (
                   <div className="text-xs text-slate-500 mt-0.5 whitespace-nowrap">
-                    {dogMode === 'large' ? 'incl. dog ticket' : 'small dog free'}
+                    {dogMode === 'large' ? t('journeys.price.incl') : t('journeys.price.free')}
                   </div>
                 )}
               </>
             ) : (
               <div className="text-sm font-medium text-slate-400 mt-1 whitespace-nowrap">
-                Check operator
+                {t('journeys.price.check')}
               </div>
             )}
           </div>

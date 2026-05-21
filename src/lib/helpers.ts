@@ -1,3 +1,4 @@
+import i18n from './i18n';
 import type { Leg } from './types';
 
 export function getDefaultDate(): string {
@@ -38,8 +39,8 @@ export function getTransferMinutes(prevLeg: Leg, nextLeg: Leg): number | null {
 }
 
 export function getLineName(leg: Leg): string {
-  if (leg.walking) return 'Walk';
-  return leg.line?.name ?? leg.line?.product ?? 'Unknown';
+  if (leg.walking) return i18n.t('helpers.walk', 'Walk');
+  return leg.line?.name ?? leg.line?.product ?? i18n.t('helpers.unknown', 'Unknown');
 }
 
 /** Station / direction text: Hauptbahnhof→Hbf, drop Bahnhof, shorten bracketed rivers (Main)→(M). */
@@ -72,7 +73,7 @@ export function getLegDurationMinutes(leg: Leg): number {
 
 /** Line name for badges: keep a space between type and number (e.g. ICE 507), no destination. */
 export function compactLineName(leg: Leg): string {
-  if (leg.walking) return 'Walk';
+  if (leg.walking) return i18n.t('helpers.walk', 'Walk');
   const name = (leg.line?.name ?? '').replace(/\s+/g, ' ').trim();
   if (!name) return (leg.line?.product ?? '—').toUpperCase();
   return name;
@@ -80,9 +81,9 @@ export function compactLineName(leg: Leg): string {
 
 /** Short label for pills / bars (no "to", no direction). */
 export function getLegBadgeLabel(leg: Leg): string {
-  if (leg.walking) return 'Walk';
+  if (leg.walking) return i18n.t('helpers.walk', 'Walk');
   
-  const rawName = leg.line?.name || leg.line?.product || 'Train';
+  const rawName = leg.line?.name || leg.line?.product || i18n.t('helpers.train', 'Train');
 
   // 1. Entfernt "(Zug-Nr. 12345)" etc.
   let cleanName = rawName.replace(/\s*\(\s*zug-nr\.?\s*\d+\s*\)/i, '').trim();

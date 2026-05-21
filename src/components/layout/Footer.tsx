@@ -1,4 +1,6 @@
-import { Github, Mail, Linkedin, Route, Instagram } from 'lucide-react';
+import { Github, Mail, Linkedin, Instagram } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { LogoMark } from './Header'; // Verwendet exakt deine bestehende Ordnerstruktur
 
 export function WaveDivider() {
   return (
@@ -17,23 +19,30 @@ interface Props {
 }
 
 export default function Footer({ onShowImprint }: Props) {
+  const { t } = useTranslation();
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
       <WaveDivider />
       <footer className="bg-secondary text-white relative" role="contentinfo">
         <div className="max-w-3xl mx-auto px-4 pt-2 pb-10">
           <div className="flex flex-col items-center text-center gap-6">
-            <div className="flex items-center justify-center rounded-2xl bg-white/10 border border-white/15 p-4" aria-hidden="true">
-              <Route size={52} className="text-white" strokeWidth={1.75} />
+            
+            {/* Hier sitzt jetzt die neue LogoMark als zentrales Markenzeichen */}
+            <div className="hover:scale-105 transition-transform">
+              <LogoMark size="large" />
             </div>
+
             <div className="space-y-2 max-w-md">
-              <p className="font-heading font-bold text-xl tracking-tight text-white">Train Doggo</p>
-              <p className="text-sm text-white/85 font-body leading-relaxed">
-                Find a comfortable seat for you and your dog, peek at example carriage layouts, then reserve the space that works for both of you.
+              <h2 className="text-lg font-bold tracking-tight font-heading">Train Doggo</h2>
+              <p className="text-xs sm:text-sm text-white/70 font-body leading-relaxed">
+                {t('footer.text')}
               </p>
             </div>
-            <p className="text-sm font-semibold text-white/95 font-heading">Kevin Klaus</p>
-            <div className="flex items-center justify-center gap-4">
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3 mt-2">
               <a href="https://instagram.com/traindoggo" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15">
                 <Instagram size={22} strokeWidth={2} />
               </a>
@@ -48,11 +57,16 @@ export default function Footer({ onShowImprint }: Props) {
               </a>
             </div>
             
-            <div className="mt-4 border-t border-white/10 pt-6 w-full max-w-sm flex justify-center">
-              <button onClick={onShowImprint} className="text-sm text-white/60 hover:text-white transition-colors underline underline-offset-4">
-                Impressum & Datenschutz
+            <div className="mt-4 border-t border-white/10 pt-6 w-full max-w-sm flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/70">
+              <p className="whitespace-nowrap">{t('footer.rights')}</p>
+              <button 
+                onClick={onShowImprint} 
+                className="hover:text-white underline decoration-white/30 hover:decoration-white transition-all whitespace-nowrap"
+              >
+                {t('footer.imprint')}
               </button>
             </div>
+
           </div>
         </div>
       </footer>

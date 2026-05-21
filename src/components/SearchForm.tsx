@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { ArrowDownUp, Dog } from 'lucide-react';
-import type { SearchParams, DogMode } from '../lib/types';
+import { ArrowDownUp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import type { SearchParams } from '../lib/types';
 // import { searchStationsByCoords } from '../lib/api'; // <-- 1. Auskommentiert
 import StationInput from './ui/StationInput';
 import DateTimeInput from './ui/DateTimeInput';
@@ -14,16 +15,17 @@ interface Props {
 }
 
 export default function SearchForm({ params, onChange, onSearch, loading }: Props) {
+  const { t } = useTranslation();
   const [shaking, setShaking] = useState(false);
   const [validationMsg, setValidationMsg] = useState<string | null>(null);
   // const [locating, setLocating] = useState(false); // <-- 2. Auskommentiert
   const today = new Date().toISOString().split('T')[0];
 
-  const dogModes: { key: DogMode; label: string; desc: string; icon: React.ReactNode }[] = [
-    { key: 'none', label: 'No dog', desc: 'Standard ticket', icon: null },
-    { key: 'small', label: 'Small dog', desc: 'Free in carrier', icon: <Dog size={14} /> },
-    { key: 'large', label: 'Large dog', desc: 'Dog ticket required', icon: <Dog size={16} /> },
-  ];
+/*   const dogModes: { key: DogMode; label: string; desc: string; icon: React.ReactNode }[] = [
+    { key: 'none', label: t('searchForm.dogModes.none', 'No dog'), desc: t('searchForm.dogModes.noneSub', 'Standard ticket'), icon: null },
+    { key: 'small', label: t('searchForm.dogModes.small', 'Small dog'), desc: t('searchForm.dogModes.smallSub', 'Free in carrier'), icon: <Dog size={14} /> },
+    { key: 'large', label: t('searchForm.dogModes.large', 'Large dog'), desc: t('searchForm.dogModes.largeSub', 'Dog ticket required'), icon: <Dog size={16} /> },
+  ]; */
 
   /* 3. Funktion komplett auskommentiert
   async function handleLocate() {
@@ -48,8 +50,8 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
       setShaking(true);
       setValidationMsg(
         !params.from && !params.to
-          ? 'Please select departure and destination stations'
-          : !params.from ? 'Please select a departure station' : 'Please select a destination station'
+          ? t('searchForm.validation.both', 'Please select departure and destination stations')
+          : !params.from ? t('searchForm.validation.from', 'Please select a departure station') : t('searchForm.validation.to', 'Please select a destination station')
       );
       setTimeout(() => setShaking(false), 500);
       return;
@@ -64,10 +66,10 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
       <div className="space-y-3">
         <StationInput
           id="station-from"
-          label="From"
+          label={t('searchForm.fromLabel', 'From')}
           value={params.from}
           onChange={(s) => onChange({ ...params, from: s })}
-          placeholder="z. B. München Hbf"
+          placeholder={t('searchForm.fromPlaceholder', 'z. B. München Hbf')}
           // showLocationButton       // <-- 4. Auskommentiert
           // onLocate={handleLocate}  // <-- 4. Auskommentiert
           // locating={locating}      // <-- 4. Auskommentiert
@@ -77,10 +79,10 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
           <div className="flex-1 min-w-0">
             <StationInput
               id="station-to"
-              label="To"
+              label={t('searchForm.toLabel', 'To')}
               value={params.to}
               onChange={(s) => onChange({ ...params, to: s })}
-              placeholder="z. B. Berlin Hbf"
+              placeholder={t('searchForm.toPlaceholder', 'z. B. Berlin Hbf')}
             />
           </div>
           <div className="flex flex-col shrink-0">
@@ -89,8 +91,8 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
             </span>
             <IconButton 
               onClick={() => onChange({ ...params, from: params.to, to: params.from })} 
-              aria-label="Swap departure and destination" 
-              title="Swap direction"
+              aria-label={t('searchForm.swapAria', 'Swap departure and destination')} 
+              title={t('searchForm.swapTitle', 'Swap direction')}
             >
               <ArrowDownUp size={18} strokeWidth={2.25} />
             </IconButton>
@@ -102,7 +104,7 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
       <div className="grid grid-cols-2 gap-3 min-w-0">
         <DateTimeInput
           id="search-date"
-          label="Date"
+          label={t('searchForm.dateLabel', 'Date')}
           iconType="date"
           value={params.date}
           min={today}
@@ -111,7 +113,7 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
         />
         <DateTimeInput
           id="search-time"
-          label="Time"
+          label={t('searchForm.timeLabel', 'Time')}
           iconType="time"
           step={60}
           value={params.time}
@@ -120,8 +122,8 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
         />
       </div>
 
-      {/* 3. Dog Logistics Parameter Matrices */}
-{/*       <div>
+      {/* 3. Dog Logistics Parameter Matrices (Auskommentiert laut Original) */}
+{/* <div>
         <span className="block text-xs font-semibold text-slate-600 tracking-wide mb-2 select-none">
           Dog logistics
         </span>
@@ -160,15 +162,15 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
       <button 
         type="submit" 
         className={`${TOKENS.buttons.primarySubmit} ${shaking ? 'animate-shake' : ''}`} 
-        aria-label="Search journeys"
+        aria-label={t('searchForm.submitBtn', 'Search journeys')}
       >
         {loading ? (
           <span className="inline-flex items-center justify-center gap-2.5">
             <Spinner className="h-4 w-4 text-white" />
-            <span>Searching…</span>
+            <span>{t('searchForm.loadingBtn', 'Searching…')}</span>
           </span>
         ) : (
-          'Search journeys'
+          t('searchForm.submitBtn', 'Search journeys')
         )}
       </button>
     </form>
