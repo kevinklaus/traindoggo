@@ -33,8 +33,6 @@ export default function App() {
   const [apiUnavailable, setApiUnavailable] = useState(false);
   const [showImprint, setShowImprint] = useState(false);
 
-  const hasAutoSearched = useRef(false);
-
   // 2. API Modus synchronisieren
   useEffect(() => {
     setMockApiMode(useMockApi);
@@ -64,14 +62,6 @@ export default function App() {
       setLoading(false);
     }
   }, [params, useMockApi]);
-
-  // 4. Auto-Suche für Dev-Modus
-  useEffect(() => {
-    if (isDev && !hasAutoSearched.current) {
-      hasAutoSearched.current = true;
-      handleSearch(params); 
-    }
-  }, [isDev, handleSearch, params]);
 
   // 5. Layout (Extrem sauber, da Header, Footer und Banner ausgelagert sind)
   return (

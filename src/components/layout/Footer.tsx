@@ -58,7 +58,7 @@ export default function Footer({ onShowImprint }: Props) {
             </div>
             
             <div className="mt-4 border-t border-white/10 pt-6 w-full max-w-sm flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/70">
-              <p className="whitespace-nowrap">{t('footer.rights')}</p>
+              <p className="whitespace-nowrap">© {currentYear}  {t('footer.rights')}</p>
               <button 
                 onClick={onShowImprint} 
                 className="hover:text-white underline decoration-white/30 hover:decoration-white transition-all whitespace-nowrap"

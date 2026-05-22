@@ -3,13 +3,27 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 const deTranslations = {
+  nav: {
+    home: "Home",
+    guide: "Ratgeber"
+  },
   header: {
     subtitle: "Züge für dich und deinen Hund",
-    dogStatus: "{{mode}} Hund"
+    dogStatus: "{{mode}} Hund",    
+    langSwitch: "Sprache wechseln",
+    langDE: "Deutsch",
+    langEN: "English",
+    openMenu: "Menü öffnen"
+  },
+  menu: {
+    title: "Menü",
+    nav: "Navigation",
+    settings: "Einstellungen",
+    lang: "Sprache"
   },
   footer: {
     text: "Finde einen bequemen Sitzplatz für dich und deinen Hund, wirf einen Blick auf beispielhafte Wagenlayouts und reserviere dann den Bereich, der für euch beide am besten passt.",    
-    rights: "© 2026 Train Doggo. Alle Rechte vorbehalten.",
+    rights: "Train Doggo. Alle Rechte vorbehalten.",
     imprint: "Impressum & Datenschutz"
   },
   landing: {
@@ -33,6 +47,21 @@ const deTranslations = {
     dticket: "Mit D-Ticket kostenlos",
     noVerbund: "DB Hundeticket erforderlich",
     attribution: "Kartendaten: Christoph Sohn, CC BY-SA 4.0, via Wikimedia Commons. | Alle Angaben ohne Gewähr."
+    },
+    howItWorks: {
+      title: "So funktioniert Train Doggo",
+      step1: {
+        title: "1. Verbindung suchen",
+        text: "Gib Start, Ziel und Datum ein. Du kannst Verbindungen in ganz Europa finden!"
+      },
+      step2: {
+        title: "2. Beste Route wählen",
+        text: "Wir zeigen dir Auslastungen und warnen vor knappen Umstiegen. <br/><span class='text-primary font-medium mt-1 inline-block'>🔜 Bald neu: Tipps für entspannte Gassi-Pausen!</span>"
+      },
+      step3: {
+        title: "3. Clever reservieren",
+        text: "Du findest mit unseren Sitzplatz-Empfehlungen den Waggon mit dem meisten Platz für die Pfoten."
+      }
     },
   },
   searchForm: {
@@ -156,13 +185,27 @@ const deTranslations = {
 };
 
 const enTranslations = {
+  nav: {
+    home: "Home",
+    guide: "Guide"
+  },
   header: {
     subtitle: "Trains for you and your dog",
-    dogStatus: "{{mode}} Dog"
+    dogStatus: "{{mode}} Dog",
+    langSwitch: "Change Language",
+    langDE: "German",
+    langEN: "English",
+    openMenu: "Open menu"
+  },
+  menu: {
+    title: "Menu",
+    nav: "Navigation",
+    settings: "Settings",
+    lang: "Language"
   },
   footer: {
     text: "Find a comfortable seat for you and your dog, peek at example carriage layouts, then reserve the space that works for both of you.",
-    rights: "© 2026 Train Doggo. All rights reserved.",
+    rights: "Train Doggo. All rights reserved.",
     imprint: "Imprint & Privacy"
   },
   landing: {
@@ -186,6 +229,21 @@ const enTranslations = {
     dticket: "Free with D-Ticket",
     noVerbund: "Dog ticket from DB required",
     attribution: "Map data: Christoph Sohn, CC BY-SA 4.0, via Wikimedia Commons. | All information without warranty."
+    },
+    howItWorks: {
+      title: "How Train Doggo works",
+      step1: {
+        title: "1. Search connection",
+        text: "Enter your start, destination, and date. Find connections all across Europe!"
+      },
+      step2: {
+        title: "2. Choose the best route",
+        text: "We show you train loads and warn you about tight transfers. <br/><span class='text-primary font-medium mt-1 inline-block'>🔜 Coming soon: Tips for relaxed potty breaks!</span>"
+      },
+      step3: {
+        title: "3. Book smart",
+        text: "Find the carriage with the most paw-room using our seat recommendations."
+      }
     },
   },
   searchForm: {
