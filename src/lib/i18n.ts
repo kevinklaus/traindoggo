@@ -174,7 +174,9 @@ const deTranslations = {
     ui: {
       dogFriendly: "Hundefreundlicher Sitzplan (Beispiel)",
       typical: "Typische Wagenreihung",
-      exampleNote: "Beispiel-Konfiguration — Vor Einsteigen Gleisanzeiger prüfen."
+      exampleNote: "Beispiel-Konfiguration — Vor Einsteigen Gleisanzeiger prüfen.",
+      closeModal: "Schließen",
+      reopenModal: "Wagenreihung anzeigen"
     }
   },
   errors: {
@@ -356,7 +358,9 @@ const enTranslations = {
     ui: {
       dogFriendly: "Dog-friendly seat map alignment (example)",
       typical: "Typical train composition",
-      exampleNote: "Example configurations modeled after DB standards — always check track indicators before boarding."
+      exampleNote: "Example configurations modeled after DB standards — always check track indicators before boarding.",
+      closeModal: "Close",
+      reopenModal: "Show train composition"
     }
   },
   errors: {

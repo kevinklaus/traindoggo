@@ -51,6 +51,11 @@ export function abbreviateStationName(name: string | undefined | null): string {
   s = s.replace(/\bbahnhof\b/gi, '');
   s = s.replace(/\(\s*([^)]+?)\s*\)/g, (_, inner: string) => {
     const word = inner.trim();
+    
+    if (word.toLowerCase() === 'tief') {
+      return `(${word})`; 
+    }
+    
     if (/^[A-Za-zÄÖÜäöüß]+$/.test(word) && word.length >= 4) {
       const ch = word[0].toUpperCase();
       return `(${ch})`;
