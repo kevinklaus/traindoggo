@@ -176,7 +176,15 @@ const deTranslations = {
       typical: "Typische Wagenreihung",
       exampleNote: "Beispiel-Konfiguration — Vor Einsteigen Gleisanzeiger prüfen.",
       closeModal: "Schließen",
-      reopenModal: "Wagenreihung anzeigen"
+      reopenModal: "Wagenreihung anzeigen",
+      vagonwebExplanation: "Hier siehst du die echten Wagennummern und Klassen. Klicke auf das kleine Kamera- oder Layout-Symbol unter dem Wagen, um den detaillierten Sitzplan zu öffnen. Die Fenster sind exakt eingezeichnet, so siehst du sofort, ob du rausschauen kannst!",
+      vagonwebBestSeats: "Tipp: Gute Sitzmöglichkeiten für Hunde bieten Plätze mit Rückenlehne an Rückenlehne oder Plätze, deren Rückenlehne direkt an eine Gepäckablage, einen Raumtrenner/Schiebetür oder ans Wagenende grenzen.",
+      realComposition: "Echte Wagenreihung (vagonWEB)",
+      fullscreen: "Vollbild",
+      interactiveMap: "Interaktiver Sitzplan",
+      loadingLive: "Lade echte Wagenreihung...",
+      layoutDetails: "Sitzplan & Details",
+      carriage: "Wagen",
     }
   },
   errors: {
@@ -360,7 +368,15 @@ const enTranslations = {
       typical: "Typical train composition",
       exampleNote: "Example configurations modeled after DB standards — always check track indicators before boarding.",
       closeModal: "Close",
-      reopenModal: "Show train composition"
+      reopenModal: "Show train composition",
+      vagonwebExplanation: "Here you can see the real carriage numbers and classes. Click the small camera or layout icon below the carriage to open the detailed seat map. The windows are drawn exactly as they are, so you can see if you have a view!",
+      vagonwebBestSeats: "Tip: The best seating options for dogs are back-to-back seats, or seats where the backrest is directly against a luggage rack, a partition/sliding door, or the end of the carriage.",
+      realComposition: "Real composition (vagonWEB)",
+      fullscreen: "Fullscreen",
+      interactiveMap: "Interactive Seat Map",
+      loadingLive: "Fetching live composition...",
+      layoutDetails: "Seat Map & Details",
+      carriage: "Carriage",
     }
   },
   errors: {
