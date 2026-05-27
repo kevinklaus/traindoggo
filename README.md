@@ -1,4 +1,4 @@
-# ticket-to-tail
+# traindoggo
 
 A lightweight train journey planner built for dog-friendly travel in Germany.
 
