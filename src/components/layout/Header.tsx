@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Route, Menu, X, Home, Globe } from 'lucide-react';
+import { Route, Menu, X, Globe, MoonStar, Bone, TrainFront } from 'lucide-react';
 import type { DogMode } from '../../lib/types';
 import { useTranslation } from 'react-i18next';
 
@@ -52,46 +52,79 @@ export default function Header({ dogMode, onLogoClick }: Props) {
 
   const navItems = [
     { 
-      label: t('nav.home', 'Home'), 
-      icon: <Home size={18} />, 
-      onClick: () => handleNavClick(onLogoClick) 
+      label: t('nav.home', 'Start'), 
+      icon: <Route size={18} />, 
+      onClick: () => handleNavClick(onLogoClick),
+      alwaysVisibleOnTablet: true 
+    },
+    { 
+      label: t('nav.doggoTips', 'Doggo-Tipps'), 
+      icon: <Bone size={18} />, 
+      onClick: () => handleNavClick(onLogoClick),
+      soon: true
+    },
+    { 
+      label: t('nav.destinations', 'Reiseziele'), 
+      icon: <TrainFront size={18} />, 
+      onClick: () => handleNavClick(onLogoClick),
+      soon: true
+    },
+    { 
+      label: t('nav.nightTrains', 'Nachtzüge'), 
+      icon: <MoonStar size={18} />, 
+      onClick: () => handleNavClick(onLogoClick),
+      soon: true
     },
   ];
 
   return (
     <>
-      <header className="bg-white/85 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 h-[64px] sm:h-[73px] flex items-center">
-        <div className="max-w-7xl mx-auto px-4 w-full flex items-center justify-between gap-2 sm:gap-4 min-w-0 relative">
+      <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 h-[64px] sm:h-[73px] flex items-center">
+        <div className="max-w-7xl mx-auto px-4 w-full flex items-center justify-between gap-4 min-w-0">
           
-          <button 
-            onClick={onLogoClick} 
-            className="hover:opacity-90 transition-opacity flex items-center gap-2.5 sm:gap-3 text-left shrink relative z-10 min-w-0"
-          >
-            <LogoMark />
-            <div className="flex flex-col justify-center min-w-0 text-left">
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight font-heading leading-none truncate">
-                Train Doggo
-              </h1>
-              <p className="hidden sm:block text-[13px] text-slate-500 font-body leading-snug mt-0.5 truncate">
-                {t('header.subtitle')}
-              </p>
-            </div>
-          </button>
+          {/* LEFT: Flex-1 zwingt diese Seite, genauso viel Platz zu nehmen wie die rechte Seite */}
+          <div className="flex-1 flex justify-start min-w-0">
+            <button 
+              onClick={onLogoClick} 
+              className="hover:opacity-90 transition-opacity flex items-center gap-2.5 sm:gap-3 text-left min-w-0"
+            >
+              <LogoMark />
+              <div className="flex flex-col justify-center min-w-0 text-left">
+                <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight font-heading leading-none truncate">
+                  Train Doggo
+                </h1>
+                <p className="hidden sm:block text-[13px] text-slate-500 font-body leading-snug mt-0.5 truncate">
+                  {t('header.subtitle', 'Züge für dich und deinen Hund')}
+                </p>
+              </div>
+            </button>
+          </div>
 
-          <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6" aria-label="Main Navigation">
+          {/* CENTER: Das Menü. Da links und rechts flex-1 haben, ist das hier absolut zentriert */}
+          <nav className="hidden md:flex shrink-0 justify-center items-center gap-1 lg:gap-4" aria-label="Main Navigation">
             {navItems.map((item, idx) => (
               <button 
                 key={idx}
                 onClick={item.onClick}
-                className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-primary transition-colors"
+                className={`
+                  items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-colors
+                  ${item.alwaysVisibleOnTablet ? 'flex' : 'hidden lg:flex'}
+                  text-slate-600 hover:text-primary hover:bg-slate-50
+                `}
               >
                 {item.icon}
                 <span>{item.label}</span>
+                {item.soon && (
+                  <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-md ml-0.5">
+                    {t('nav.soon', 'Bald')}
+                  </span>
+                )}
               </button>
             ))}
           </nav>
           
-          <div className="flex items-center gap-1 sm:gap-3 shrink-0 relative z-10">
+          {/* RIGHT: Flex-1 auf der rechten Seite als unsichtbares Gegengewicht zur linken Seite */}
+          <div className="flex-1 flex items-center justify-end gap-1 sm:gap-3 shrink-0">
             <button 
               onClick={toggleLanguage}
               className="flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-2 text-sm font-semibold text-slate-600 hover:text-primary hover:bg-slate-50 rounded-xl transition-colors"
@@ -102,18 +135,20 @@ export default function Header({ dogMode, onLogoClick }: Props) {
             </button>
 
             <button 
-              className="md:hidden p-1.5 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+              className="lg:hidden p-1.5 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label={t('header.openMenu', 'Open menu')}
             >
               <Menu size={24} className="shrink-0" />
             </button>
           </div>
+
         </div>
       </header>
 
+      {/* Mobile & Tablet Overlay Menü */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex justify-end">
+        <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
           <div 
             className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-fade-in"
             onClick={() => setIsMobileMenuOpen(false)}
@@ -140,10 +175,17 @@ export default function Header({ dogMode, onLogoClick }: Props) {
                   <button 
                     key={idx}
                     onClick={item.onClick}
-                    className="flex items-center gap-3 w-full px-3 py-3 text-left font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary rounded-xl transition-colors"
+                    className="flex items-center w-full px-3 py-3 text-left font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary rounded-xl transition-colors"
                   >
-                    <span className="text-slate-400">{item.icon}</span>
-                    <span>{item.label}</span>
+                    <div className="flex items-center gap-3 flex-1">
+                      <span className="text-slate-400">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </div>
+                    {item.soon && (
+                      <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-md shrink-0">
+                        {t('nav.soon', 'Bald')}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>

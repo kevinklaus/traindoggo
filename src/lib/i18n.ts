@@ -4,8 +4,12 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 const deTranslations = {
   nav: {
-    home: "Home",
-    guide: "Ratgeber"
+    home: "Start",
+    guide: "Ratgeber",
+    nightTrains: "Nachtzüge",
+    doggoTips: "Doggo-Tipps",
+    dogRules: "Hunderegeln",
+    destinations: "Reiseziele"
   },
   header: {
     subtitle: "Züge für dich und deinen Hund",
@@ -197,7 +201,11 @@ const deTranslations = {
 const enTranslations = {
   nav: {
     home: "Home",
-    guide: "Guide"
+    guide: "Guide",
+    nightTrains: "Night Trains",
+    doggoTips: "Doggo Tips",
+    dogRules: "Dog Rules",
+    destinations: "Destinations"
   },
   header: {
     subtitle: "Trains for you and your dog",
@@ -394,7 +402,14 @@ i18n
       de: { translation: deTranslations },
       en: { translation: enTranslations }
     },
-    fallbackLng: 'de',
+    // EN ist der Standard für alle Sprachen außer Deutsch
+    fallbackLng: 'en',
+    supportedLngs: ['de', 'en'],
+    detection: {
+      // Prüft die Browser-/Gerätesprache
+      order: ['navigator', 'localStorage'],
+      caches: ['localStorage']
+    },
     interpolation: { escapeValue: false }
   });
 
