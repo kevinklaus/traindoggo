@@ -82,7 +82,7 @@ export default function Header({ dogMode, onLogoClick }: Props) {
       <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 h-[64px] sm:h-[73px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 w-full flex items-center justify-between gap-4 min-w-0">
           
-          {/* LEFT: Flex-1 zwingt diese Seite, genauso viel Platz zu nehmen wie die rechte Seite */}
+          {/* LEFT: Flex-1 */}
           <div className="flex-1 flex justify-start min-w-0">
             <button 
               onClick={onLogoClick} 
@@ -100,30 +100,37 @@ export default function Header({ dogMode, onLogoClick }: Props) {
             </button>
           </div>
 
-          {/* CENTER: Das Menü. Da links und rechts flex-1 haben, ist das hier absolut zentriert */}
+          {/* CENTER: Desktop Navigation mit smartem Hover-Replace Effekt */}
           <nav className="hidden md:flex shrink-0 justify-center items-center gap-1 lg:gap-4" aria-label="Main Navigation">
             {navItems.map((item, idx) => (
               <button 
                 key={idx}
                 onClick={item.onClick}
                 className={`
-                  items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-colors
+                  group relative flex items-center justify-center px-3 py-2 rounded-xl text-sm font-semibold transition-colors
                   ${item.alwaysVisibleOnTablet ? 'flex' : 'hidden lg:flex'}
                   text-slate-600 hover:text-primary hover:bg-slate-50
                 `}
               >
-                {item.icon}
-                <span>{item.label}</span>
+                {/* Normaler Text & Icon (Verschwindet beim Hover, wenn 'soon' aktiv ist) */}
+                <div className={`flex items-center gap-2 transition-all duration-200 ${item.soon ? 'group-hover:opacity-0 group-hover:scale-95' : ''}`}>
+                  {item.icon}
+                  <span>{item.label}</span>
+                </div>
+
+                {/* Absolutes "Bald"-Badge (Erscheint beim Hover an der gleichen Stelle) */}
                 {item.soon && (
-                  <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-md ml-0.5">
-                    {t('nav.soon', 'Bald')}
-                  </span>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 scale-105 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none">
+                    <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-2 py-1 rounded-md shadow-sm">
+                      {t('nav.soon', 'Bald')}
+                    </span>
+                  </div>
                 )}
               </button>
             ))}
           </nav>
           
-          {/* RIGHT: Flex-1 auf der rechten Seite als unsichtbares Gegengewicht zur linken Seite */}
+          {/* RIGHT: Flex-1 */}
           <div className="flex-1 flex items-center justify-end gap-1 sm:gap-3 shrink-0">
             <button 
               onClick={toggleLanguage}
@@ -181,6 +188,7 @@ export default function Header({ dogMode, onLogoClick }: Props) {
                       <span className="text-slate-400">{item.icon}</span>
                       <span>{item.label}</span>
                     </div>
+                    {/* Mobile: Sichtbares Badge rechtsbündig */}
                     {item.soon && (
                       <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-md shrink-0">
                         {t('nav.soon', 'Bald')}

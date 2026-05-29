@@ -9,7 +9,8 @@ const deTranslations = {
     nightTrains: "Nachtzüge",
     doggoTips: "Doggo-Tipps",
     dogRules: "Hunderegeln",
-    destinations: "Reiseziele"
+    destinations: "Reiseziele",
+    soon: "Bald",
   },
   header: {
     subtitle: "Züge für dich und deinen Hund",
@@ -205,7 +206,8 @@ const enTranslations = {
     nightTrains: "Night Trains",
     doggoTips: "Doggo Tips",
     dogRules: "Dog Rules",
-    destinations: "Destinations"
+    destinations: "Destinations",
+    soon: "Soon"
   },
   header: {
     subtitle: "Trains for you and your dog",
