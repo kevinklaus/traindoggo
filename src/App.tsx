@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { Journey, SearchParams } from './lib/types';
 import { searchJourneys, setMockApiMode } from './lib/api';
 import { getDefaultDate, getDefaultTime } from './lib/helpers';
@@ -12,8 +12,14 @@ import DevBanners from './components/layout/DevBanners';
 import LandingContent from './components/content/LandingContent';
 import Imprint from './components/content/Imprint';
 
+// Neue Content-Seiten importieren
+import DoggoTips from './components/content/DoggoTips';
+import NightTrains from './components/content/NightTrains';
+import Destinations from './components/content/Destinations';
+
+export type Page = 'home' | 'tips' | 'destinations' | 'nightTrains';
+
 export default function App() {
-// Strikter Check: Nur Mock-Modus wenn explizit gewünscht UND auf localhost
   const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
   const isDev = import.meta.env.VITE_USE_MOCK_API === 'true' && isLocalhost; 
   const [params, setParams] = useState<SearchParams>({
@@ -33,17 +39,19 @@ export default function App() {
   const [apiUnavailable, setApiUnavailable] = useState(false);
   const [showImprint, setShowImprint] = useState(false);
 
-  // 2. API Modus synchronisieren
+  // NEU: State für die aktuelle Seite
+  const [activePage, setActivePage] = useState<Page>('home');
+
   useEffect(() => {
     setMockApiMode(useMockApi);
   }, [useMockApi]);
 
-  // 3. Such-Logik
   const handleSearch = useCallback(async (searchParams = params) => {
     if (!searchParams.from || !searchParams.to) return;
     setLoading(true);
     setError(null);
     setSearched(true);
+    setActivePage('home'); // Springe auf Home, falls wir von woanders suchen
 
     try {
       const departure = `${searchParams.date}T${searchParams.time}:00`;
@@ -63,10 +71,14 @@ export default function App() {
     }
   }, [params, useMockApi]);
 
-  // 5. Layout (Extrem sauber, da Header, Footer und Banner ausgelagert sind)
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-primary/[0.03] flex flex-col">
-      <Header dogMode={params.dogMode} onLogoClick={() => setSearched(false)} />
+      <Header 
+        dogMode={params.dogMode} 
+        activePage={activePage} 
+        onNavigate={setActivePage} 
+        onLogoClick={() => { setActivePage('home'); setSearched(false); }} 
+      />
       
       <DevBanners 
         isDev={isDev} 
@@ -76,17 +88,29 @@ export default function App() {
       />
 
       <main className="max-w-3xl mx-auto px-4 py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 z-10 relative">
-          <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={loading} />
-        </section>
+        
+        {/* HOMEPAGE: Nur rendern, wenn activePage === 'home' */}
+        {activePage === 'home' && (
+          <>
+            <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 z-10 relative">
+              <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={loading} />
+            </section>
 
-        {searched ? (
-          <div className="mt-8">
-            <JourneyResults journeys={journeys} dogMode={params.dogMode} loading={loading} error={error} />
-          </div>
-        ) : (
-          <LandingContent />
+            {searched ? (
+              <div className="mt-8">
+                <JourneyResults journeys={journeys} dogMode={params.dogMode} loading={loading} error={error} />
+              </div>
+            ) : (
+              <LandingContent />
+            )}
+          </>
         )}
+
+        {/* CONTENT SEITEN */}
+        {activePage === 'tips' && <DoggoTips />}
+        {activePage === 'destinations' && <Destinations />}
+        {activePage === 'nightTrains' && <NightTrains />}
+
       </main>
 
       <Footer onShowImprint={() => setShowImprint(true)} />

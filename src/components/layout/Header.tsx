@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Route, Menu, X, Globe, MoonStar, Bone, TrainFront } from 'lucide-react';
 import type { DogMode } from '../../lib/types';
 import { useTranslation } from 'react-i18next';
+import type { Page } from '../../App'; // Importiert den Typ aus App.tsx
 
 // ============================================================================
 // LOGO COMPONENT
@@ -24,10 +25,12 @@ export function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
 // ============================================================================
 interface Props {
   dogMode: DogMode;
+  activePage: Page;
+  onNavigate: (page: Page) => void;
   onLogoClick?: () => void;
 }
 
-export default function Header({ dogMode, onLogoClick }: Props) {
+export default function Header({ dogMode, activePage, onNavigate, onLogoClick }: Props) {
   const { t, i18n } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -45,35 +48,33 @@ export default function Header({ dogMode, onLogoClick }: Props) {
     i18n.changeLanguage(nextLang);
   };
 
-  const handleNavClick = (callback?: () => void) => {
+  const handleNavClick = (pageId: Page) => {
     setIsMobileMenuOpen(false);
-    if (callback) callback();
+    onNavigate(pageId);
   };
 
-  const navItems = [
+  // Definition der Navigations-Elemente
+  const navItems: Array<{ id: Page; label: string; icon: React.ReactNode; alwaysVisibleOnTablet?: boolean; soon?: boolean }> = [
     { 
+      id: 'home',
       label: t('nav.home', 'Start'), 
       icon: <Route size={18} />, 
-      onClick: () => handleNavClick(onLogoClick),
       alwaysVisibleOnTablet: true 
     },
     { 
+      id: 'tips',
       label: t('nav.doggoTips', 'Doggo-Tipps'), 
-      icon: <Bone size={18} />, 
-      onClick: () => handleNavClick(onLogoClick),
-      soon: true
+      icon: <Bone size={18} />
     },
     { 
+      id: 'destinations',
       label: t('nav.destinations', 'Reiseziele'), 
-      icon: <TrainFront size={18} />, 
-      onClick: () => handleNavClick(onLogoClick),
-      soon: true
+      icon: <TrainFront size={18} />
     },
     { 
+      id: 'nightTrains',
       label: t('nav.nightTrains', 'Nachtzüge'), 
-      icon: <MoonStar size={18} />, 
-      onClick: () => handleNavClick(onLogoClick),
-      soon: true
+      icon: <MoonStar size={18} />
     },
   ];
 
@@ -82,7 +83,6 @@ export default function Header({ dogMode, onLogoClick }: Props) {
       <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 h-[64px] sm:h-[73px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 w-full flex items-center justify-between gap-4 min-w-0">
           
-          {/* LEFT: Flex-1 */}
           <div className="flex-1 flex justify-start min-w-0">
             <button 
               onClick={onLogoClick} 
@@ -100,37 +100,39 @@ export default function Header({ dogMode, onLogoClick }: Props) {
             </button>
           </div>
 
-          {/* CENTER: Desktop Navigation mit smartem Hover-Replace Effekt */}
           <nav className="hidden md:flex shrink-0 justify-center items-center gap-1 lg:gap-4" aria-label="Main Navigation">
-            {navItems.map((item, idx) => (
-              <button 
-                key={idx}
-                onClick={item.onClick}
-                className={`
-                  group relative flex items-center justify-center px-3 py-2 rounded-xl text-sm font-semibold transition-colors
-                  ${item.alwaysVisibleOnTablet ? 'flex' : 'hidden lg:flex'}
-                  text-slate-600 hover:text-primary hover:bg-slate-50
-                `}
-              >
-                {/* Normaler Text & Icon (Verschwindet beim Hover, wenn 'soon' aktiv ist) */}
-                <div className={`flex items-center gap-2 transition-all duration-200 ${item.soon ? 'group-hover:opacity-0 group-hover:scale-95' : ''}`}>
-                  {item.icon}
-                  <span>{item.label}</span>
-                </div>
-
-                {/* Absolutes "Bald"-Badge (Erscheint beim Hover an der gleichen Stelle) */}
-                {item.soon && (
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 scale-105 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none">
-                    <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-2 py-1 rounded-md shadow-sm">
-                      {t('nav.soon', 'Bald')}
+            {navItems.map((item) => {
+              const isActive = activePage === item.id;
+              
+              return (
+                <button 
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`
+                    group relative flex items-center justify-center px-3 py-2 rounded-xl text-sm font-semibold transition-colors
+                    ${item.alwaysVisibleOnTablet ? 'flex' : 'hidden lg:flex'}
+                    ${isActive ? 'text-primary bg-primary/5' : 'text-slate-600 hover:text-primary hover:bg-slate-50'}
+                  `}
+                >
+                  <div className={`flex items-center gap-2 transition-all duration-200 ${item.soon ? 'group-hover:opacity-0 group-hover:scale-95' : ''}`}>
+                    <span className={isActive ? 'text-primary' : 'text-slate-400 group-hover:text-primary transition-colors'}>
+                      {item.icon}
                     </span>
+                    <span>{item.label}</span>
                   </div>
-                )}
-              </button>
-            ))}
+
+                  {item.soon && (
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 scale-105 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none">
+                      <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-2 py-1 rounded-md shadow-sm">
+                        {t('nav.soon', 'Bald')}
+                      </span>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </nav>
           
-          {/* RIGHT: Flex-1 */}
           <div className="flex-1 flex items-center justify-end gap-1 sm:gap-3 shrink-0">
             <button 
               onClick={toggleLanguage}
@@ -149,11 +151,9 @@ export default function Header({ dogMode, onLogoClick }: Props) {
               <Menu size={24} className="shrink-0" />
             </button>
           </div>
-
         </div>
       </header>
 
-      {/* Mobile & Tablet Overlay Menü */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
           <div 
@@ -178,24 +178,31 @@ export default function Header({ dogMode, onLogoClick }: Props) {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 mb-2 block">
                   {t('menu.nav', 'Navigation')}
                 </span>
-                {navItems.map((item, idx) => (
-                  <button 
-                    key={idx}
-                    onClick={item.onClick}
-                    className="flex items-center w-full px-3 py-3 text-left font-semibold text-slate-700 hover:bg-slate-50 hover:text-primary rounded-xl transition-colors"
-                  >
-                    <div className="flex items-center gap-3 flex-1">
-                      <span className="text-slate-400">{item.icon}</span>
-                      <span>{item.label}</span>
-                    </div>
-                    {/* Mobile: Sichtbares Badge rechtsbündig */}
-                    {item.soon && (
-                      <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-md shrink-0">
-                        {t('nav.soon', 'Bald')}
-                      </span>
-                    )}
-                  </button>
-                ))}
+                {navItems.map((item) => {
+                  const isActive = activePage === item.id;
+
+                  return (
+                    <button 
+                      key={item.id}
+                      onClick={() => handleNavClick(item.id)}
+                      className={`group flex items-center w-full px-3 py-3 text-left font-semibold rounded-xl transition-colors
+                        ${isActive ? 'text-primary bg-primary/5' : 'text-slate-700 hover:bg-slate-50 hover:text-primary'}
+                      `}
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        <span className={isActive ? 'text-primary' : 'text-slate-400 group-hover:text-primary transition-colors'}>
+                          {item.icon}
+                        </span>
+                        <span>{item.label}</span>
+                      </div>
+                      {item.soon && (
+                        <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-md shrink-0">
+                          {t('nav.soon', 'Bald')}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
 
               <div className="space-y-1 mt-auto border-t border-slate-100 pt-6">

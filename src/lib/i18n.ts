@@ -196,7 +196,39 @@ const deTranslations = {
     diagnosticTitle: "System-Diagnosebericht",
     systemNotes: "Architektur-Wiederherstellungs-Notizen",
     retryBtn: "Erneut versuchen"
-  }
+  },
+  contentPages: {
+    doggoTips: {
+      title: "Doggo-Tipps für die Bahn",
+      subtitle: "Die wichtigsten Antworten für eine entspannte Reise.",
+      q1: "Muss mein Hund einen Maulkorb tragen?",
+      a1: "Offiziell: Ja. Die DB und viele europäische Bahnen verlangen für Hunde, die nicht in einer Transportbox reisen, Leine und Maulkorb. In der Praxis reagiert das Personal bei ruhigen Hunden oft kulant, aber du musst ihn zwingend dabei haben und auf Aufforderung anlegen.",
+      q2: "Wie plane ich Gassi-Pausen?",
+      a2: "Züge warten nicht. Plane beim Buchen Umstiege von mindestens 20-30 Minuten ein, am besten an großen Bahnhöfen mit Grünflächen in der Nähe. Im Zug gibt es keine Möglichkeit für ein Geschäft.",
+      q3: "Was gehört ins Zug-Gepäck?",
+      a3: "Eine vertraute Decke (gibt Sicherheit und schützt die Sitze/Boden), ein faltbarer Reisenapf, Wasser und Kausnacks zur Beruhigung beim Druckausgleich (Tunnel)."
+    },
+    nightTrains: {
+      title: "Nachtzüge mit Hund",
+      subtitle: "Schlafend ans Ziel – was du wissen musst.",
+      q1: "Darf der Hund in den Schlaf-/Liegewagen?",
+      a1: "Ja, ABER fast alle Anbieter (wie der ÖBB Nightjet) haben eine eiserne Regel: Du musst das gesamte Abteil für dich (und deine Mitreisenden) buchen. Einzelplätze mit Hund im geteilten Abteil sind nicht erlaubt.",
+      q2: "Wo macht der Hund nachts Pipi?",
+      a2: "Das ist die größte Herausforderung. Nachtzüge halten oft stundenlang nicht oder nur mitten in der Nacht für wenige Minuten ohne Türfreigabe. Gehe vor dem Schlafen extrem ausführlich Gassi und reduziere das Wasser nachts.",
+      q3: "Was kostet das Ticket?",
+      a3: "Neben den Kosten für das private Abteil verlangen die meisten Betreiber eine Hunde-Pauschale (beim Nightjet z. B. ca. 30€ pro Strecke). Das Ticket gibt es meist nur direkt beim Betreiber."
+    },
+    destinations: {
+      title: "Hundefreundliche Reiseziele",
+      subtitle: "Europas beste Spots, perfekt erreichbar auf Schienen.",
+      q1: "Österreich (Top Empfehlung)",
+      a1: "Die ÖBB ist extrem hundefreundlich. Züge sind oft geräumig, und Österreich bietet perfekte Wanderwege, die fast alle mit der Bahn erreichbar sind. Wien ist zudem eine sehr grüne Stadt.",
+      q2: "Schweiz",
+      a2: "Die SBB bietet spezielle 'Hunde-Tageskarten' und sogar einen Hunde-Pass für ein ganzes Jahr. Züge sind pünktlich, sauber und Hunde sind fast überall gern gesehene Gäste.",
+      q3: "Deutsche Küsten (Sylt / Rügen)",
+      a3: "Viele direkte IC-Verbindungen fahren bis an die Küste. Hunde lieben das Meer, und außerhalb der Hauptsaison sind viele Strände komplett für freilaufende Hunde geöffnet."
+    }
+  },
 };
 
 const enTranslations = {
@@ -393,7 +425,39 @@ const enTranslations = {
     diagnosticTitle: "System Diagnostics Report",
     systemNotes: "Architectural System Recovery Notes",
     retryBtn: "Retry Setup"
-  }
+  },
+  contentPages: {
+    doggoTips: {
+      title: "Doggo Travel Tips",
+      subtitle: "The most important answers for a relaxed journey.",
+      q1: "Does my dog have to wear a muzzle?",
+      a1: "Officially: Yes. DB and many European railways require leashes and muzzles for dogs not traveling in a carrier. In practice, staff are often lenient with calm dogs, but you absolutely must have one with you and put it on if asked.",
+      q2: "How do I plan potty breaks?",
+      a2: "Trains don't wait. When booking, plan layovers of at least 20-30 minutes, ideally at large stations with nearby green spaces. There are no facilities on board for dogs to relieve themselves.",
+      q3: "What should I pack?",
+      a3: "A familiar blanket (provides security and protects the floor), a collapsible travel bowl, water, and chew snacks to help them calm down and equalize ear pressure in tunnels."
+    },
+    nightTrains: {
+      title: "Night Trains with Dogs",
+      subtitle: "Sleeping to your destination – what you need to know.",
+      q1: "Are dogs allowed in sleeper/couchette cars?",
+      a1: "Yes, BUT almost all operators (like ÖBB Nightjet) have a strict rule: You must book the entire private compartment for yourself (and your group). Individual beds in shared compartments are strictly prohibited with pets.",
+      q2: "Where does the dog pee at night?",
+      a2: "This is the biggest challenge. Night trains often don't stop for hours, or only stop for operational reasons without opening doors. Take a very long walk before boarding and limit water intake overnight.",
+      q3: "How much does the ticket cost?",
+      a3: "In addition to the cost of the private compartment, most operators charge a flat pet fee (e.g., around €30 per trip on Nightjet). You usually have to book this directly through the operator's website."
+    },
+    destinations: {
+      title: "Dog-Friendly Destinations",
+      subtitle: "Europe's best spots, perfectly accessible by rail.",
+      q1: "Austria (Top Recommendation)",
+      a1: "The ÖBB is extremely dog-friendly. Trains are spacious, and Austria offers perfect hiking trails that are almost all accessible by rail. Vienna is also a very green city.",
+      q2: "Switzerland",
+      a2: "The SBB offers special 'Dog Day Passes' and even a yearly dog pass. Trains are punctual, clean, and dogs are welcome guests almost everywhere.",
+      q3: "German Coasts (Sylt / Rügen)",
+      a3: "Many direct IC trains go straight to the coast. Dogs love the sea, and outside of peak season, many beaches are completely open for dogs to run off-leash."
+    }
+  },
 };
 
 i18n
