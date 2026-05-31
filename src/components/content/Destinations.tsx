@@ -1,6 +1,6 @@
 import { MapPin, Train, Palmtree } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { InfoCard } from './DoggoTips';
+import InfoCard from '../layout/InfoCard';
 
 export default function Destinations() {
   const { t } = useTranslation();
