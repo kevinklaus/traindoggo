@@ -11,6 +11,7 @@ import Footer from './components/layout/Footer';
 import DevBanners from './components/layout/DevBanners';
 import LandingContent from './components/content/LandingContent';
 import Imprint from './components/content/Imprint';
+import RecommendedDays from './components/ui/RecommendedDays';
 
 // Neue Content-Seiten importieren
 import DoggoTips from './components/content/DoggoTips';
@@ -39,7 +40,7 @@ export default function App() {
   const [apiUnavailable, setApiUnavailable] = useState(false);
   const [showImprint, setShowImprint] = useState(false);
 
-  // NEU: State für die aktuelle Seite
+  // State für das Page-Routing
   const [activePage, setActivePage] = useState<Page>('home');
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     setSearched(true);
-    setActivePage('home'); // Springe auf Home, falls wir von woanders suchen
+    setActivePage('home'); // Springe zurück auf Home, wenn eine Suche gestartet wird
 
     try {
       const departure = `${searchParams.date}T${searchParams.time}:00`;
@@ -71,6 +72,13 @@ export default function App() {
     }
   }, [params, useMockApi]);
 
+  // Handler für Klicks auf die neuen Datums-Tabs
+  const handleDayChange = (newDateStr: string) => {
+    const newParams = { ...params, date: newDateStr };
+    setParams(newParams);
+    handleSearch(newParams);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-primary/[0.03] flex flex-col">
       <Header 
@@ -89,7 +97,6 @@ export default function App() {
 
       <main className="max-w-3xl mx-auto px-4 py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
         
-        {/* HOMEPAGE: Nur rendern, wenn activePage === 'home' */}
         {activePage === 'home' && (
           <>
             <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 z-10 relative">
@@ -97,7 +104,8 @@ export default function App() {
             </section>
 
             {searched ? (
-              <div className="mt-8">
+              <div className="mt-8 animate-in fade-in slide-in-from-bottom-4">
+                <RecommendedDays currentDateStr={params.date} onDateChange={handleDayChange} />
                 <JourneyResults journeys={journeys} dogMode={params.dogMode} loading={loading} error={error} />
               </div>
             ) : (
@@ -106,7 +114,7 @@ export default function App() {
           </>
         )}
 
-        {/* CONTENT SEITEN */}
+        {/* Content Seiten Routing */}
         {activePage === 'tips' && <DoggoTips />}
         {activePage === 'destinations' && <Destinations />}
         {activePage === 'nightTrains' && <NightTrains />}

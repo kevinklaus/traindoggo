@@ -27,7 +27,7 @@ const deTranslations = {
     lang: "Sprache"
   },
   footer: {
-    text: "Finde einen bequemen Sitzplatz für dich und deinen Hund, wirf einen Blick auf beispielhafte Wagenlayouts und reserviere dann den Bereich, der für euch beide am besten passt.",    
+    text: "Entspannte Zugreisen für dich und deinen Hund. Wir zeigen dir genaue Wagenlayouts, damit du den Platz reservieren kannst, der für euch beide am besten passt.",    
     rights: "Train Doggo. Alle Rechte vorbehalten.",
     imprint: "Impressum & Datenschutz"
   },
@@ -137,6 +137,10 @@ const deTranslations = {
       transfer: "Umstieg",
       walk: "Fußweg",
       inclMin: "(inkl. {{count}} Min)"
+    },
+    recommended: {
+      title: "Reisetag Empfehlung",
+      subtitle: "Dienstag, Mittwoch, Donnerstag und Samstag sind Züge meist etwas leerer als sonst."
     }
   },
   composition: {
@@ -174,7 +178,7 @@ const deTranslations = {
       ic1Tip: "Sechser-Abteile lassen kaum Bodenfläche. Großraumwagen bieten besser berechenbare Platzgrenzen.",
       regioZone: "Mehrzweckabteil",
       regioSeats: "Klappsitze längs zur Fahrtrichtung nahe den Fahrradstellplätzen",
-      regioTip: "Achte auf große Fahrrad-/Rollstuhl-Symbole außen am Zug. Den Hund an kurzer Leine führen."
+      regioTip: "Achte auf große Fahrrad-/Rollstuhl-Symbole außen am Zug."
     },
     ui: {
       dogFriendly: "Hundefreundlicher Sitzplan (Beispiel)",
@@ -256,7 +260,7 @@ const enTranslations = {
     lang: "Language"
   },
   footer: {
-    text: "Find a comfortable seat for you and your dog, peek at example carriage layouts, then reserve the space that works for both of you.",
+    text: "Comfortable train travel for you and your dog. We'll show you detailed carriage layouts, so you can reserve a spot that works for both of you.",
     rights: "Train Doggo. All rights reserved.",
     imprint: "Imprint & Privacy"
   },
@@ -366,6 +370,10 @@ const enTranslations = {
       transfer: "Transfer",
       walk: "Walk",
       inclMin: "(incl. {{count}} min)"
+    },
+    recommended: {
+      title: "Recommended travel days",
+      subtitle: "Tuesdays, Wednesdays, Thursdays, and Saturdays tend to have emptier trains."
     }
   },
   composition: {
@@ -403,7 +411,7 @@ const enTranslations = {
       ic1Tip: "Traditional 6-seat compartments leave zero usable floor area when fully occupied. Open layout cars offer safer, predictable spatial boundaries.",
       regioZone: "Multi-Purpose Area (Mehrzweckabteil)",
       regioSeats: "Fold-up longitudinal seat benches near bicycle slots",
-      regioTip: "Look for large bicycle/wheelchair stencils on the car exterior. These zones feature open floor sections. Keep your dog closely leashed near passenger boarding flows."
+      regioTip: "Look for large bicycle/wheelchair stencils on the car exterior."
     },
     ui: {
       dogFriendly: "Dog-friendly seat map alignment (example)",
