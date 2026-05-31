@@ -1,6 +1,6 @@
 import { Github, Mail, Linkedin, Instagram } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { LogoMark } from './Header'; // Verwendet exakt deine bestehende Ordnerstruktur
+import { LogoMark } from '../ui/Primitives'; 
 
 export function WaveDivider() {
   return (
@@ -26,7 +26,7 @@ export default function Footer({ onShowImprint }: Props) {
     <>
       <WaveDivider />
       <footer className="bg-secondary text-white relative" role="contentinfo">
-        <div className="max-w-3xl mx-auto px-4 pt-2 pb-10">
+        <div className="max-w-4xl mx-auto px-4 pt-2 pb-10">
           <div className="flex flex-col items-center text-center gap-6">
             
             {/* Hier sitzt jetzt die neue LogoMark als zentrales Markenzeichen */}

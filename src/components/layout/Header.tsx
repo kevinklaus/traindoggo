@@ -1,24 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Route, Menu, X, Globe, MoonStar, Bone, TrainFront } from 'lucide-react';
+import { LogoMark } from '../ui/Primitives';
 import type { DogMode } from '../../lib/types';
 import { useTranslation } from 'react-i18next';
 import type { Page } from '../../App'; // Importiert den Typ aus App.tsx
 
-// ============================================================================
-// LOGO COMPONENT
-// ============================================================================
-export function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
-  const wrap = size === 'large' ? 'w-16 h-16 rounded-2xl' : 'w-10 h-10 sm:w-12 sm:h-12 rounded-xl';
-  const iconSize = size === 'large' ? 34 : 24;
-  return (
-    <div
-      className={`relative flex items-center justify-center bg-primary shadow-lg shadow-primary/25 shrink-0 ${wrap}`}
-      aria-hidden="true"
-    >
-      <Route size={iconSize} className="text-white" strokeWidth={2} />
-    </div>
-  );
-}
+
 
 // ============================================================================
 // MAIN HEADER COMPONENT

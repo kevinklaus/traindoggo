@@ -95,7 +95,7 @@ export default function App() {
         setUseMockApi={setUseMockApi} 
       />
 
-      <main className="max-w-3xl mx-auto px-4 py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
+      <main className="max-w-4xl mx-auto px-4 py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
         
         {activePage === 'home' && (
           <>

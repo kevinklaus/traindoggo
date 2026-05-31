@@ -1,3 +1,4 @@
+import { PawPrint } from 'lucide-react';
 import React from 'react';
 
 // ============================================================================
@@ -20,6 +21,83 @@ export const TOKENS = {
     popoverList: "absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto overflow-x-hidden",
   }
 };
+
+
+// ============================================================================
+// ATOMIC COMPONENTS
+// ============================================================================
+
+
+// ============================================================================
+// LOGO COMPONENT
+// ============================================================================
+export function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
+  const wrap = size === 'large' ? 'w-16 h-16 rounded-full' : 'w-10 h-10 sm:w-12 sm:h-12 rounded-full';
+  const iconSize = size === 'large' ? 34 : 24;
+  return (
+    <div
+      className={`relative flex items-center justify-center bg-accent shrink-0 ${wrap}`}
+      aria-hidden="true"
+    >
+      <PawPrint size={iconSize} className="text-white" strokeWidth={2} />
+    </div>
+  );
+}
+
+export function Spinner({ className = '' }: { className?: string }) {
+  return (
+    <svg 
+      className={`animate-spin ${className}`} 
+      xmlns="http://www.w3.org/2000/svg" 
+      fill="none" 
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle 
+        className="opacity-25" 
+        cx="12" 
+        cy="12" 
+        r="10" 
+        stroke="currentColor" 
+        strokeWidth="4"
+      />
+      <path 
+        className="opacity-75" 
+        fill="currentColor" 
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  );
+}
+
+interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+}
+export function IconButton({ children, className = '', ...props }: IconButtonProps) {
+  return (
+    <button type="button" className={`${TOKENS.buttons.iconButton} ${className}`} {...props}>
+      {children}
+    </button>
+  );
+}
+
+interface BadgeProps {
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+  title?: string;
+  className?: string;
+}
+export function Badge({ children, style, title, className = '' }: BadgeProps) {
+  return (
+    <span
+      title={title}
+      className={`text-xs font-bold px-2 py-0.5 rounded-md truncate max-w-full block text-center ${className}`}
+      style={style}
+    >
+      {children}
+    </span>
+  );
+}
 
 // ============================================================================
 // CENTRALIZED TRANSPORT BRAND COLOR ENGINE
@@ -128,62 +206,4 @@ export function getLegColorTheme(product?: string, name?: string, isWalking?: bo
     bgHex: '#334155',     // slate-700
     textHex: '#ffffff',
   };
-}
-
-// ============================================================================
-// ATOMIC COMPONENTS
-// ============================================================================
-export function Spinner({ className = '' }: { className?: string }) {
-  return (
-    <svg 
-      className={`animate-spin ${className}`} 
-      xmlns="http://www.w3.org/2000/svg" 
-      fill="none" 
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <circle 
-        className="opacity-25" 
-        cx="12" 
-        cy="12" 
-        r="10" 
-        stroke="currentColor" 
-        strokeWidth="4"
-      />
-      <path 
-        className="opacity-75" 
-        fill="currentColor" 
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      />
-    </svg>
-  );
-}
-
-interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-}
-export function IconButton({ children, className = '', ...props }: IconButtonProps) {
-  return (
-    <button type="button" className={`${TOKENS.buttons.iconButton} ${className}`} {...props}>
-      {children}
-    </button>
-  );
-}
-
-interface BadgeProps {
-  children: React.ReactNode;
-  style?: React.CSSProperties;
-  title?: string;
-  className?: string;
-}
-export function Badge({ children, style, title, className = '' }: BadgeProps) {
-  return (
-    <span
-      title={title}
-      className={`text-xs font-bold px-2 py-0.5 rounded-md truncate max-w-full block text-center ${className}`}
-      style={style}
-    >
-      {children}
-    </span>
-  );
 }
