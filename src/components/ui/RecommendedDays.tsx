@@ -98,7 +98,7 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
         <div 
           ref={scrollRef}
           onScroll={checkScroll}
-          className="flex-1 flex gap-3 md:gap-3.5 overflow-x-auto pt-4 pb-3 pl-1 pr-4 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] scroll-smooth"
+          className="flex-1 flex gap-2 md:gap-3 overflow-x-auto pt-4 pb-3 pl-1 pr-4 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] scroll-smooth"
         >
           {days.map((d) => {
             const dateStr = formatDateStr(d);
@@ -110,11 +110,11 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
                 key={dateStr}
                 onClick={() => onDateChange(dateStr)}
                 className={`
-                  snap-center shrink-0 flex flex-col items-center justify-center py-2 px-2.5 md:py-2.5 md:px-3 rounded-xl border-2 transition-all min-w-[72px] md:min-w-[96px] relative focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 overflow-visible
+                  snap-center shrink-0 flex flex-col items-center justify-center py-1 px-2 md:py-2 md:px-2 rounded-xl border-2 transition-all min-w-[72px] md:min-w-[96px] relative focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 overflow-visible
                   ${isActive 
-                    ? 'active-day bg-primary border-primary text-white shadow-md shadow-primary/30 transform scale-[1.02] z-10' 
+                    ? 'active-day bg-primary border-primary text-white transform scale-[1.02] z-10' 
                     : recommended 
-                      ? 'bg-blue-50/50 border-primary/40 text-slate-700 hover:border-primary hover:bg-blue-50 z-0' 
+                      ? 'bg-white border-primary/40 text-slate-700 hover:border-primary hover:bg-blue-50 z-0' 
                       : 'bg-white border-slate-100 text-slate-600 hover:border-slate-300 hover:bg-slate-50 z-0'
                   }
                 `}

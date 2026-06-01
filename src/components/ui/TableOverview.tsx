@@ -29,7 +29,7 @@ export default function TableOverview({ columns, data }: Props) {
   const restCols = columns.slice(1);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 mt-2 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-5 mt-2 mb-6">
       {data.map(row => (
         <div 
           key={row.id} 

@@ -127,7 +127,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
               title={t('header.langSwitch', 'Change Language')}
             >
               <Globe size={18} className="shrink-0" />
-              <span>{i18n.language.startsWith('de') ? t('header.langDE', 'Deutsch') : t('header.langEN', 'English')}</span>
+              <span>{i18n.language.startsWith('de') ? t('header.langEN') : t('header.langDE')}</span>
             </button>
 
             <button 

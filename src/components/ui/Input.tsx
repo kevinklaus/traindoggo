@@ -42,7 +42,7 @@ export default function Input({
           {children}
 
           {rightElement && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center gap-1.5">
+            <div className="absolute bg-white right-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center gap-1.5">
               {rightElement}
             </div>
           )}

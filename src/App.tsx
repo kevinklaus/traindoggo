@@ -4,16 +4,13 @@ import { searchJourneys, setMockApiMode } from './lib/api';
 import { getDefaultDate, getDefaultTime } from './lib/helpers';
 import { DEV_INITIAL_FROM, DEV_INITIAL_TO } from './lib/mockData';
 
-import SearchForm from './components/SearchForm';
-import JourneyResults from './components/JourneyResults';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import DevBanners from './components/layout/DevBanners';
 import LandingContent from './components/content/LandingContent';
 import Imprint from './components/content/Imprint';
-import RecommendedDays from './components/ui/RecommendedDays';
 
-// Neue Content-Seiten importieren
+// Content-Seiten importieren
 import DoggoTips from './components/content/DoggoTips';
 import NightTrains from './components/content/NightTrains';
 import Destinations from './components/content/Destinations';
@@ -72,7 +69,6 @@ export default function App() {
     }
   }, [params, useMockApi]);
 
-  // Handler für Klicks auf die neuen Datums-Tabs
   const handleDayChange = (newDateStr: string) => {
     const newParams = { ...params, date: newDateStr };
     setParams(newParams);
@@ -80,7 +76,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-primary/[0.03] flex flex-col">
+    <div className="min-h-screen bg-secondary/5 from-slate-50 via-white to-primary/[0.03] flex flex-col">
       <Header 
         dogMode={params.dogMode} 
         activePage={activePage} 
@@ -95,23 +91,20 @@ export default function App() {
         setUseMockApi={setUseMockApi} 
       />
 
-      <main className="max-w-4xl mx-auto px-4 py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
+      <main className="max-w-6xl mx-auto px-4 py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
         
+        {/* Die Startseite wird jetzt komplett an LandingContent delegiert */}
         {activePage === 'home' && (
-          <>
-            <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 z-10 relative">
-              <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={loading} />
-            </section>
-
-            {searched ? (
-              <div className="mt-8 animate-in fade-in slide-in-from-bottom-4">
-                <RecommendedDays currentDateStr={params.date} onDateChange={handleDayChange} />
-                <JourneyResults journeys={journeys} dogMode={params.dogMode} loading={loading} error={error} />
-              </div>
-            ) : (
-              <LandingContent />
-            )}
-          </>
+          <LandingContent 
+            params={params}
+            setParams={setParams}
+            handleSearch={handleSearch}
+            handleDayChange={handleDayChange}
+            loading={loading}
+            error={error}
+            searched={searched}
+            journeys={journeys}
+          />
         )}
 
         {/* Content Seiten Routing */}

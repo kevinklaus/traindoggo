@@ -7,7 +7,7 @@ import React from 'react';
 export const TOKENS = {
   inputs: {
     base: "w-full py-3 px-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all font-body text-sm",
-    iconPadding: "pl-10 pr-9",
+    iconPadding: "pl-9 pr-3 sm:pl-10 sm:pr-4",
     label: "block text-xs font-semibold text-slate-600 tracking-wide mb-1.5 select-none",
     error: "mt-1.5 text-xs text-red-600 flex items-center gap-1 font-medium select-none animate-fade-in"
   },
@@ -17,7 +17,7 @@ export const TOKENS = {
     primarySubmit: "w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-primary/30 font-heading",
   },
   layouts: {
-    card: "bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden",
+    card: "bg-white rounded-3xl shadow-sm hover:shadow-md transition-all overflow-hidden",
     popoverList: "absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto overflow-x-hidden",
   }
 };

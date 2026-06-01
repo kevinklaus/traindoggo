@@ -61,11 +61,11 @@ const deTranslations = {
       },
       step2: {
         title: "2. Beste Route wählen",
-        text: "Wir zeigen dir Auslastungen und warnen vor knappen Umstiegen. <br/><span class='text-primary font-medium mt-1 inline-block'>🔜 Bald neu: Tipps für entspannte Gassi-Pausen!</span>"
+        text: "Wir warnen vor knappen Umstiegen und zeigen dir genaue Wagenlayouts. <br/><span class='text-primary font-medium mt-1 inline-block'> Bald neu: Tipps für entspannte Gassi-Pausen!</span>"
       },
       step3: {
-        title: "3. Clever reservieren",
-        text: "Du findest mit unseren Sitzplatz-Empfehlungen den Waggon mit dem meisten Platz für die Pfoten."
+        title: "3. Sitzplatz finden",
+        text: "Du findest mit unseren Empfehlungen den Sitzplatz mit dem meisten Raum für Pfoten."
       }
     },
   },
@@ -140,7 +140,7 @@ const deTranslations = {
     },
     recommended: {
       title: "Reisetag Empfehlung",
-      subtitle: "Dienstag, Mittwoch, Donnerstag und Samstag sind Züge meist etwas leerer als sonst."
+      subtitle: "Dienstag, Mittwoch, Donnerstag und Samstag sind Züge oft leerer."
     }
   },
   composition: {
@@ -291,7 +291,7 @@ const enTranslations = {
     subtitle: "Trains for you and your dog",
     dogStatus: "{{mode}} Dog",
     langSwitch: "Change Language",
-    langDE: "German",
+    langDE: "Deutsch",
     langEN: "English",
     openMenu: "Open menu"
   },
@@ -336,11 +336,11 @@ const enTranslations = {
       },
       step2: {
         title: "2. Choose the best route",
-        text: "We show you train loads and warn you about tight transfers. <br/><span class='text-primary font-medium mt-1 inline-block'>🔜 Coming soon: Tips for relaxed potty breaks!</span>"
+        text: "We warn about tight transfers and show you detailed carriage layouts. <br/><span class='text-primary font-medium mt-1 inline-block'> Coming soon: Tips for relaxed potty breaks!</span>"
       },
       step3: {
-        title: "3. Book smart",
-        text: "Find the carriage with the most paw-room using our seat recommendations."
+        title: "3. Find a seat",
+        text: "Find the seat with the most paw-room using our recommendations."
       }
     },
   },

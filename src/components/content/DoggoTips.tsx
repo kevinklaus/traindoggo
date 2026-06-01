@@ -1,4 +1,4 @@
-import { ShieldAlert, Clock, BaggageClaim, Map, Compass, Dog, Euro, AlertCircle, TrainFront, TrainTrack } from 'lucide-react';
+import { Map, Dog, AlertCircle, TrainFront, TrainTrack, Ticket } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import DogRulesMap from '../DogRulesMap';
 // import InfoCard from '../layout/InfoCard';
@@ -13,7 +13,7 @@ export default function DoggoTips() {
     // { id: 'breaks', label: t('contentPages.doggoTips.q2'), icon: <Clock size={16}/> },
     // { id: 'packing', label: t('contentPages.doggoTips.q3'), icon: <BaggageClaim size={16}/> },
     { id: 'germany', label: t('landing.title'), icon: <Dog size={16}/> },
-    { id: 'prices', label: t('contentPages.doggoTips.tableTitle'), icon: <Euro size={16}/> },
+    { id: 'prices', label: t('contentPages.doggoTips.tableTitle'), icon: <Ticket size={16}/> },
     { id: 'dogrulesmap', label: t('landing.map.title'), icon: <Map size={16}/> },
   ];
 
@@ -51,7 +51,7 @@ export default function DoggoTips() {
         {/* <div id="breaks"><InfoCard icon={<Clock className="text-primary" />} title={t('contentPages.doggoTips.q2')} text={t('contentPages.doggoTips.a2')} /></div> */}
         {/* <div id="packing"><InfoCard icon={<BaggageClaim className="text-primary" />} title={t('contentPages.doggoTips.q3')} text={t('contentPages.doggoTips.a3')} /></div> */}
         
-        <div id="germany" className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 scroll-mt-24">
+        <div id="germany" className="bg-white rounded-3xl p-6 sm:p-8 scroll-mt-24">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2.5 bg-green-50 text-green-600 rounded-xl">
               <Dog size={24} strokeWidth={2} />
@@ -81,7 +81,7 @@ export default function DoggoTips() {
           </div>
         </div>
 
-        <div id="prices" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm mt-6 scroll-mt-24">
+        <div id="prices" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <h3 className="text-lg font-bold text-slate-800 mb-4">{t('contentPages.doggoTips.tableTitle')}</h3>
           <TableOverview columns={tableColumns} data={tableData} />
         </div>

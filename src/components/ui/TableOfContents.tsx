@@ -24,8 +24,8 @@ export default function TableOfContents({ items }: Props) {
   };
 
   return (
-    <div className="bg-primary/5 rounded-2xl p-4 sm:p-5 mb-8 border border-primary/10">
-      <span className="text-[14px] font-bold tracking-wider text-primary mb-3 block">
+    <div className="bg-secondary/10 rounded-3xl p-4 sm:p-5 mb-8">
+      <span className="text-[14px] font-bold tracking-wider text-secondary mb-3 block">
         {t('contentPages.tocTitle')}
       </span>
       <div className="flex flex-wrap gap-2.5">
@@ -33,7 +33,7 @@ export default function TableOfContents({ items }: Props) {
           <button
             key={item.id}
             onClick={() => scrollTo(item.id)}
-            className="flex items-center text-left gap-2 bg-white px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary hover:shadow-sm border border-slate-200 hover:border-primary/30 transition-all"
+            className="flex items-center text-left gap-2 bg-white px-3 py-2 rounded-full text-sm font-semibold text-secondary hover:text-primary hover:shadow-sm hover:border-primary/30 transition-all"
           >
             {item.icon || <Hash size={16} className="text-primary/50" />}
             <span>{item.label}</span>

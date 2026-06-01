@@ -45,7 +45,7 @@ export default function NightTrains() {
       <div className="space-y-6">
         <div id="cabins"><InfoCard icon={<MoonStar className="text-primary" />} title={t('contentPages.nightTrains.q1')} text={t('contentPages.nightTrains.a1')} /></div>
         
-        <div id="overview" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm mt-6 scroll-mt-24">
+        <div id="overview" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <h3 className="text-lg font-bold text-slate-800 mb-2">{t('contentPages.nightTrains.tableTitle')}</h3>
           <p className="text-sm text-slate-600 mb-4">{t('contentPages.nightTrains.romaniaNote')}</p>
           <TableOverview columns={tableColumns} data={tableData} />
@@ -54,7 +54,7 @@ export default function NightTrains() {
     {/*     <div id="potty"><InfoCard icon={<AlertTriangle className="text-amber-500" />} title={t('contentPages.nightTrains.q2')} text={t('contentPages.nightTrains.a2')} /></div>
         <div id="tickets"><InfoCard icon={<Ticket className="text-primary" />} title={t('contentPages.nightTrains.q3')} text={t('contentPages.nightTrains.a3')} /></div>
  */}        
-        <div id="map" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm mt-6 scroll-mt-24">
+        <div id="map" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-primary/10 rounded-xl shrink-0"><Map className="text-primary" /></div>
             <h3 className="text-lg font-bold text-slate-800">{t('contentPages.nightTrains.mapTitle')}</h3>
@@ -62,7 +62,7 @@ export default function NightTrains() {
           <p className="text-slate-600 mb-4 ml-[52px]">{t('contentPages.nightTrains.mapDesc')}</p>
           <iframe 
             src="https://back-on-track.eu/night-train-map/" 
-            className="w-full aspect-[4/5] md:aspect-[4/5] rounded-xl border border-slate-200"
+            className="w-full aspect-[4/5] md:aspect-[4/5] rounded-xl"
             title="European Night Train Map"
             loading="lazy"
           />

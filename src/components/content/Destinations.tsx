@@ -26,7 +26,7 @@ export default function Destinations() {
       <div className="space-y-6">
         
         {/* Nativer Viaduct Embed */}
-        <div id="viaduct-map" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm mb-6 scroll-mt-24">
+        <div id="viaduct-map" className="bg-white rounded-3xl p-5 sm:p-6 mb-6 scroll-mt-24">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-primary/10 rounded-xl shrink-0"><Map className="text-primary" /></div>
             <h3 className="text-lg font-bold text-slate-800">{t('contentPages.destinations.mapTitle')}</h3>
@@ -49,7 +49,7 @@ export default function Destinations() {
         <div id="coasts"><InfoCard icon={<Palmtree className="text-primary" />} title={t('contentPages.destinations.q3')} text={t('contentPages.destinations.a3')} /></div> */}
 
         {/* Instagram Modul mit direktem Button */}
-        <div id="instagram" className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm mt-6 scroll-mt-24">
+        <div id="instagram" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-pink-50 text-pink-600 rounded-xl shrink-0"><Instagram size={20} /></div>
             <h3 className="text-lg font-bold text-slate-800">
