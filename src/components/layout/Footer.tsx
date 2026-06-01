@@ -1,4 +1,4 @@
-import { Github, Mail, Linkedin, Instagram } from 'lucide-react';
+import { Github, Mail, Linkedin, Instagram, Globe } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LogoMark } from '../ui/Primitives'; 
 
@@ -46,12 +46,15 @@ export default function Footer({ onShowImprint }: Props) {
               <a href="https://instagram.com/traindoggo" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15">
                 <Instagram size={22} strokeWidth={2} />
               </a>
-              <a href="https://github.com/kevinklaus" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15">
+              <a href="https://github.com/kevinklaus/traindoggo" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15">
                 <Github size={22} strokeWidth={2} />
               </a>
-              <a href="mailto:kevintheklaus@gmail.com" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15">
-                <Mail size={22} strokeWidth={2} />
+              <a href="https://kevinklaus.github.io" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15">
+                <Globe size={22} strokeWidth={2} />
               </a>
+              {/* <a href="mailto:kevintheklaus@gmail.com" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15">
+                <Mail size={22} strokeWidth={2} />
+              </a> */}
               <a href="https://www.linkedin.com/in/kevinklaus" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-white transition-all hover:scale-105 border border-white/15">
                 <Linkedin size={22} strokeWidth={2} />
               </a>
