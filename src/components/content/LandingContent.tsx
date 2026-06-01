@@ -42,10 +42,10 @@ export default function LandingContent({
         {/* Weicher Gradient, damit der Text immer gut lesbar bleibt */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-slate-900/5 to-transparent flex flex-col justify-end p-6 sm:p-10 pb-16 sm:pb-24 md:pb-28">
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-heading font-bold text-white mb-2 leading-tight">
-            {t('landing.heroTitle', 'Züge für dich & deinen Hund')}
+            {t('landing.heroTitle')}
           </h1>
           <p className="hidden sm:block text-white text-sm sm:text-base md:text-xl max-w-xl">
-            {t('landing.heroSubtitle', 'Auf hundefreundlichen Bahnreisen Europa entdecken')}
+            {t('landing.heroSubtitle')}
           </p>
         </div>
       </div>

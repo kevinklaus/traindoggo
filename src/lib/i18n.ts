@@ -33,6 +33,8 @@ const deTranslations = {
   },
   landing: {
     title: "Im Zug mit Doggos in Europa",
+    heroTitle: "Züge für dich & deinen Hund",
+    heroSubtitle: "Auf hundefreundlichen Bahnreisen Europa entdecken",
     fernverkehr: {
       title: "Fernverkehr (ICE/TGV/EC)",
       bullet1: "<b>Kleine Hunde</b> (Katzengröße) reisen gratis in der Box.",
@@ -308,6 +310,8 @@ const enTranslations = {
   },
   landing: {
     title: "Traveling with a Doggo in Europe",
+    heroTitle: "Trains for you & your dog",
+    heroSubtitle: "Discover dog-friendly train travel across Europe",
     fernverkehr: {
       title: "Long-Distance (ICE/TGV/EC)",
       bullet1: "<b>Small dogs</b> (cat size) travel for free in a carrier.",
