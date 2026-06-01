@@ -80,7 +80,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight font-heading leading-tight truncate">
                   Train Doggo
                 </h1>
-                <p className="hidden sm:block text-[13px] text-slate-500 font-body leading-snug mt-0.5 truncate">
+                <p className="hidden text-[13px] text-slate-500 font-body leading-snug mt-0.5 truncate">
                   {t('header.subtitle', 'Züge für dich und deinen Hund')}
                 </p>
               </div>
