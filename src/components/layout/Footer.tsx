@@ -1,4 +1,4 @@
-import { Github, Mail, Linkedin, Instagram, Globe } from 'lucide-react';
+import { Github, Linkedin, Instagram, Globe } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LogoMark } from '../ui/Primitives'; 
 

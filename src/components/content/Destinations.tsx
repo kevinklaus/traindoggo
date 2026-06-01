@@ -1,6 +1,5 @@
-import { MapPin, Train, Palmtree, Map, Instagram } from 'lucide-react';
+import { Map, Instagram } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import InfoCard from '../layout/InfoCard';
 import TableOfContents from '../ui/TableOfContents';
 
 export default function Destinations() {

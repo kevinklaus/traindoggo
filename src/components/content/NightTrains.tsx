@@ -1,4 +1,4 @@
-import { MoonStar, AlertTriangle, Ticket, Map, Dog } from 'lucide-react';
+import { MoonStar, Map, Dog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import InfoCard from '../layout/InfoCard';
 import TableOverview from '../ui/TableOverview';
