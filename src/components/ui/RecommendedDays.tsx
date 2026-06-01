@@ -67,7 +67,7 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
       
       <div className="mb-2 px-1">
         <div className="flex items-center gap-2 mb-0.5">
-          <PawPrint size={18} strokeWidth={2} className="text-primary" />
+          <PawPrint size={18} strokeWidth={2} className="text-primary fill-primary" />
           <span className="text-[14px] font-bold text-slate-800 capitalize">
             {t('journeys.recommended.title')}
           </span>
@@ -131,10 +131,12 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
                 
                 {/* Schwebende Pfote - Nutzt den durch pt-4 & pr-4 freigeschaufelten Platz im Scroll-Container */}
                 {recommended && (
-                  <div className={`absolute -top-3 -right-3 flex items-center justify-center w-[30px] h-[30px] rounded-full border-2 bg-white border-primary/10 text-primary`}>
+                  <div className={`absolute -top-3 -right-3 flex items-center justify-center w-[24px] h-[24px] rounded-full bg-white text-primary`}>
                     <PawPrint 
                       size={16} 
                       strokeWidth={2} 
+                      className={`fill-primary`}
+                      aria-label={t('journeys.recommended.recommendedForDogs')}
                     />
                   </div>
                 )}

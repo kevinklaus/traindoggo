@@ -51,7 +51,7 @@ export default function TableOverview({ columns, data }: Props) {
             {/* Empfehlungs-Badge */}
             {row.highlight && (
               <div className="inline-flex items-center gap-1.5 bg-white text-primary px-3 py-1.5 rounded-xl text-[13px] font-bold w-fit">
-                <PawPrint size={15} strokeWidth={2.5} />
+                <PawPrint size={15} strokeWidth={2.5} className="fill-primary" />
                 <span className="capitalize">{t('contentPages.tableRecommendation', 'Empfehlung mit Hund')}</span>
               </div>
             )}

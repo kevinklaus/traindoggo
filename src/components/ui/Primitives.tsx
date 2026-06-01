@@ -33,13 +33,13 @@ export const TOKENS = {
 // ============================================================================
 export function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
   const wrap = size === 'large' ? 'w-16 h-16 rounded-full' : 'w-10 h-10 sm:w-12 sm:h-12 rounded-full';
-  const iconSize = size === 'large' ? 34 : 24;
+  const iconSize = size === 'large' ? 36 : 24;
   return (
     <div
       className={`relative flex items-center justify-center bg-accent shrink-0 ${wrap}`}
       aria-hidden="true"
     >
-      <PawPrint size={iconSize} className="text-white" strokeWidth={2} />
+      <PawPrint size={iconSize} className="text-white fill-white" strokeWidth={2} />
     </div>
   );
 }
