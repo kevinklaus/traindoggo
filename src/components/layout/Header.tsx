@@ -77,7 +77,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
             >
               <LogoMark />
               <div className="flex flex-col justify-center min-w-0 text-left">
-                <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight font-heading leading-none truncate">
+                <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight font-heading leading-tight truncate">
                   Train Doggo
                 </h1>
                 <p className="hidden sm:block text-[13px] text-slate-500 font-body leading-snug mt-0.5 truncate">
