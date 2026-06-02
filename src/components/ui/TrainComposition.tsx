@@ -109,7 +109,7 @@ export default function TrainComposition({ leg, onClose }: Props) {
             <iframe 
               ref={iframeRef}
               src={vagonWeb.directUrl} 
-              className="w-full h-[260px] object-contain bg-white block" 
+              className="w-full h-[150px] object-contain bg-white block" 
               sandbox="allow-scripts allow-same-origin"
             />
           </div>

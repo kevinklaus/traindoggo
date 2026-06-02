@@ -129,7 +129,7 @@ const INJECTED_SCRIPT = `
     if (targetScroll) {
       setTimeout(function() {
         var topPosition = targetScroll.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: topPosition - 2, behavior: 'smooth' });
+        window.scrollTo({ top: topPosition + 10, behavior: 'smooth' });
         setTimeout(function() { document.body.style.overflowY = 'hidden'; }, 800);
       }, 300);
     }
