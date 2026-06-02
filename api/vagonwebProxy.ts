@@ -2,9 +2,27 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const INJECTED_CSS = `
   #hlavicka, #hlavicka_respon, #horizmenu, #horizmenu_respon, #cesta3, #cesta4, #pravanavigace0, #zapati { display: none !important; }
-  body { background: #fff !important; margin: 0; padding: 10px 10px 15px 10px; }
-  ::-webkit-scrollbar { width: 0px; height: 6px; }
+  
+  /* FIX: Komplettes Reset aller vagonWEB Hintergrund-Ebenen auf Weiß */
+  body, html, #obalovydiv, .obsah, .clearboth, .overflow_x, .obsah_razeni { background: #55556d !important; background-color: #55556d !important; margin: 0; padding: 0; }
+  body { padding: 10px 0 !important; }
+  
+  ::-webkit-scrollbar { width: 0px; height: 8px; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  
+  /* FIX: Zug-Container in App-Blau zwingen */
+  table.vlacek { background-color: #55556d !important; border-radius: 12px; padding: 8px; border: none !important; margin: 0 auto; }
+  .vlak_zahlavi { background-color: #55556d !important; border-radius: 6px 6px 0 0; }
+  
+  /* FIX: Alle verbleibenden grünen Rahmen (Klassen wie .tab-, .vlak_trat) unsichtbar machen */
+  .vlak_trat, [class^="tab-"], table.tab td, table.monitoring td { border-color: transparent !important; border-top-color: transparent !important; border-bottom-color: transparent !important; }
+  
+  /* Hover Farbe kräftiger machen */
+  .bunka_vozu { cursor: pointer !important; transition: all 0.2s ease; border-bottom: 4px solid transparent; border-radius: 6px; }
+  .bunka_vozu:hover { background-color: #00017a !important; border-bottom-color: #00017a !important; transform: translateY(-2px); }
+  
+  /* Kleine Symbole ausgrauen */
+  a.colorbox, a.schem, a.fotog { pointer-events: none !important; opacity: 0.4 !important; }
 `;
 
 const MAIN_CSS = `
@@ -29,8 +47,44 @@ const MAIN_CSS = `
   }
 `;
 
+const POPUP_CSS = `
+  body { background: #f8fafc !important; margin: 0; padding: 16px; font-family: sans-serif; display: flex; justify-content: center; }
+  #hlavicka, #menu, .drobecky, #levy, #paticka, .ads, .reklama, center { display: none !important; }
+  #obsah, #pravy { width: 100% !important; margin: 0 !important; float: none !important; }
+  img.plan { max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+  a { pointer-events: none; color: inherit; text-decoration: none; }
+`;
+
 const INJECTED_SCRIPT = `
   window.addEventListener('DOMContentLoaded', function() {
+    var layouts = [];
+    
+    document.querySelectorAll('.bunka_vozu').forEach(function(vuz, index) {
+        var link = vuz.querySelector('a[href*="vuz.php"]') || vuz.querySelector('a.colorbox') || vuz.querySelector('a.schem');
+        
+        var carNumEl = vuz.querySelector('.cislo_vozu, .cislo_vozu_v, .cislo_vozu_m, .cislo');
+        var carNum = carNumEl ? (carNumEl.textContent || carNumEl.innerText).replace(/[^0-9a-zA-Z]/g, '') : null;
+        
+        if (link) {
+            var urlObj = new URL(link.href, document.baseURI);
+            if (!carNum) carNum = urlObj.searchParams.get('c'); 
+            
+            var lang = new URLSearchParams(window.location.search).get('lang') || 'de';
+            urlObj.searchParams.set('lang', lang);
+            layouts.push({ index: index, url: urlObj.href, carNum: carNum });
+            
+            vuz.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.postMessage({ type: 'OPEN_MODAL_INDEX', index: index }, '*');
+            });
+        } else {
+            layouts.push(null);
+        }
+    });
+    
+    window.parent.postMessage({ type: 'VAGON_LAYOUTS', layouts: layouts }, '*');
+
     var originalOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(method, url) {
        var resolvedUrl = new URL(url, document.baseURI).href;
@@ -38,10 +92,14 @@ const INJECTED_SCRIPT = `
            var urlParams = new URLSearchParams(window.location.search);
            var finalUrl = resolvedUrl + (resolvedUrl.indexOf('?') !== -1 ? '&' : '?') + 'lang=' + (urlParams.get('lang') || 'de');
            
-           var carMatch = resolvedUrl.match(/[?&]c=([^&]+)/);
-           var carNum = carMatch ? carMatch[1] : null;
-           
-           window.parent.postMessage({ type: 'OPEN_MODAL', url: finalUrl, carNum: carNum }, '*');
+           var foundIdx = layouts.findIndex(l => l && l.url === finalUrl);
+           if(foundIdx !== -1) {
+               window.parent.postMessage({ type: 'OPEN_MODAL_INDEX', index: foundIdx }, '*');
+           } else {
+               var carMatch = resolvedUrl.match(/[?&]c=([^&]+)/);
+               var carNum = carMatch ? carMatch[1] : null;
+               window.parent.postMessage({ type: 'OPEN_MODAL', url: finalUrl, carNum: carNum }, '*');
+           }
            arguments[1] = 'data:text/plain,'; 
        } else if (resolvedUrl.indexOf('vagonweb.cz') !== -1) {
            arguments[1] = window.location.protocol + '//' + window.location.host + '/api/vagonwebProxy?proxyTarget=' + encodeURIComponent(resolvedUrl) + '&render=true';
@@ -51,23 +109,9 @@ const INJECTED_SCRIPT = `
 
     document.addEventListener('click', function(e) {
         var link = e.target.closest('a');
-        if (link && (link.href.includes('fotogalerie') || link.href.includes('vuz.php') || link.href.includes('popisy'))) {
+        if (link && !link.classList.contains('obly_cudlik')) {
             e.preventDefault();
             e.stopPropagation();
-            
-            var urlObj = new URL(link.href, document.baseURI);
-            var carNum = urlObj.searchParams.get('c'); 
-            
-            if (!carNum) {
-                var td = link.closest('td') || link.closest('.vuz');
-                var carEl = td ? td.querySelector('.cislo_vozu, .cislo_vozu_v, .cislo_vozu_m, .cislo') : null;
-                carNum = carEl ? carEl.innerText.replace(/[^0-9a-zA-Z]/g, '') : null;
-            }
-
-            var lang = new URLSearchParams(window.location.search).get('lang') || 'de';
-            urlObj.searchParams.set('lang', lang);
-            
-            window.parent.postMessage({ type: 'OPEN_MODAL', url: urlObj.href, carNum: carNum }, '*');
         }
     }, true);
 
@@ -85,7 +129,7 @@ const INJECTED_SCRIPT = `
     if (targetScroll) {
       setTimeout(function() {
         var topPosition = targetScroll.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: topPosition - 5, behavior: 'smooth' });
+        window.scrollTo({ top: topPosition - 2, behavior: 'smooth' });
         setTimeout(function() { document.body.style.overflowY = 'hidden'; }, 800);
       }, 300);
     }
@@ -107,66 +151,65 @@ const INJECTED_SCRIPT = `
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const headers: Record<string, string> = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', 'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7' };
 
-  if (req.query.proxyTarget) {
-    try {
-      const response = await fetch(decodeURIComponent(req.query.proxyTarget as string), { headers });
-      res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      return res.status(200).send(await response.text());
-    } catch { return res.status(500).send('AJAX Proxy failed'); }
-  }
-
-  const url = new URL('https://www.vagonweb.cz/razeni/vlak.php');
   const isRender = req.query.render === 'true';
   const isPopup = req.query.isPopup === 'true';
-
-  for (const [key, value] of Object.entries(req.query)) {
-    if (key !== 'render' && key !== 'proxyTarget' && key !== 'isPopup' && typeof value === 'string') {
-      url.searchParams.append(key, value);
-    }
-  }
-
-  if (isRender) headers['Referer'] = url.toString(); 
+  let html = '';
 
   try {
-    const response = await fetch(url.toString(), { headers });
-    let html = await response.text();
-
-    // ====================================================================
-    // DIE NUKLEAR-OPTION FÜR POPUPS: Bild serverseitig extrahieren!
-    // ====================================================================
-    if (isRender) {
-      // WICHTIG: Das Popup MUSS die gleichen Stile und Scripts bekommen wie die Hauptansicht,
-      // damit der Proxy-Mechanismus (XMLHttpRequest) auch im Popup aktiv bleibt!
-      const activeCss = isPopup ? MAIN_CSS : MAIN_CSS; 
-      html = html.replace('<head>', `<head><base href="https://www.vagonweb.cz/razeni/">\n<style>\n${INJECTED_CSS}\n${activeCss}\n</style>`);
-      html += `\n<script>\n${INJECTED_SCRIPT}\n</script>`;
-      res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      return res.status(200).send(html);
-    }
-
-    // Normales Processing für die Hauptansicht
-    html = html.replace(/<script[^>]*cloudflare[^>]*>[\s\S]*?<\/script>/gi, '');
-    html = html.replace(/<script[^>]*cdn-cgi[^>]*>[\s\S]*?<\/script>/gi, '');
-    html = html.replace(/@font-face\s*\{[^}]*\}/gi, '');
-
-    if (!isRender) {
-      const isMissing = html.includes('Kein Zug gefunden') || html.includes('not found') || html.includes('nebyl nalezen');
-      const hasOverviewLink = html.match(/>\s*(anzeigen|show|zobrazit)\s*<\/a>/i);
-      const hasGraphics = html.includes('id="obsah_razeni"') || html.includes('class="vuz"') || html.includes('vlacek');
-
-      if (!isMissing && (hasOverviewLink || hasGraphics)) {
-        return res.status(200).json({ exists: true, directUrl: `/api/vagonwebProxy?${url.searchParams.toString()}&render=true` });
+    if (req.query.proxyTarget) {
+      const response = await fetch(decodeURIComponent(req.query.proxyTarget as string), { headers });
+      html = await response.text();
+    } else {
+      const url = new URL('https://www.vagonweb.cz/razeni/vlak.php');
+      for (const [key, value] of Object.entries(req.query)) {
+        if (key !== 'render' && key !== 'proxyTarget' && key !== 'isPopup' && typeof value === 'string') {
+          url.searchParams.append(key, value);
+        }
       }
-      return res.status(200).json({ exists: false });
-    }
-
-    if (isRender && !isPopup) {
-      html = html.replace('<head>', `<head><base href="https://www.vagonweb.cz/razeni/">\n<style>\n${INJECTED_CSS}\n${MAIN_CSS}\n</style>`);
-      html += `\n<script>\n${INJECTED_SCRIPT}\n</script>`;
-      res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      return res.status(200).send(html);
+      if (isRender) headers['Referer'] = url.toString(); 
+      const response = await fetch(url.toString(), { headers });
+      html = await response.text();
     }
   } catch (error: any) {
-    return res.status(500).json({ exists: false, error: error.message });
+     if (req.query.proxyTarget) return res.status(500).send('AJAX Proxy failed');
+     return res.status(500).json({ exists: false, error: error.message });
   }
+
+  if (isRender) {
+    html = html.replace(/<script[\s\S]*?<\/script>/gi, '');
+    
+    if (isPopup) {
+      html = html.replace('<head>', `<head><base href="https://www.vagonweb.cz/razeni/">\n<style>\n${POPUP_CSS}\n</style>`);
+    } else {
+      html = html.replace('<head>', `<head><base href="https://www.vagonweb.cz/razeni/">\n<style>\n${INJECTED_CSS}\n${MAIN_CSS}\n</style>`);
+      html += `\n<script>\n${INJECTED_SCRIPT}\n</script>`;
+    }
+    
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.status(200).send(html);
+  }
+
+  html = html.replace(/<script[^>]*cloudflare[^>]*>[\s\S]*?<\/script>/gi, '');
+  html = html.replace(/<script[^>]*cdn-cgi[^>]*>[\s\S]*?<\/script>/gi, '');
+  html = html.replace(/@font-face\s*\{[^}]*\}/gi, '');
+
+  if (!req.query.proxyTarget) {
+    const isMissing = html.includes('Kein Zug gefunden') || html.includes('not found') || html.includes('nebyl nalezen');
+    const hasOverviewLink = html.match(/>\s*(anzeigen|show|zobrazit)\s*<\/a>/i);
+    const hasGraphics = html.includes('id="obsah_razeni"') || html.includes('class="bunka_vozu"') || html.includes('vlacek');
+
+    if (!isMissing && (hasOverviewLink || hasGraphics)) {
+       const urlParams = new URLSearchParams();
+       for (const [key, value] of Object.entries(req.query)) {
+          if (key !== 'render' && key !== 'proxyTarget' && key !== 'isPopup' && typeof value === 'string') {
+            urlParams.append(key, value);
+          }
+       }
+       return res.status(200).json({ exists: true, directUrl: `/api/vagonwebProxy?${urlParams.toString()}&render=true` });
+    }
+    return res.status(200).json({ exists: false });
+  }
+
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  return res.status(200).send(html);
 }

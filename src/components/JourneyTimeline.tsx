@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, LayoutGrid, AlertTriangle, Dog, Footprints, Info } from 'lucide-react';
+import { ChevronDown, ChevronUp, PawPrint, AlertTriangle, Dog, Footprints, Info } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Leg } from '../lib/types';
@@ -201,14 +201,14 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                             <button
                               type="button"
                               onClick={() => setExpandedCarriageLeg(expandedCarriageLeg === i ? null : i)}
-                              className={`inline-flex items-center gap-1 font-bold text-xs transition-all px-2.5 py-1 rounded-xl border ${
+                              className={`inline-flex items-center gap-1 font-bold text-sm transition-all pl-2 pr-4 py-2 rounded-xl border ${
                                 expandedCarriageLeg === i 
-                                  ? 'bg-accent/10 border-accent/30 text-accent' 
+                                  ? 'bg-primary/10 border-primary/30 text-primary' 
                                   : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
                               }`}
                             >
-                              {expandedCarriageLeg === i ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                              <LayoutGrid size={11} strokeWidth={2.5} />
+                              {expandedCarriageLeg === i ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                              <PawPrint size={14} strokeWidth={2} className="text-primary fill-primary" />
                               <span>{t('journeys.timeline.dogTips')}</span>
                             </button>
 
@@ -222,7 +222,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                                     : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
                                 }`}
                               >
-                                {expandedStopsLeg === i ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                                {expandedStopsLeg === i ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                                 <span>{leg.stopovers.length === 1 ? t('journeys.timeline.stop_one') : t('journeys.timeline.stop_other', { count: leg.stopovers.length })}</span>
                               </button>
                             )}
@@ -230,7 +230,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
 
                           {expandedCarriageLeg === i && (
                             <div className="max-w-full animate-fade-in pt-1">
-                              <TrainComposition leg={leg} />
+                              <TrainComposition leg={leg} onClose={() => setExpandedCarriageLeg(null)} />
                             </div>
                           )}
 
