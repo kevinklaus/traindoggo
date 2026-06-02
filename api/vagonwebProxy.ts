@@ -194,7 +194,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   html = html.replace(/@font-face\s*\{[^}]*\}/gi, '');
 
   if (!req.query.proxyTarget) {
-    const isMissing = html.includes('Kein Zug gefunden') || html.includes('not found') || html.includes('nebyl nalezen');
+    const isMissing = html.includes('nicht gefunden') || html.includes('not found') || html.includes('nebyl nalezen');
     const hasOverviewLink = html.match(/>\s*(anzeigen|show|zobrazit)\s*<\/a>/i);
     const hasGraphics = html.includes('id="obsah_razeni"') || html.includes('class="bunka_vozu"') || html.includes('vlacek');
 
