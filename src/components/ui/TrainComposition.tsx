@@ -21,6 +21,13 @@ export default function TrainComposition({ leg, onClose }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   
   const trainName = leg.line?.name ?? t('composition.trains.train', 'Zug');
+
+  // // Klicke auf das Wort "Typische Wagenreihung" um die Rohdaten des Zuges in die Konsole zu loggen
+  // const logTrainData = () => {
+  //   console.log("🚂 RAW TRAIN DATA für:", leg.line?.name);
+  //   console.log("Line Object:", leg.line);
+  //   console.log("Remarks:", (leg as any).remarks);
+  // };
   
   // Custom Hook regelt die komplette VagonWeb-Logik!
   const vagonWeb = useVagonWeb(leg, i18n.language, trainName, iframeRef);
@@ -68,7 +75,10 @@ export default function TrainComposition({ leg, onClose }: Props) {
         <div className="flex flex-wrap items-center justify-between gap-2 p-3 pb-0 text-xs font-semibold text-slate-600 tracking-wide">
           <div className="flex items-center gap-2 min-w-0">
             <LayoutGrid size={14} className="shrink-0" />
-            <span>{t('composition.ui.typical')}</span>
+            {/* <span onClick={logTrainData} className="cursor-pointer border-b border-dashed border-slate-300"> */}
+            <span className="cursor-pointer border-b border-dashed border-slate-300">
+              {t('composition.ui.typical')}
+            </span>
             <span className="text-slate-500 font-medium truncate">
               {trainName}{leg.direction ? ` — ${abbreviateStationName(leg.direction)}` : ''}
             </span>
