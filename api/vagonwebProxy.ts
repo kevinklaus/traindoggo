@@ -30,15 +30,15 @@ const MAIN_CSS = `
   
   .td-scroll-btn {
     position: fixed; top: 50%; transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.95); border: 1px solid #e2e8f0; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8); border-radius: 50%;
     width: 40px; height: 40px; cursor: pointer; z-index: 999999;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); color: #334155; transition: all 0.2s ease; user-select: none;
+    color: rgb(59, 61, 255); transition: all 0.2s ease; user-select: none;
   }
   .td-scroll-btn:hover { background: #ffffff; transform: translateY(-50%) scale(1.05); }
   .td-scroll-btn:active { transform: translateY(-50%) scale(0.95); }
-  #td-scroll-left { left: 12px; }
-  #td-scroll-right { right: 12px; }
+  #td-scroll-left { left: -10px; }
+  #td-scroll-right { right: -10px; }
 
   @media (max-width: 600px) {
     .td-scroll-btn { width: 36px; height: 36px; background: rgba(255, 255, 255, 0.85); }
@@ -134,8 +134,8 @@ const INJECTED_SCRIPT = `
       }, 300);
     }
 
-    var svgLeft = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
-    var svgRight = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+    var svgLeft = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
+    var svgRight = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
 
     var btnLeft = document.createElement('div'); btnLeft.id = 'td-scroll-left'; btnLeft.className = 'td-scroll-btn'; btnLeft.innerHTML = svgLeft;
     var btnRight = document.createElement('div'); btnRight.id = 'td-scroll-right'; btnRight.className = 'td-scroll-btn'; btnRight.innerHTML = svgRight;

@@ -189,7 +189,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                       {!walking ? (
                         <div className="space-y-2.5">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className={`font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-[10px] transition-colors ${colors.badge}`}>
+                            <span className={`font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-[12px] transition-colors ${colors.badge}`}>
                               {getLegBadgeLabel(leg)}
                             </span>
                             <span className="text-sm text-slate-700 font-medium">
@@ -230,7 +230,7 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
 
                           {expandedCarriageLeg === i && (
                             <div className="max-w-full animate-fade-in pt-1">
-                              <TrainComposition leg={leg} onClose={() => setExpandedCarriageLeg(null)} />
+                              <TrainComposition leg={leg} onClose={() => setExpandedCarriageLeg(null)} badge={colors.badge} />
                             </div>
                           )}
 

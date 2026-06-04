@@ -170,9 +170,9 @@ export function findMockJourneys(fromId: string, toId: string, departure: string
       buildMockJourney([
         buildLeg(
           {
-            tripId: 'FLX 35',
+            tripId: 'FLX 1240',
             direction: 'Stuttgart Hbf',
-            line: { type: 'line', name: 'FLX 35', product: 'nationalExpress', operator: { name: 'FlixTrain' } },
+            line: { type: 'line', name: 'FLX 1240', product: 'nationalExpress', operator: { name: 'FlixTrain' } },
             origin: stationMap.get('8011160'),
             destination: inlineStation('8000096', 'Stuttgart Hbf'),
             departurePlatform: '3',
