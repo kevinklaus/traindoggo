@@ -39,12 +39,6 @@ const MAIN_CSS = `
   .td-scroll-btn:active { transform: translateY(-50%) scale(0.95); }
   #td-scroll-left { left: -10px; }
   #td-scroll-right { right: -10px; }
-
-  @media (max-width: 600px) {
-    .td-scroll-btn { width: 36px; height: 36px; background: rgba(255, 255, 255, 0.85); }
-    #td-scroll-left { left: 6px; }
-    #td-scroll-right { right: 6px; }
-  }
 `;
 
 const POPUP_CSS = `

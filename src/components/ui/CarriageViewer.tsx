@@ -11,40 +11,43 @@ interface Props {
   onClose: () => void;
 }
 
-export function CarriageViewer({ url, title, hasPrev, hasNext, onPrev, onNext, onClose }: Props) {
+export function CarriageViewer({ url, title }: Props) {
+//export function CarriageViewer({ url, title, hasPrev, hasNext, onPrev, onNext, onClose }: Props) {
+
   const [isLoading, setIsLoading] = useState(true);
 
   // Reset loading state when URL changes
   useEffect(() => { setIsLoading(true); }, [url]);
 
   return (
-    <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-md shrink-0 animate-in fade-in slide-in-from-top-2 relative">
-      <div className="bg-slate-100 px-3 py-2 flex items-center justify-between border-b border-slate-200 z-20 relative">
+    <div className="border border-slate-300 text-center rounded-2xl overflow-hidden shrink-0 animate-in fade-in slide-in-from-top-2 relative">
+      <span className="relative top-[10px] text-base font-bold text-center flex-1 truncate pt-1 z-20">{title}</span>
+
+{/*       <div className="py-2 px-2 flex items-center justify-between z-20 relative">
         {hasPrev || hasNext ? (
-          <button onClick={onPrev} disabled={!hasPrev} className="p-2 bg-primary/10 text-primary rounded-full text-xs font-bold hover:bg-primary/20 transition-colors disabled:opacity-30 transition-colors">
+          <button onClick={onPrev} disabled={!hasPrev} className="p-2 bg-white/30 text-white rounded-full text-xs font-bold hover:bg-primary/20 transition-colors disabled:opacity-0 transition-colors">
             <ChevronLeft size={24} />
           </button>
         ) : <div className="w-7" />}
 
-        <span className="text-sm font-bold text-slate-800 text-center flex-1 truncate px-2">{title}</span>
 
         <div className="flex items-center gap-1">
           {hasPrev || hasNext ? (
             <>
-              <button onClick={onNext} disabled={!hasNext} className="p-2 bg-primary/10 text-primary rounded-full text-xs font-bold hover:bg-primary/20 transition-colors disabled:opacity-30 transition-colors">
+              <button onClick={onNext} disabled={!hasNext} className="p-2 bg-white/30 text-white rounded-full text-xs font-bold hover:bg-primary/20 transition-colors disabled:opacity-0 transition-colors">
                 <ChevronRight size={24} />
               </button>
               <div className="w-px h-4 bg-slate-300 mx-1" />
             </>
           ) : null}
-          <button onClick={onClose} className="p-2 bg-secondary/10 text-secondary rounded-full text-xs font-bold hover:bg-slate-200 transition-colors">
+          <button onClick={onClose} className="p-2 bg-white/20 text-white rounded-full text-xs font-bold hover:bg-slate-200 transition-colors">
             <X size={24} />
           </button>
         </div>
-      </div>
+      </div> */}
       
       {isLoading && (
-        <div className="absolute inset-0 top-[40px] z-10 flex flex-col items-center justify-center bg-white bg-opacity-90">
+        <div className="absolute inset-0 top-[60px] z-10 flex flex-col items-center justify-center bg-white bg-opacity-90">
           <Loader2 size={28} className="animate-spin text-primary" />
           <span className="text-xs font-semibold text-slate-500 mt-2">Lade Sitzplan...</span>
         </div>
@@ -52,7 +55,7 @@ export function CarriageViewer({ url, title, hasPrev, hasNext, onPrev, onNext, o
 
       <iframe 
         src={url} 
-        className="w-full h-[300px] bg-white block relative z-0" 
+        className="w-full h-[250px] bg-white block relative z-0" 
         title="Layout Details"
         onLoad={(e) => {
           setIsLoading(false);

@@ -45,7 +45,7 @@ export function getFallbackCompositionSections(leg: Leg, t: TFunction): Composit
   const product = (leg.line?.product || '').toLowerCase();
   const name = (leg.line?.name || '').toLowerCase();
   
-  if (trainType === 'ice' || name.startsWith('ice')) {
+  if (trainType === 'ice' || name.startsWith('ice') || name.startsWith('TGV') || name.startsWith('OGV')|| name.startsWith('Eurostar') || name.startsWith('freccia') || name.startsWith('italo')) {
     return [
       {
         title: t('composition.trains.ice'),
@@ -67,12 +67,7 @@ export function getFallbackCompositionSections(leg: Leg, t: TFunction): Composit
 
   if (
     trainType === 'ic' || 
-    trainType === 'ec' || 
-    product === 'flx' || 
-    product === 'national' ||
-    name.startsWith('ic') || 
-    name.startsWith('ec') || 
-    name.startsWith('flx')
+    name.startsWith('ic')
   ) {
     if (name.includes('20') || name.includes('24')) {
       return [
@@ -106,21 +101,41 @@ export function getFallbackCompositionSections(leg: Leg, t: TFunction): Composit
     ];
   }
 
+  if (
+    trainType === 'ec' || 
+    product === 'flx' || 
+    product === 'national' ||
+    name.startsWith('ec') || 
+    name.startsWith('flx')|| 
+    name.includes('Railjet')|| 
+    name.includes('RJX')|| 
+    name.includes('RGJ')|| 
+    name.includes('Night')
+  ) {
+    return [
+      {
+        title: t('composition.trains.ic1'),
+        carriages: [
+          { type: 'loco', shortLabel: t('composition.labels.lok'), grossraum: false, isDogFriendly: false },
+          gross1st(t),
+          { type: 'bistro', shortLabel: t('composition.labels.bistro'), grossraum: false, isDogFriendly: false },
+          { type: 'abteil', shortLabel: t('composition.labels.abteil'), grossraum: false, isDogFriendly: false },
+          gross2nd(t, [5, 6, 11, 12]),
+          gross2nd(t),
+          gross2nd(t),
+          gross2nd(t),
+        ],
+      },
+    ];
+  }
+
   return [
     {
-      title: t('composition.trains.re1'),
+      title: t('composition.trains.re'),
       carriages: [
+        gross2nd(t),       
+        gross2nd(t),
         mehrzweck(t, [1, 2, 3, 4]),
-        gross2nd(t),
-        gross2nd(t),
-        gross1st(t),
-      ],
-    },
-    {
-      title: t('composition.trains.re2'),
-      carriages: [
-        mehrzweck(t),
-        gross2nd(t),
         gross2nd(t),
         gross1st(t),
       ],

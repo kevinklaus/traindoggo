@@ -12,7 +12,7 @@ import {
   getLegDurationMinutes,
   getStationUrl,
 } from '../lib/helpers';
-import TrainComposition from './ui/TrainComposition';
+import TrainComposition from './ui/TrainComposition/TrainComposition';
 import { getLegColorTheme } from './ui/Primitives';
 
 interface Props {

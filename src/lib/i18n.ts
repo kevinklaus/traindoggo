@@ -157,15 +157,14 @@ const deTranslations = {
       abteil: "Abteil"
     },
     trains: {
-      ice: "ICE",
+      ice: "Fernverkehr (ICE/TGV/EC)",
       ic2: "IC2 Doppelstock",
       ic1: "IC1 Traditionell",
-      re1: "Regional-Express 1",
-      re2: "Regional-Express 2",
+      re: "Regional-Zug / S-Bahn",
       train: "Zug"
     },
     advice: {
-      title: "Dog-First Sitzplatz-Empfehlung",
+      title: "Sitzplatz-Empfehlung",
       zone: "Empfohlene Zone:",
       seats: "Beste Sitzanordnung:",
       tip: "Experten-Tipp:",
@@ -183,7 +182,6 @@ const deTranslations = {
       regioTip: "Achte auf große Fahrrad-/Rollstuhl-Symbole außen am Zug."
     },
     ui: {
-      dogFriendly: "Hundefreundlicher Sitzplan (Beispiel)",
       typical: "Wagenreihung",
       exampleNote: "Beispiel-Konfiguration — Vor Einsteigen Gleisanzeiger prüfen.",
       closeModal: "Schließen",
@@ -434,15 +432,14 @@ const enTranslations = {
       abteil: "Compartment"
     },
     trains: {
-      ice: "ICE",
+      ice: "Long-Distance (ICE/TGV/EC)",
       ic2: "IC2 Double-Decker",
       ic1: "IC1 Traditional",
-      re1: "Regional-Express 1",
-      re2: "Regional-Express 2",
+      re: "Regional Train / Suburban",
       train: "Train"
     },
     advice: {
-      title: "Dog-First Reservation Advice",
+      title: "Seating Advice",
       zone: "Recommended Zone:",
       seats: "Best Seat Arrangement:",
       tip: "Expert Companion Tip:",
@@ -460,7 +457,6 @@ const enTranslations = {
       regioTip: "Look for large bicycle/wheelchair stencils on the car exterior."
     },
     ui: {
-      dogFriendly: "Dog-friendly seat map alignment (example)",
       typical: "Train composition",
       exampleNote: "Example configurations modeled after DB standards — always check track indicators before boarding.",
       closeModal: "Close",
