@@ -21,18 +21,16 @@ export default function Destinations() {
 
   // 2. Inhaltsverzeichnis dynamisch aufbauen!
   const tocItems = [
-    // Spread-Operator entpackt alle generierten Reiseziele als einzelne TOC-Links
+    { id: 'viaduct-map', label: t('contentPages.destinations.mapTitle'), icon: <Map size={16}/> },
     ...tableData.map((card) => ({
       id: card.id,
       label: card.destination,
     })),
-    // Danach die Standard-Einträge
-    { id: 'viaduct-map', label: t('contentPages.destinations.mapTitle'), icon: <Map size={16}/> },
     { id: 'instagram', label: t('contentPages.destinations.igTitle', 'Instagram'), icon: <Instagram size={16}/> },
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 animate-in fade-in slide-in-from-bottom-4">
+    <div className="max-w-4xl mx-auto md:px-4 md:py-8 animate-in fade-in slide-in-from-bottom-4">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 font-heading mb-2">{t('contentPages.destinations.title')}</h1>
         <p className="text-slate-600 text-lg">{t('contentPages.destinations.subtitle')}</p>
@@ -41,12 +39,6 @@ export default function Destinations() {
       <TableOfContents items={tocItems} />
 
       <div className="space-y-6 mt-8">
-        
-        {/* Die dynamischen Destination Cards */}
-        <div>
-          <TableOverview columns={columns} data={tableData} />
-        </div>
-
         {/* Nativer Viaduct Embed */}
         <div id="viaduct-map" className="bg-white rounded-3xl p-5 sm:p-6 mb-6 scroll-mt-24">
           <div className="flex items-center gap-3 mb-4">
@@ -66,7 +58,12 @@ export default function Destinations() {
           />
         </div>
 
-        {/* Instagram Modul mit direktem Button */}
+        {/* Die dynamischen Destination Cards */}
+        <div className="bg-white rounded-3xl p-5">
+          <TableOverview columns={columns} data={tableData} />
+        </div>
+
+                {/* Instagram Modul mit direktem Button */}
         <div id="instagram" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-pink-50 text-pink-600 rounded-xl shrink-0"><Instagram size={20} /></div>
