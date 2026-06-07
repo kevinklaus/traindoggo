@@ -99,6 +99,10 @@ export function buildVagonWebParams(leg: Leg, currentLang: string) {
   else if (opId.includes('öbb') || opName.includes('öbb') || opId.includes('oebb') || opName.includes('oebb')) {
     zeme = 'OBB';
   }
+  // SBB 
+  else if (opId.includes('sbb') || opName.includes('sbb')) {
+    zeme = 'SBB';
+  }
   // RegioJet (Zwingt zeme UND kategorie auf RJ)
   else if (opId.includes('regiojet') || opName.includes('regiojet')) {
     zeme = 'RJ';

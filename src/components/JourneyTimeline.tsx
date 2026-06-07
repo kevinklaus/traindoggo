@@ -211,27 +211,27 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                               <PawPrint size={14} strokeWidth={2} className="text-primary fill-primary" />
                               <span>{t('journeys.timeline.dogTips')}</span>
                             </button>
-
-                            {leg.stopovers && leg.stopovers.length > 0 && (
-                              <button
-                                type="button"
-                                onClick={() => setExpandedStopsLeg(expandedStopsLeg === i ? null : i)}
-                                className={`inline-flex items-center gap-1 font-bold text-xs transition-all px-2.5 py-1 rounded-xl border ${
-                                  expandedStopsLeg === i
-                                    ? 'bg-slate-100 border-slate-400 text-slate-700'
-                                    : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
-                                }`}
-                              >
-                                {expandedStopsLeg === i ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                <span>{leg.stopovers.length === 1 ? t('journeys.timeline.stop_one') : t('journeys.timeline.stop_other', { count: leg.stopovers.length })}</span>
-                              </button>
-                            )}
                           </div>
 
                           {expandedCarriageLeg === i && (
                             <div className="max-w-full animate-fade-in pt-1">
                               <TrainComposition leg={leg} onClose={() => setExpandedCarriageLeg(null)} badge={colors.badge} />
                             </div>
+                          )}
+
+                          {leg.stopovers && leg.stopovers.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setExpandedStopsLeg(expandedStopsLeg === i ? null : i)}
+                              className={`inline-flex items-center gap-1 font-bold text-xs transition-all px-2.5 py-1 rounded-xl border ${
+                                expandedStopsLeg === i
+                                  ? 'bg-slate-100 border-slate-400 text-slate-700'
+                                  : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
+                              }`}
+                            >
+                              {expandedStopsLeg === i ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                              <span>{leg.stopovers.length === 1 ? t('journeys.timeline.stop_one') : t('journeys.timeline.stop_other', { count: leg.stopovers.length })}</span>
+                            </button>
                           )}
 
                           {expandedStopsLeg === i && leg.stopovers && (

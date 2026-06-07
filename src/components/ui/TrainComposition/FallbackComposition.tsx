@@ -5,7 +5,7 @@ interface Props {
   sections: { title: string; carriages: CarriageDef[] }[];
 }
 
-export function FallbackComposition({ sections }: Props) {
+export function FallbackComposition({ sections}: Props) {
   const getThemeClass = (type: string) => {
     if (type.startsWith('1st')) return 'bg-amber-100';
     if (type === 'mehrzweck') return 'bg-sky-100 ';
@@ -20,9 +20,11 @@ export function FallbackComposition({ sections }: Props) {
     <div className="space-y-6">
       {/* 1. Die Wagenreihung (Badges) */}
       {sections.map((section, si) => (
-        <div key={si} className="space-y-2 shrink-0">
-          <p className="pb-2 px-1.5">{section.title}</p>
-          <div className="flex gap-2 pb-5 snap-x snap-mandatory" role="list">
+        <div key={si} className="shrink-0">
+          <p className="pb-2 px-1.5">
+            {section.title}
+          </p>
+          <div className="flex gap-2 pb-5 pt-2 snap-x snap-mandatory overflow-x-auto" role="list">
             {section.carriages.map((c, ci) => (
               <div 
                 key={`${si}-${ci}`} 

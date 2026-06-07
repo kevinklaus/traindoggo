@@ -14,7 +14,7 @@ export const TOKENS = {
   buttons: {
     iconButton: "box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-[0.95] disabled:opacity-50",
     dogChip: "p-3 rounded-xl border-2 text-center transition-all active:scale-[0.97] text-sm font-semibold",
-    primarySubmit: "w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-primary/30 font-heading",
+    primarySubmit: "w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-secondary text-white font-semibold rounded-xl transition-all active:scale-[0.98] font-heading",
   },
   layouts: {
     card: "bg-white rounded-3xl shadow-sm hover:shadow-md transition-all overflow-hidden",
@@ -195,6 +195,16 @@ export function getLegColorTheme(product?: string, name?: string, isWalking?: bo
       border: 'border-solid border-emerald-600/40',
       dot: 'border-emerald-600 bg-white shadow-sm',
       bgHex: '#059669',   // emerald-600
+      textHex: '#ffffff',
+    };
+  }
+
+  if (prod === 'night' || prod === 'EN' || prod === 'NJ' || trName.includes('night') || trName.includes('sleeper')) {
+    return {
+      badge: 'bg-secondary text-white',
+      border: 'border-solid border-secondary/40',
+      dot: 'border-secondary bg-white shadow-sm',
+      bgHex: '#00017a',  
       textHex: '#ffffff',
     };
   }

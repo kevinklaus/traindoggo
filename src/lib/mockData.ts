@@ -244,9 +244,9 @@ export function findMockJourneys(fromId: string, toId: string, departure: string
       buildMockJourney([
         buildLeg(
           {
-            tripId: 'ICE 591',
+            tripId: 'EC 27',
             direction: 'Frankfurt (Main) Hbf',
-            line: { type: 'line', name: 'ICE 591', product: 'ice', operator: { name: 'Deutsche Bahn' } },
+            line: { type: 'line', name: 'EC 27', product: 'ec', operator: { name: 'SBB' } },
             origin: stationMap.get('8011160'),
             destination: stationMap.get('8000105'),
             departurePlatform: '3',
@@ -304,9 +304,9 @@ export function findMockJourneys(fromId: string, toId: string, departure: string
         ),
         buildLeg(
           {
-            tripId: 'ICE 104',
+            tripId: 'EN 49621',
             direction: 'Basel SBB',
-            line: { type: 'line', name: 'ICE 104', product: 'ice', operator: { name: 'Deutsche Bahn' } },
+            line: { type: 'line', name: 'EN 49621', product: 'night', operator: { name: 'Deutsche Bahn' } },
             origin: inlineStation('8089021', 'Berlin Friedrichstraße'),
             destination: stationMap.get('8000105'),
             departurePlatform: '3',

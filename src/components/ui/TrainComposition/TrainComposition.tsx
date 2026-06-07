@@ -7,7 +7,7 @@ import { getFallbackCompositionSections } from '../../../lib/trainLayoutFallback
 
 import { useVagonWeb } from '../../../lib/useVagonWeb';
 import { FallbackComposition } from './FallbackComposition';
-import { CarriageViewer } from '../CarriageViewer';
+import { CarriageViewer } from './CarriageViewer';
 import { SeatingAdvice } from './SeatingAdvice';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
   badge?: string;
 }
 
-export default function TrainComposition({ leg, onClose, badge }: Props) {
+export default function TrainComposition({ leg, onClose, badge = "bg-red-600 text-white shadow-sm" }: Props) {
   const { t, i18n } = useTranslation();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   
@@ -26,8 +26,6 @@ export default function TrainComposition({ leg, onClose, badge }: Props) {
   
   const sections = getFallbackCompositionSections(leg, t);
   const exampleGross = sections.flatMap(s => s.carriages).find(c => c.isDogFriendly && c.dogSeats?.length);
-  //const advice = getDogSeatingAdvice(leg, t); 
-  // TODO: In Zukunft vielleicht auch wieder spezifischere Tipps je nach Zugtyp, z.B. ICE vs Regionalbahn etc.
 
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -48,45 +46,57 @@ export default function TrainComposition({ leg, onClose, badge }: Props) {
 
   const DynamicTitle = () => {
     if (vagonWeb.status === 'found') {
+      // ZUSTAND 1: Sitzplan ist GEÖFFNET -> Zeige "Wagen XY [Badge]"
+      if (vagonWeb.isPopupOpen && vagonWeb.activeTitleToRender) {
+        // Schneidet "Wagen 14" aus "Wagen 14 - ICE 279" aus
+        const wagenName = vagonWeb.activeTitleToRender.split(/[-—]/)[0].trim();
+        return (
+          <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-300">
+            <span className="text-base font-bold text-slate-800">{wagenName}</span>
+            <span className={`font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-[12px] ${badge}`}>
+              {trainName}
+            </span>
+          </div>
+        );
+      }
+      
+      // ZUSTAND 2: Sitzplan ist GESCHLOSSEN -> Zeige "Wagenreihung [Badge]"
       return (
-        <div className="flex items-center gap-2 px-1.5">
-          <span className="text-base font-bold text-slate-800">{t('composition.ui.typical', 'Wagenreihung')}</span>
+        <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-2 duration-300">
+          <span className="text-base font-bold text-slate-800">{t('composition.ui.composition', 'Wagenreihung')}</span>
           <span className={`font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-[12px] ${badge}`}>
             {trainName}
           </span>
         </div>
       );
     }
+
+    // FALLBACK
     return (
-      <span className="text-base font-bold text-slate-800 px-1.5" onClick={() => {console.log(leg);}}>
-        Beispielhafte Wagenreihung
+      <span className="text-base font-bold text-slate-800">
+        {t('composition.ui.exampleComposition', 'Beispielhafte Wagenreihung')}
       </span>
     );
   };
 
   const modalContent = (
     <>
-      <div className="flex-none flex items-center justify-between pb-3">
-        <DynamicTitle />
-        
-        <div className="flex items-center gap-2">
-          {vagonWeb.status === 'found' && vagonWeb.firstAvailableLayout !== -1 && (
-            <button 
-              onClick={() => vagonWeb.openIndex(vagonWeb.firstAvailableLayout)} 
-              className="flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-primary/20 transition-colors"
-            >
-              <LayoutGrid size={18} /> {t('composition.ui.interactiveMap', 'Sitzpläne')}
-            </button>
-          )}
-          {isMobile && (
-            <button onClick={onClose} className="p-2 bg-primary/10 hover:bg-primary/20 rounded-full text-primary transition-colors shrink-0">
-              <X size={24} />
-            </button>
-          )}
+      {/* Mobile HEADER */}
+      {isMobile && (
+        <div className={`pl-2 flex items-center justify-between w-full ${isMobile ? 'pb-4' : ' mb-4'}`}>
+          <DynamicTitle />
+          {/* Close-Button: Schließt das Mobile Modal */}
+          <button 
+            onClick={onClose} 
+            className={`flex-none p-2 rounded-full transition-colors shrink-0 bg-primary/10 hover:bg-primary/20 text-primary`}
+            aria-label="Schließen"
+          >
+            <X size={isMobile ? 24 : 20} strokeWidth={2.5} />
+          </button>
         </div>
-      </div>
+      )}
 
-      <div className={`flex-1 overflow-y-auto max-md:-webkit-overflow-scrolling-touch space-y-3`}>
+      <div className="flex-1 overflow-y-auto max-md:-webkit-overflow-scrolling-touch pr-1">
         
         {vagonWeb.status === 'loading' && (
           <div className="flex flex-col items-center justify-center py-10 space-y-3">
@@ -96,7 +106,7 @@ export default function TrainComposition({ leg, onClose, badge }: Props) {
         )}
 
         {vagonWeb.status === 'found' && vagonWeb.directUrl && (
-          <div className="shrink-0 space-y-2">
+          <div className="shrink-0 relative mb-4">
             <iframe 
               ref={iframeRef}
               src={vagonWeb.directUrl} 
@@ -104,11 +114,35 @@ export default function TrainComposition({ leg, onClose, badge }: Props) {
               sandbox="allow-scripts allow-same-origin"
             />
           </div>
-        
         )}
 
+        {/* Animierter Sitzplan-Button */}
+        <div 
+          className={`overflow-hidden transition-all duration-300 ease-in-out ${
+            vagonWeb.isPopupOpen 
+              ? 'max-h-0 opacity-0' 
+              : 'max-h-[60px] opacity-100'
+          }`}
+        >
+          {vagonWeb.status === 'found' && vagonWeb.firstAvailableLayout !== -1 && (
+            <button 
+              onClick={() => vagonWeb.openIndex(vagonWeb.firstAvailableLayout)} 
+              className="block w-full mb-4 sm:inline-flex sm:w-auto items-center gap-1.5 py-2 px-4 bg-primary hover:bg-secondary text-white font-semibold rounded-xl transition-all active:scale-[0.98] hover:shadow-primary/30 font-heading "
+            >
+              <LayoutGrid size={18} className="inline mr-1.5 sm:mr-0" /> 
+              {t('composition.ui.openSeatMap')}
+            </button>
+          )}
+          {vagonWeb.status === 'found' && vagonWeb.firstAvailableLayout == -1 && (
+            <p className="text-sm text-slate-500 italic px-2 mb-4">
+              {t('composition.ui.checkAtOperator')}
+            </p>
+          )}
+        </div>
+
+        {/* Erweiterte Ansicht wenn Sitzplan offen ist */}
         {vagonWeb.isPopupOpen && (
-          <div className='space-y-3'>
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
             <CarriageViewer 
               url={vagonWeb.activeUrlToRender!}
               title={vagonWeb.activeTitleToRender!}
@@ -118,35 +152,37 @@ export default function TrainComposition({ leg, onClose, badge }: Props) {
               onNext={vagonWeb.handleNext}
               onClose={vagonWeb.closePopup}
             />
-            <SeatingAdvice exampleGross={exampleGross} t={t} />
           </div>
         )}
 
+        {/* Fallback & Loading Ansichten */}
         {vagonWeb.status === 'not-found' && (
-          <div className="shrink-0">
-            <FallbackComposition sections={sections} />
-            <SeatingAdvice exampleGross={exampleGross} t={t} />
+          <div className="shrink-0 space-y-4">
+            <FallbackComposition sections={sections}/>
           </div>
         )}
+
+        <SeatingAdvice exampleGross={exampleGross} t={t} />
         
         {vagonWeb.status === 'not-found' && (
-          <p className="text-[10px] text-slate-400 leading-snug shrink-0 pb-4 md:pb-0">
+          <p className="text-[10px] text-slate-400 leading-snug shrink-0 pt-4 pb-4 md:pb-0">
             {t('composition.ui.exampleNote', 'Beispiel-Konfiguration — Vor Einsteigen Gleisanzeiger prüfen.')}
           </p>
         )}
       </div>
-     {vagonWeb.status === 'found' && vagonWeb.directUrl && (
-      <div className="text-right mt-0 space-y-0">
-        <a 
-          href={vagonWeb.directUrl} 
-          target="_blank" 
-          rel="noreferrer" 
-          className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-500 hover:text-primary transition-colors"
-        >
-          Data by vagonWEB.cz <ExternalLink size={10} />
-        </a>
-      </div>
-    )}
+
+      {vagonWeb.status === 'found' && vagonWeb.directUrl && (
+        <div className="text-right mt-2">
+          <a 
+            href={vagonWeb.directUrl} 
+            target="_blank" 
+            rel="noreferrer" 
+            className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-400 hover:text-primary transition-colors"
+          >
+            Data by vagonWEB.cz <ExternalLink size={10} />
+          </a>
+        </div>
+      )}
     </>
   );
 
@@ -162,7 +198,7 @@ export default function TrainComposition({ leg, onClose, badge }: Props) {
   }
 
   return (
-    <div className="md:bg-white md:block animate-in fade-in">
+    <div className="md:bg-white md:rounded-2xl md:block animate-in fade-in">
       {modalContent}
     </div>
   );

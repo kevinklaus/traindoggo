@@ -17,13 +17,7 @@ interface Props {
 export function SeatingAdvice({exampleGross, t }: Props) {
 
   return (
-    <div className="space-y-3 ">
-        <div className="">
-            <div className="p-3 bg-secondary/10 text-slate-700 rounded-2xl flex gap-2 items-start">
-                <PawPrint size={18} className="fill-secondary text-secondary shrink-0 mt-0.5" />
-                <p>{t('composition.ui.vagonwebBestSeats', 'Tipp für Hunde: Rücken-an-Rücken-Plätze oder Sitze direkt an Gepäckablagen und Raumtrennern sind meistens die besten Optionen.')}</p>
-            </div>
-        </div>
+    <div>
         {/* 2. Der illustrative Hunde-Sitzplan (4-Box-Grid mit Bildern) */}
         {exampleGross && (
         <div className="mt-4 p-4 rounded-2xl bg-secondary/10 shrink-0">
@@ -31,7 +25,6 @@ export function SeatingAdvice({exampleGross, t }: Props) {
             <Armchair size={18} className="" />
             <span className="text-md font-bold text-slate-800">{t('composition.advice.title', 'Sitzplatz-Empfehlung')}</span>
           </div>
-
           {/* Grid Layout für Mobile & Desktop */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
 
@@ -95,6 +88,10 @@ export function SeatingAdvice({exampleGross, t }: Props) {
               <div className="w-3 h-4 border-l-[3px] border-indigo-950 bg-indigo-100 rounded-[2px]"></div> = Rückenlehne
             </div>
           </div>
+            {/* Text um die Bilder zu erklären */}
+            <div className="mt-4 text-sm">
+                <p>{t('composition.ui.vagonwebBestSeats', 'Rücken-an-Rücken-Plätze oder Sitze direkt an Gepäckablagen und Raumtrennern sind meistens die besten Optionen.')}</p>
+            </div>
         </div>
       )}
     </div>
