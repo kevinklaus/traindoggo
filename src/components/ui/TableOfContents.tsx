@@ -35,7 +35,7 @@ export default function TableOfContents({ items }: Props) {
             onClick={() => scrollTo(item.id)}
             className="flex items-center text-left gap-2 bg-white px-3 py-2 rounded-full text-sm font-semibold text-secondary hover:text-primary hover:shadow-sm hover:border-primary/30 transition-all"
           >
-            {item.icon || <Hash size={16} className="text-primary/50" />}
+            {item.icon? item.icon: ""}
             <span>{item.label}</span>
           </button>
         ))}

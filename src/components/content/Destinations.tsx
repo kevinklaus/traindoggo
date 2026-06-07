@@ -25,7 +25,6 @@ export default function Destinations() {
     ...tableData.map((card) => ({
       id: card.id,
       label: card.destination,
-      icon: '' 
     })),
     // Danach die Standard-Einträge
     { id: 'viaduct-map', label: t('contentPages.destinations.mapTitle'), icon: <Map size={16}/> },
