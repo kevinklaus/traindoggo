@@ -265,16 +265,27 @@ const deTranslations = {
     destinations: {
       title: "Hundefreundliche Reiseziele",
       subtitle: "Europas beste Spots, perfekt erreichbar auf Schienen.",
-      q1: "Österreich (Top Empfehlung)",
-      a1: "Die ÖBB ist extrem hundefreundlich. Züge sind oft geräumig, und Österreich bietet perfekte Wanderwege, die fast alle mit der Bahn erreichbar sind. Wien ist zudem eine sehr grüne Stadt.",
-      q2: "Schweiz",
-      a2: "Die SBB bietet spezielle 'Hunde-Tageskarten' und sogar einen Hunde-Pass für ein ganzes Jahr. Züge sind pünktlich, sauber und Hunde sind fast überall gern gesehene Gäste.",
-      q3: "Deutsche Küsten (Sylt / Rügen)",
-      a3: "Viele direkte IC-Verbindungen fahren bis an die Küste. Hunde lieben das Meer, und außerhalb der Hauptsaison sind viele Strände komplett für freilaufende Hunde geöffnet.",
+      tableCols: {
+        destination: "Ziel",
+        description: "Beschreibung",
+        travel: "Anreise-Tipp"
+      },
+      cards: [
+        { destination: "🇮🇹 Südtirol (Meran & Rosengarten)", highlight: true, description: "Perfekte Mischung aus Bergen, Wein und charmanten Dörfern. Endlose Wanderoptionen für dich und deinen Hund, z.B. am Kalterer See.", travel: "Bequem mit dem EuroCity (EC) via München und Innsbruck direkt nach Bozen." },
+        { destination: "🇪🇸 Montblanc (Katalonien)", description: "Wunderschöne Berge, alte Weinberge und sehr entspannte Ausflugsziele für Hunde abseits des Trubels.", travel: "TGV Frankfurt ➔ Aix-en-Provence (6h), umsteigen nach Barcelona (4h), dann Regionalzug nach Montblanc (2h)." },
+        { destination: "🇵🇱 Breslau (Wrocław) & Krakau", description: "Weltoffene Städte voller Geschichte, Kultur und Altstadt-Charme. Entlang der Flüsse gibt es sehr viel Platz für Spaziergänge.", travel: "Sehr gut und direkt erreichbar mit dem EuroCity (EC) ab Berlin oder Leipzig." },
+        { destination: "🇫🇷 Avignon (Provence)", description: "Süße Stadt direkt am Fluss mit Zugang zu kleinen grünen Oasen für den Hund und toller südfranzösischer Küche.", travel: "Mit dem TGV direkt ab Frankfurt in entspannten 6 Stunden erreichbar." },
+        { destination: "🇩🇪 Thüringen (Erfurt & Weimar)", description: "Historische Altstädte und geniale Ausflugsziele wie die Wartburg. Der Thüringer Wald bietet unendlich viel Natur zum Wandern.", travel: "Schnell aus ganz Deutschland mit dem ICE angebunden (über den ICE-Knotenpunkt Erfurt)." },
+        { destination: "🇮🇹 Salerno (Amalfiküste)", description: "Bella Italia pur! Ein genialer Ausgangspunkt für die Amalfiküste mit viel Flair und süditalienischem Charme.", travel: "EuroCity (EC) nach Mailand (ab Frankfurt/Basel), dann mit dem Hochgeschwindigkeitszug Frecciarossa nach Salerno (4h). Alternativ mit dem Nachtzug." },
+        { destination: "🇵🇱 Zielona Góra (Grünberg)", description: "Süße, ruhige Altstadt. Perfekt für einen Wochenend- oder Tagesausflug. Leckeres Essen gibt es in den lokalen Brauereien.", travel: "In nur 2 Stunden extrem schnell erreichbar mit dem EuroCity (EC) direkt ab Berlin." },
+        { destination: "🇮🇹 Sapri (Cilento)", highlight: true, description: "Ein süßes kleines Städtchen im Cilento. Hier kann man am ruhigen Strand ungestört mit Hund und Gelato spazieren gehen.", travel: "EuroCity (EC) nach Mailand (ab Frankfurt/Basel), dann bequem über Nacht mit dem Nachtzug (ICN) im Privatabteil nach Sapri." },
+        { destination: "🇦🇹 Wien", description: "Sehr grüne Stadt! Zwar herrscht teils Leinen-/Maulkorbpflicht, aber die riesige Donauinsel bietet unendlich Platz zum Toben.", travel: "Direkte Verbindungen mit Railjet (RJ), ICE oder der privaten Westbahn aus vielen deutschen Städten." },
+        { destination: "🇫🇷 Marseille", description: "Nur für die Harten: Wenig Grün in der Stadt, aber wer damit klarkommt, erlebt eine aufgeweckte, kreative Metropole direkt am Mittelmeer.", travel: "Tolle Anbindung: Mit dem TGV direkt ab Frankfurt in 7 Stunden ohne Umstieg ans Meer." },
+      ],
       mapTitle: "Unsere Reisekarte",
       mapDesc: "Hier auf der Viaduct-Karte seht ihr, wo Aslan und ich schon überall unterwegs waren. Schreibt mir gerne, wenn ihr Fragen zu bestimmten Routen habt – ich teile meine Erfahrungen jederzeit sehr gerne!",
       igTitle: "Impressionen auf Instagram",
-      igDesc: "Auf @traindoggo gibt's Reiseeindrücke und kleine Ausflüge von Aslan und mir. 🐾",
+      igDesc: "Folge @traindoggo für aktuelle Reiseeindrücke und kleine Ausflüge von uns.",
     }
   },
 };
@@ -542,16 +553,27 @@ const enTranslations = {
     destinations: {
       title: "Dog-Friendly Destinations",
       subtitle: "Europe's best spots, perfectly accessible by rail.",
-      q1: "Austria (Top Recommendation)",
-      a1: "The ÖBB is extremely dog-friendly. Trains are spacious, and Austria offers perfect hiking trails that are almost all accessible by rail. Vienna is also a very green city.",
-      q2: "Switzerland",
-      a2: "The SBB offers special 'Dog Day Passes' and even a yearly dog pass. Trains are punctual, clean, and dogs are welcome guests almost everywhere.",
-      q3: "German Coasts (Sylt / Rügen)",
-      a3: "Many direct IC trains go straight to the coast. Dogs love the sea, and outside of peak season, many beaches are completely open for dogs to run off-leash.",
+      tableCols: {
+        destination: "Destination",
+        description: "Description",
+        travel: "Travel Tip"
+      },
+      cards: [
+        { destination: "🇮🇹 South Tyrol (Meran & Rosengarten)", highlight: true, description: "A perfect mix of mountains, wine, and charming villages. Endless hiking options for you and your dog, e.g. at Lake Kaltern.", travel: "Comfortably reached via EuroCity (EC) through Munich and Innsbruck directly to Bolzano." },
+        { destination: "🇪🇸 Montblanc (Catalonia)", description: "Beautiful mountains, old vineyards, and very relaxed excursion spots for dogs away from the hustle and bustle.", travel: "TGV Frankfurt ➔ Aix-en-Provence (6h), change to Barcelona (4h), then regional train to Montblanc (2h)." },
+        { destination: "🇵🇱 Wroclaw & Krakow", description: "Cosmopolitan cities full of history, culture, and old-town charm. Lots of space for walks along the rivers.", travel: "Very accessible via direct EuroCity (EC) trains from Berlin or Leipzig." },
+        { destination: "🇫🇷 Avignon (Provence)", description: "A cute town right on the river with access to small green oases for your dog and great southern French cuisine.", travel: "Easily accessible with a direct TGV from Frankfurt in just under 6 hours." },
+        { destination: "🇩🇪 Thuringia (Erfurt & Weimar)", description: "Historic old towns and brilliant sights like the Wartburg. The Thuringian Forest offers endless nature for hiking.", travel: "Fast connections from all over Germany via ICE (through the ICE hub Erfurt)." },
+        { destination: "🇮🇹 Salerno (Amalfi Coast)", description: "Pure Bella Italia! An excellent starting point for the Amalfi Coast with lots of flair and southern Italian charm.", travel: "EuroCity (EC) to Milan (from Frankfurt/Basel), then High-Speed Frecciarossa to Salerno (4h). Alternatively by night train." },
+        { destination: "🇵🇱 Zielona Góra", description: "A cute, quiet old town. Perfect for a weekend or day trip. Enjoy delicious food in the local breweries.", travel: "Extremely fast to reach in just 2 hours via direct EuroCity (EC) from Berlin." },
+        { destination: "🇮🇹 Sapri (Cilento)", highlight: true, description: "A cute little town in Cilento. Walk undisturbed along the quiet beach with your dog and some gelato.", travel: "EuroCity (EC) to Milan (from Frankfurt/Basel), then comfortably overnight in a private cabin on the night train (ICN) to Sapri." },
+        { destination: "🇦🇹 Vienna", description: "A very green city! Although leashes/muzzles are sometimes required, the huge Danube Island offers infinite space to run.", travel: "Direct connections via Railjet (RJ), ICE, or the private Westbahn from many German cities." },
+        { destination: "🇫🇷 Marseille", description: "Only for the tough ones: Very little greenery in the city, but if you can handle that, you'll experience a vibrant, creative metropolis by the sea.", travel: "Great connection: Direct TGV from Frankfurt to the Mediterranean in 7 hours with no transfers." },
+      ],
       mapTitle: "Our Travel Map",
       mapDesc: "Here on the Viaduct map you can see everywhere Aslan and I have traveled so far. Feel free to message me if you have questions about specific routes – I'm always happy to share my experiences!",
       igTitle: "Impressions on Instagram",
-      igDesc: "Find travel impressions and short trips from Aslan and me @traindoggo 🐾",
+      igDesc: "Follow @traindoggo for recent travel impressions and short trips. 🐾",
     }
   },
 };

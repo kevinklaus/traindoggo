@@ -9,7 +9,7 @@ export interface TableColumn {
 export interface TableRow {
   id: string;
   highlight?: boolean;
-  image?: string; // Option für Bilder (einfach in der Datenquelle ergänzen)
+  image?: string; 
   [key: string]: any;
 }
 
@@ -23,7 +23,6 @@ export default function TableOverview({ columns, data }: Props) {
 
   if (!columns || columns.length === 0) return null;
 
-  // Wir nutzen die erste Spalte (z.B. Land/Betreiber) dynamisch als Titel für die Card
   const mainCol = columns[0];
   const restCols = columns.slice(1);
 
@@ -32,9 +31,9 @@ export default function TableOverview({ columns, data }: Props) {
       {data.map(row => (
         <div 
           key={row.id} 
-          className={`flex flex-col ${row.highlight ? 'bg-accent/15' : 'bg-accent/5'}  rounded-2xl transition-all overflow-hidden relative`}
+          id={row.id} // <--- WICHTIG: Setzt die ID für das Inhaltsverzeichnis
+          className={`flex flex-col ${row.highlight ? 'bg-accent/15' : 'bg-accent/5'} rounded-2xl transition-all overflow-hidden relative scroll-mt-24`} // <--- WICHTIG: scroll-mt-24 verhindert Verstecken hinterm Header
         >
-          {/* Optionales Bild (wird nur gerendert, wenn row.image vorhanden ist) */}
           {row.image && (
             <div className="w-full h-32 sm:h-40 bg-slate-100 overflow-hidden relative">
               <img src={row.image} alt={row[mainCol.key]} className="w-full h-full object-cover" />
@@ -42,13 +41,10 @@ export default function TableOverview({ columns, data }: Props) {
           )}
 
           <div className="p-5 sm:p-6 flex flex-col flex-1">
-
-            {/* Titel der Card (zieht sich automatisch die erste Spalte) */}
             <h3 className={`text-xl font-bold text-slate-800 font-heading mb-3`}>
               {row[mainCol.key]}
             </h3>
 
-            {/* Empfehlungs-Badge */}
             {row.highlight && (
               <div className="inline-flex items-center gap-1.5 bg-white text-primary px-3 py-1.5 rounded-xl text-[13px] font-bold w-fit">
                 <PawPrint size={15} strokeWidth={2.5} className="fill-primary" />
@@ -56,7 +52,6 @@ export default function TableOverview({ columns, data }: Props) {
               </div>
             )}
 
-            {/* Restliche Tabellen-Daten als Key-Value Paare im Body */}
             <div className={`flex flex-col gap-3.5 mt-auto ${row.image || row.highlight ? 'pt-3' : ''}`}>
               {restCols.map(col => (
                 <div key={col.key} className="flex flex-col gap-0.5">
@@ -69,7 +64,6 @@ export default function TableOverview({ columns, data }: Props) {
                 </div>
               ))}
             </div>
-
           </div>
         </div>
       ))}
