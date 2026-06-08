@@ -78,7 +78,7 @@ export default function Destinations() {
         </div>
 
         {/* Die dynamischen Destination Cards */}
-        <div className="bg-transparent rounded-3xl pt-2">
+        <div className="bg-white rounded-3xl p-4">
           <TableOverview columns={columns} data={tableData} />
         </div>
 

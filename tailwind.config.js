@@ -4,9 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#3b3dff',
+        primary: '#1638C6',
         secondary: '#00017a',
-        accent: '#ff5c0b',
+        accent: '#FF313C',
+        highlight: '#FFB32B',
       },
       fontFamily: {
         heading: ['"Atkinson Hyperlegible Next"', 'sans-serif'],
