@@ -1,21 +1,12 @@
 import { Map, Dog, AlertCircle, TrainFront, TrainTrack, Ticket } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import DogRulesMap from '../DogRulesMap';
+import DogRulesMap from './DogRulesMap';
 // import InfoCard from '../layout/InfoCard';
-import TableOverview from '../ui/TableOverview';
-import TableOfContents from '../ui/TableOfContents';
+import TableOverview from './TableOverview';
+import TableOfContents from './TableOfContents';
 
 export default function DoggoTips() {
   const { t } = useTranslation();
-
-  const tocItems = [
-    // { id: 'rules', label: t('contentPages.doggoTips.q1'), icon: <ShieldAlert size={16}/> },
-    // { id: 'breaks', label: t('contentPages.doggoTips.q2'), icon: <Clock size={16}/> },
-    // { id: 'packing', label: t('contentPages.doggoTips.q3'), icon: <BaggageClaim size={16}/> },
-    { id: 'germany', label: t('landing.title'), icon: <Dog size={16}/> },
-    { id: 'prices', label: t('contentPages.doggoTips.tableTitle'), icon: <Ticket size={16}/> },
-    { id: 'dogrulesmap', label: t('landing.map.title'), icon: <Map size={16}/> },
-  ];
 
   const tableColumns = [
     { key: 'country', label: t('contentPages.doggoTips.columns.country') },
@@ -23,7 +14,7 @@ export default function DoggoTips() {
     { key: 'comment', label: t('contentPages.doggoTips.columns.comment') },
   ];
 
-  const tableData = [
+  const tableDataOld = [
     { id: '1', highlight: true, country: t('contentPages.doggoTips.rows.trenitalia.country'), price: t('contentPages.doggoTips.rows.trenitalia.price'), comment: t('contentPages.doggoTips.rows.trenitalia.comment') },
     { id: '2', highlight: true, country: t('contentPages.doggoTips.rows.sncf.country'), price: t('contentPages.doggoTips.rows.sncf.price'), comment: t('contentPages.doggoTips.rows.sncf.comment') },
     { id: '3', country: t('contentPages.doggoTips.rows.db.country'), price: t('contentPages.doggoTips.rows.db.price'), comment: t('contentPages.doggoTips.rows.db.comment') },
@@ -37,8 +28,28 @@ export default function DoggoTips() {
     },
   ];
 
+    // 1. Daten holen und IDs vergeben
+  const rawCards = t('contentPages.doggoTips.rows', { returnObjects: true }) as any[];
+  const tableData = rawCards.map((card, index) => ({
+    id: `dest-${index}`, // Diese ID referenzieren wir gleich im TOC
+    ...card
+  }));
+
+    // 2. Inhaltsverzeichnis dynamisch aufbauen!
+  const tocItems = [
+    { id: 'germany', label: t('landing.title'), icon: <Dog size={16}/> },
+    ...tableData.map((card) => ({
+      id: card.id,
+      label: card.country,
+    })),
+    { id: 'dogrulesmap', label: t('landing.map.title'), icon: <Map size={16}/> },
+    // { id: 'rules', label: t('contentPages.doggoTips.q1'), icon: <ShieldAlert size={16}/> },
+    // { id: 'breaks', label: t('contentPages.doggoTips.q2'), icon: <Clock size={16}/> },
+    // { id: 'packing', label: t('contentPages.doggoTips.q3'), icon: <BaggageClaim size={16}/> },
+    ];
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 animate-in fade-in slide-in-from-bottom-4">
+    <div className="max-w-4xl mx-auto md:px-4 md:py-8 animate-in fade-in slide-in-from-bottom-4">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 font-heading mb-2">{t('contentPages.doggoTips.title')}</h1>
         <p className="text-slate-600 text-lg">{t('contentPages.doggoTips.subtitle')}</p>

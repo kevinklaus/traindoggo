@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import type { Journey, DogMode } from '../lib/types';
+import type { Journey, DogMode } from '../../lib/types';
 import JourneyCard from './JourneyCard';
-import { Spinner } from './ui/Primitives';
-import ErrorDiagnostics from './ui/ErrorDiagnostics'; // Integrated standard error handler
+import { Spinner } from '../ui/Primitives';
+import ErrorDiagnostics from './ErrorDiagnostics'; // Integrated standard error handler
 
 interface Props {
   journeys: Journey[];

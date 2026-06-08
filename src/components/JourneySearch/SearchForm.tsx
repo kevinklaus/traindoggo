@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { ArrowDownUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import type { SearchParams } from '../lib/types';
+import type { SearchParams } from '../../lib/types';
 // import { searchStationsByCoords } from '../lib/api'; // <-- 1. Auskommentiert
-import StationInput from './ui/StationInput';
-import DateTimeInput from './ui/DateTimeInput';
-import { Spinner, TOKENS, IconButton } from './ui/Primitives';
+import StationInput from '../ui/StationInput';
+import DateTimeInput from '../ui/DateTimeInput';
+import { Spinner, TOKENS, IconButton } from '../ui/Primitives';
 
 interface Props {
   params: SearchParams;

@@ -1,7 +1,7 @@
 import { Map, Instagram, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import TableOfContents from '../ui/TableOfContents';
-import TableOverview from '../ui/TableOverview';
+import TableOfContents from './TableOfContents';
+import TableOverview from './TableOverview';
 
 export default function Destinations() {
   const { t } = useTranslation();
@@ -63,7 +63,7 @@ export default function Destinations() {
           <TableOverview columns={columns} data={tableData} />
         </div>
 
-                {/* Instagram Modul mit direktem Button */}
+        {/* Instagram Modul mit direktem Button */}
         <div id="instagram" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-pink-50 text-pink-600 rounded-xl shrink-0"><Instagram size={20} /></div>

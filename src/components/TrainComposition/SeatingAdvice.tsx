@@ -1,6 +1,6 @@
 import { PawPrint, Armchair, Accessibility } from 'lucide-react';
 import { TFunction } from 'i18next';
-import { CarriageDef } from '../../../lib/trainLayoutFallbacks';
+import { CarriageDef } from '../../lib/trainLayoutFallbacks';
 
 // Bild-Importe aus demselben Ordner
 import AbteilImg from './Abteil-Wagen.jpg';

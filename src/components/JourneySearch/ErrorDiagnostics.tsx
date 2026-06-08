@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AlertCircle, Terminal, ChevronDown, ChevronUp, RefreshCw, Layers } from 'lucide-react';
-import { TOKENS } from './Primitives';
+import { TOKENS } from '../ui/Primitives';
 
 interface ErrorDiagnosticsProps {
   message: string;

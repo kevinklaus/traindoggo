@@ -1,8 +1,8 @@
 import { Search, Route, PawPrint } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import SearchForm from '../SearchForm';
-import RecommendedDays from '../ui/RecommendedDays';
-import JourneyResults from '../JourneyResults';
+import SearchForm from '../JourneySearch/SearchForm';
+import RecommendedDays from '../JourneySearch/RecommendedDays';
+import JourneyResults from '../JourneySearch/JourneyResults';
 import type { SearchParams, Journey } from '../../lib/types';
 import HeroImg from './hero.jpg';
 

@@ -1,6 +1,6 @@
 import { getLegBadgeLabel, getLegDescription, isWalking } from '../../lib/helpers';
 import type { Leg } from '../../lib/types';
-import { getLegColorTheme } from './Primitives';
+import { getLegColorTheme } from '../ui/Primitives';
 import { Footprints } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 

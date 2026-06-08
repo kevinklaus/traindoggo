@@ -221,16 +221,16 @@ const deTranslations = {
         price: "Preis",
         comment: "Besonderheiten",
       },
-      rows: {
-        db: { country: "🇩🇪 Deutschland (DB)", price: "50% des Flexpreises", comment: "Maulkorbpflicht (oft Kulanz)" },
-        oebb: { country: "🇦🇹 Österreich (ÖBB)", price: "10% des Vollpreises", comment: "Strikte Maulkorbpflicht!" },
-        sncf: { country: "🇫🇷 Frankreich (SNCF)", price: "7 - 20€ (Festpreis)", comment: "Sehr günstig! Online buchbar." },
-        trenitalia: { country: "🇮🇹 Italien (Trenitalia)", price: "1 - 5€ (Festpreis)", comment: "Extrem günstig! Oft gratis Aktionen." },
-        renfe: { country: "🇪🇸 Spanien (Renfe)", price: "Variabel", comment: "Im AVE sind Hunde >10kg oft komplett verboten! Ausnahme: TGV nach Barcelona." },
-        sbb: { country: "🇨🇭 Schweiz (SBB)", price: "25 CHF (Tageskarte)", comment: "Hunde-Pass für Vielfahrer extrem lukrativ." },
-        cd: { country: "🇨🇿 Tschechien (ČD)", price: "ca. 1 - 3€", comment: "Inland fast gratis, Maulkorbpflicht." },
-        pkp: { country: "🇵🇱 Polen (PKP)", price: "15 PLN (~3.50€)", comment: "Festpreis für alle Strecken, sehr entspannt." }
-      },
+      rows: [
+        { country: "🇩🇪 Deutschland (DB)", price: "50% des Vollpreises", comment: "Gute Platzauswahl in ICE/ICE über den DB Navigator. Oft kulante Maulkorbpflicht." },
+        { country: "🇦🇹 Österreich (ÖBB)", price: "10% des Vollpreises", comment: "Sehr verlässliche Bahnanbindung bis in die Berge. Strikte Maulkorbpflicht." },
+        { country: "🇫🇷 Frankreich (SNCF)", price: "7 - 20€ (Festpreis)", comment: "Günstiger als bei der DB! Bei SNCF Connect nur bei eigener Buchung hinzuzufügen." },
+        { country: "🇮🇹 Italien (Trenitalia)", price: "1 - 5€ (Festpreis)", comment: "Echt günstig! Sehr einfach in bei Trenitalia buchbar." },
+        { country: "🇪🇸 Spanien (Renfe)", price: "meist 10€ (Festpreis)", comment: "Im AVE sind Hunde >10kg oft komplett verboten! Ausnahme: TGV nach Barcelona." },
+        { country: "🇨🇭 Schweiz (SBB)", price: "25 CHF (Tageskarte)", comment: "Sehr verlässliche Bahnanbindung bis in die Berge. Tagesticket oder Jahres-Hunde-Pass verfügbar." },
+        { country: "🇨🇿 Tschechien (ČD)", price: "30/50 CZK (~1-2€)", comment: "Innerhlab Tschechines sehr günstig bei ČD buchbar." },
+        { country: "🇵🇱 Polen (PKP)", price: "15 PLN (~3.50€)", comment: "Festpreis für alle Strecken, sehr entspannt." }
+      ],
     },
     nightTrains: {
       title: "Nachtzüge mit Hund",
@@ -509,16 +509,16 @@ const enTranslations = {
         price: "Price",
         comment: "Notes"
       },
-      rows: {
-        db: { country: "🇩🇪 Germany (DB)", price: "50% of flex fare", comment: "Required (often lenient with muzzles)" },
-        oebb: { country: "🇦🇹 Austria (ÖBB)", price: "10% of full fare", comment: "Strictly enforced!" },
-        sncf: { country: "🇫🇷 France (SNCF)", price: "€7 - €20 (fixed)", comment: "Very cheap! (Bookable online)" },
-        trenitalia: { country: "🇮🇹 Italy (Trenitalia)", price: "€1 - €5 (fixed)", comment: "Extremely cheap! (Frequent free promos)" },
-        renfe: { country: "🇪🇸 Spain (Renfe)", price: "Variable", comment: "Warning: Dogs >10kg are strictly forbidden on AVE (high-speed) trains! (Exception: TGV to Barcelona)" },
-        sbb: { country: "🇨🇭 Switzerland (SBB)", price: "25 CHF (Day Pass)", comment: "Dog pass for frequent travelers is extremely lucrative." },
-        cd: { country: "🇨🇿 Czechia (ČD)", price: "approx. €1 - €3", comment: "Domestic travel is almost free, muzzles required." },
-        pkp: { country: "🇵🇱 Poland (PKP)", price: "15 PLN (~€3.50)", comment: "Fixed price for all routes, very relaxed." }
-      }
+      rows: [
+        { country: "🇩🇪 Germany (DB)", price: "50% of normal fare", comment: "Great seat selection over DB Navigator App. Often lenient with muzzles" },
+        { country: "🇦🇹 Austria (ÖBB)", price: "10% of full fare", comment: "Very reliable train connection to the mountains. Often strict with muzzles" },
+        { country: "🇫🇷 France (SNCF)", price: "€7 - €20 (fixed)", comment: "Cheaper than DB. Can only be booked with your own ticket." },
+        { country: "🇮🇹 Italy (Trenitalia)", price: "€1 - €5 (fixed)", comment: "Very cheap! Bookable online at Trenitalia." },
+        { country: "🇪🇸 Spain (Renfe)", price: "Variable", comment: "Warning: Dogs >10kg are strictly forbidden on AVE (high-speed) trains! (Exception: TGV to Barcelona)" },
+        { country: "🇨🇭 Switzerland (SBB)", price: "25 CHF (Day Pass)", comment: "Very reliable train connection to the mountains. Day pass or annual dog pass available." },
+        { country: "🇨🇿 Czechia (ČD)", price: "approx. €1 - €3", comment: "Domestic travel is almost free, muzzles required." },
+        { country: "🇵🇱 Poland (PKP)", price: "15 PLN (~€3.50)", comment: "Fixed price for all routes, very relaxed." }
+      ]
     },
     nightTrains: {
       title: "Night Trains with Dogs",

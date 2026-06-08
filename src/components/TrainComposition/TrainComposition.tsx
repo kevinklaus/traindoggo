@@ -2,10 +2,10 @@ import { createPortal } from 'react-dom';
 import { ExternalLink, Loader2, X, LayoutGrid } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useRef } from 'react';
-import type { Leg } from '../../../lib/types';
-import { getFallbackCompositionSections } from '../../../lib/trainLayoutFallbacks';
+import type { Leg } from '../../lib/types';
+import { getFallbackCompositionSections } from '../../lib/trainLayoutFallbacks';
 
-import { useVagonWeb } from '../../../lib/useVagonWeb';
+import { useVagonWeb } from '../../lib/useVagonWeb';
 import { FallbackComposition } from './FallbackComposition';
 import { CarriageViewer } from './CarriageViewer';
 import { SeatingAdvice } from './SeatingAdvice';

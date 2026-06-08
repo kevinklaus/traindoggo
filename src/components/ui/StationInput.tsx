@@ -4,7 +4,7 @@ import type { Station } from '../../lib/types';
 import { searchStations } from '../../lib/api';
 import { Spinner, TOKENS, IconButton } from './Primitives';
 import Input from './Input';
-import ErrorDiagnostics from './ErrorDiagnostics';
+import ErrorDiagnostics from '../JourneySearch/ErrorDiagnostics';
 
 interface Props {
   label: string;

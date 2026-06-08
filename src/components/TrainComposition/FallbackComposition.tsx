@@ -1,5 +1,5 @@
 import { PawPrint } from 'lucide-react';
-import { CarriageDef } from '../../../lib/trainLayoutFallbacks';
+import { CarriageDef } from '../../lib/trainLayoutFallbacks';
 
 interface Props {
   sections: { title: string; carriages: CarriageDef[] }[];

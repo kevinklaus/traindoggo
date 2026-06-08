@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp, PawPrint, AlertTriangle, Dog, Footprints, Info } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Leg } from '../lib/types';
+import type { Leg } from '../../lib/types';
 import {
   formatTime,
   getTransferMinutes,
@@ -11,9 +11,9 @@ import {
   abbreviateStationName,
   getLegDurationMinutes,
   getStationUrl,
-} from '../lib/helpers';
-import TrainComposition from './ui/TrainComposition/TrainComposition';
-import { getLegColorTheme } from './ui/Primitives';
+} from '../../lib/helpers';
+import TrainComposition from '../TrainComposition/TrainComposition';
+import { getLegColorTheme } from '../ui/Primitives';
 
 interface Props {
   legs: Leg[];

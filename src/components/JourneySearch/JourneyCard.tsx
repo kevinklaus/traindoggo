@@ -1,17 +1,17 @@
 import { Clock, ArrowRight, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
-import type { Journey, DogMode } from '../lib/types';
+import type { Journey, DogMode } from '../../lib/types';
 import {
   formatTime,
   formatDuration,
   filterValidLegs,
   getLegDurationMinutes,
-} from '../lib/helpers';
-import { calculateJourneyPrice } from '../lib/pricing';
+} from '../../lib/helpers';
+import { calculateJourneyPrice } from '../../lib/pricing';
 import JourneyTimeline from './JourneyTimeline';
-import JourneyTimelineBar from './ui/JourneyTimelineBar';
-import { TOKENS } from './ui/Primitives';
+import JourneyTimelineBar from './JourneyTimelineBar';
+import { TOKENS } from '../ui/Primitives';
 
 interface Props {
   journey: Journey;

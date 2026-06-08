@@ -1,6 +1,6 @@
 import { Map } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import mapSvgUrl from './content/VerbundsKarte.svg';
+import mapSvgUrl from './VerbundsKarte.svg';
 
 export default function DogRulesMap() {
   const { t } = useTranslation();

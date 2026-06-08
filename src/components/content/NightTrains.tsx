@@ -1,8 +1,8 @@
 import { MoonStar, Map, Dog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import InfoCard from '../layout/InfoCard';
-import TableOverview from '../ui/TableOverview';
-import TableOfContents from '../ui/TableOfContents';
+import InfoCard from './InfoCard';
+import TableOverview from './TableOverview';
+import TableOfContents from './TableOfContents';
 
 export default function NightTrains() {
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ export default function NightTrains() {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 animate-in fade-in slide-in-from-bottom-4">
+    <div className="max-w-4xl mx-auto md:px-4 md:py-8 animate-in fade-in slide-in-from-bottom-4">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 font-heading mb-2">{t('contentPages.nightTrains.title')}</h1>
         <p className="text-slate-600 text-lg">{t('contentPages.nightTrains.subtitle')}</p>

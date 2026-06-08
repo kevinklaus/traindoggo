@@ -1,5 +1,5 @@
 import { Circle, Train, Footprints, AlertTriangle } from 'lucide-react';
-import { Badge } from './Primitives';
+import { Badge } from '../ui/Primitives';
 
 // ============================================================================
 // MOLECULE: INTER-CONNECTED CONNECTION/TRANSFERS
