@@ -222,14 +222,14 @@ const deTranslations = {
         comment: "Besonderheiten",
       },
       rows: [
-        { country: "🇩🇪 Deutschland (DB)", price: "50% des Vollpreises", comment: "Gute Platzauswahl in ICE/ICE über den DB Navigator. Oft kulante Maulkorbpflicht." },
+        { country: "🇩🇪 Deutschland (DB)", price: "50% des Vollpreises", comment: "Sehr teuer, aber gute Platzauswahl in ICE/ICE über den DB Navigator. Oft kulante Maulkorbpflicht." },
         { country: "🇦🇹 Österreich (ÖBB)", price: "10% des Vollpreises", comment: "Sehr verlässliche Bahnanbindung bis in die Berge. Strikte Maulkorbpflicht." },
-        { country: "🇫🇷 Frankreich (SNCF)", price: "7 - 20€ (Festpreis)", comment: "Günstiger als bei der DB! Bei SNCF Connect nur bei eigener Buchung hinzuzufügen." },
-        { country: "🇮🇹 Italien (Trenitalia)", price: "1 - 5€ (Festpreis)", comment: "Echt günstig! Sehr einfach in bei Trenitalia buchbar." },
+        { country: "🇫🇷 Frankreich (SNCF)", highlight: true, price: "7 - 20€ (Festpreis)", comment: "Günstiger als bei der DB! Bei SNCF Connect nur bei eigener Buchung hinzuzufügen." },
+        { country: "🇮🇹 Italien (Trenitalia)", highlight: true, price: "1 - 5€ (Festpreis)", comment: "Echt günstig! Sehr einfach in bei Trenitalia buchbar." },
         { country: "🇪🇸 Spanien (Renfe)", price: "meist 10€ (Festpreis)", comment: "Im AVE sind Hunde >10kg oft komplett verboten! Ausnahme: TGV nach Barcelona." },
         { country: "🇨🇭 Schweiz (SBB)", price: "25 CHF (Tageskarte)", comment: "Sehr verlässliche Bahnanbindung bis in die Berge. Tagesticket oder Jahres-Hunde-Pass verfügbar." },
-        { country: "🇨🇿 Tschechien (ČD)", price: "30/50 CZK (~1-2€)", comment: "Innerhlab Tschechines sehr günstig bei ČD buchbar." },
-        { country: "🇵🇱 Polen (PKP)", price: "15 PLN (~3.50€)", comment: "Festpreis für alle Strecken, sehr entspannt." }
+        { country: "🇨🇿 Tschechien (ČD)", highlight: true, price: "30/50 CZK (~1-2€)", comment: "Innerhlab Tschechines sehr günstig bei ČD buchbar." },
+        { country: "🇵🇱 Polen (PKP)", highlight: true, price: "15 PLN (~3.50€)", comment: "Festpreis für alle Strecken, sehr entspannt." }
       ],
     },
     nightTrains: {
@@ -271,10 +271,10 @@ const deTranslations = {
         travel: "Anreise-Tipp"
       },
       cards: [
-        { destination: "🇮🇹 Südtirol", highlight: true, description: "Perfekte Mischung aus Bergen, Wein und charmanten Dörfern. Endlose Wanderoptionen für dich und deinen Hund, z.B. am Kalterer See, Meran & Rosengarten.", travel: "Bequem mit dem EuroCity (EC) via München und Innsbruck direkt nach Bozen." },
-        { destination: "🇪🇸 Montblanc (Katalonien)", highlight: true, description: "Wunderschöne Berge, alte Weinberge und sehr entspannte Ausflugsziele für Hunde abseits des Trubels.", travel: "TGV Frankfurt ➔ Aix-en-Provence (6h), umsteigen nach Barcelona (4h), dann Regionalzug nach Montblanc (2h)." },
+        { destination: "🇮🇹 Südtirol", highlight: true, description: "Perfekte Mischung aus Bergen, Wein und charmanten Dörfern. Endlose Wanderoptionen für dich und deinen Hund, z.B. am Kalterer See, Meran & Rosengarten.", travel: "Bequem mit dem EuroCity (EC) via München und Innsbruck direkt nach Bozen.", imageId: "suedtirol" },
+        { destination: "🇪🇸 Montblanc (Katalonien)", highlight: true, description: "Wunderschöne Berge, alte Weinberge und sehr entspannte Ausflugsziele für Hunde abseits des Trubels.", travel: "TGV Frankfurt ➔ Aix-en-Provence (6h), umsteigen nach Barcelona (4h), dann Regionalzug nach Montblanc (2h).", imageId: "montblanc" },
+        { destination: "🇫🇷 Avignon (Provence)", description: "Süße Stadt direkt am Fluss mit Zugang zu kleinen grünen Oasen für den Hund und toller südfranzösischer Küche.", travel: "Mit dem TGV direkt ab Frankfurt in entspannten 6 Stunden erreichbar.", imageId: "avignon" },
         { destination: "🇵🇱 Wrocław & Krakow", description: "Weltoffene Städte voller Geschichte, Kultur und Altstadt-Charme. Entlang der Flüsse gibt es sehr viel Platz für Spaziergänge.", travel: "Sehr gut und direkt erreichbar mit dem EuroCity (EC) ab Berlin oder Leipzig." },
-        { destination: "🇫🇷 Avignon (Provence)", description: "Süße Stadt direkt am Fluss mit Zugang zu kleinen grünen Oasen für den Hund und toller südfranzösischer Küche.", travel: "Mit dem TGV direkt ab Frankfurt in entspannten 6 Stunden erreichbar." },
         { destination: "🇩🇪 Thüringer Wald", highlight: true, description: "Historische Altstädte (z.B. Erfurt & Weimar) und geniale Ausflugsziele wie die Wartburg. Der Thüringer Wald bietet unendlich viel Natur zum Wandern.", travel: "Schnell aus ganz Deutschland mit dem ICE angebunden (über den ICE-Knotenpunkt Erfurt)." },
         { destination: "🇮🇹 Salerno (Amalfiküste)", description: "Bella Italia pur! Ein genialer Ausgangspunkt für die Amalfiküste mit viel Flair und süditalienischem Charme.", travel: "EuroCity (EC) nach Mailand (ab Frankfurt/Basel), dann mit dem Hochgeschwindigkeitszug Frecciarossa nach Salerno (4h). Alternativ mit dem Nachtzug." },
         { destination: "🇵🇱 Zielona Góra (Grünberg)", description: "Süße, ruhige Altstadt. Perfekt für einen Wochenend- oder Tagesausflug. Leckeres Essen gibt es in den lokalen Brauereien.", travel: "In nur 2 Stunden extrem schnell erreichbar mit dem EuroCity (EC) direkt ab Berlin." },
@@ -559,10 +559,10 @@ const enTranslations = {
         travel: "Travel Tip"
       },
       cards: [
-        { destination: "🇮🇹 South Tyrol", highlight: true, description: "A perfect mix of mountains, wine, and charming villages. Endless hiking options for you and your dog, e.g. at Lake Kaltern, Meran & Rosengarten.", travel: "Comfortably reached via EuroCity (EC) through Munich and Innsbruck directly to Bolzano." },
-        { destination: "🇪🇸 Montblanc (Catalonia)", description: "Beautiful mountains, old vineyards, and very relaxed excursion spots for dogs away from the hustle and bustle.", travel: "TGV Frankfurt ➔ Aix-en-Provence (6h), change to Barcelona (4h), then regional train to Montblanc (2h)." },
+        { destination: "🇮🇹 South Tyrol", highlight: true, description: "A perfect mix of mountains, wine, and charming villages. Endless hiking options for you and your dog, e.g. at Lake Kaltern, Meran & Rosengarten.", travel: "Comfortably reached via EuroCity (EC) through Munich and Innsbruck directly to Bolzano.", imageId: "suedtirol" },
+        { destination: "🇪🇸 Montblanc (Catalonia)", description: "Beautiful mountains, old vineyards, and very relaxed excursion spots for dogs away from the hustle and bustle.", travel: "TGV Frankfurt ➔ Aix-en-Provence (6h), change to Barcelona (4h), then regional train to Montblanc (2h).", imageId: "avignon" },
+        { destination: "🇫🇷 Avignon (Provence)", description: "A cute town right on the river with access to small green oases for your dog and great southern French cuisine.", travel: "Easily accessible with a direct TGV from Frankfurt in just under 6 hours.", imageId: "avignon" },
         { destination: "🇵🇱 Wrocław & Krakow", description: "Cosmopolitan cities full of history, culture, and old-town charm. Lots of space for walks along the rivers.", travel: "Very accessible via direct EuroCity (EC) trains from Berlin or Leipzig." },
-        { destination: "🇫🇷 Avignon (Provence)", description: "A cute town right on the river with access to small green oases for your dog and great southern French cuisine.", travel: "Easily accessible with a direct TGV from Frankfurt in just under 6 hours." },
         { destination: "🇩🇪 Thuringia Forest", description: "Historic old towns  (e.g. Erfurt & Weimar) and brilliant sights like the Wartburg. The Thuringian Forest offers endless nature for hiking.", travel: "Fast connections from all over Germany via ICE (through the ICE hub Erfurt)." },
         { destination: "🇮🇹 Salerno (Amalfi Coast)", description: "Pure Bella Italia! An excellent starting point for the Amalfi Coast with lots of flair and southern Italian charm.", travel: "EuroCity (EC) to Milan (from Frankfurt/Basel), then High-Speed Frecciarossa to Salerno (4h). Alternatively by night train." },
         { destination: "🇵🇱 Zielona Góra", description: "A cute, quiet old town. Perfect for a weekend or day trip. Enjoy delicious food in the local breweries.", travel: "Extremely fast to reach in just 2 hours via direct EuroCity (EC) from Berlin." },

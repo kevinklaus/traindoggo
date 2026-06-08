@@ -3,6 +3,14 @@ import { useTranslation } from 'react-i18next';
 import TableOfContents from './TableOfContents';
 import TableOverview from './TableOverview';
 
+// VITE GLOB IMPORT: Holt auf einen Schlag ALLE Bilder aus dem Ordner!
+// Das { eager: true, as: 'url' } sorgt dafür, dass Vite direkt die fertigen URLs liefert.
+const destinationImages = import.meta.glob('./images/*.{png,jpg,jpeg,webp}', { 
+  eager: true, 
+  query: '?url',
+  import: 'default' 
+}) as Record<string, string>;
+
 export default function Destinations() {
   const { t } = useTranslation();
 
@@ -12,25 +20,35 @@ export default function Destinations() {
     { key: 'travel', label: t('contentPages.destinations.tableCols.travel', 'Anreise-Tipp') }
   ];
 
-  // 1. Daten holen und IDs vergeben
+  // 1. Daten holen und IDs + Bilder vergeben
   const rawCards = t('contentPages.destinations.cards', { returnObjects: true }) as any[];
-  const tableData = rawCards.map((card, index) => ({
-    id: `dest-${index}`, // Diese ID referenzieren wir gleich im TOC
-    ...card
-  }));
+  
+  const tableData = rawCards.map((card, index) => {
+    // Finde das passende Bild aus dem Glob-Import anhand der imageId
+    // Wir suchen nach dem Dateinamen, z.B. "montblanc.jpg" in den importierten Pfaden
+    const matchedImagePath = Object.keys(destinationImages).find(path => 
+      path.includes(`/${card.imageId}.`)
+    );
+
+    return {
+      id: `dest-${index}`, // Diese ID referenzieren wir gleich im TOC
+      image: matchedImagePath ? destinationImages[matchedImagePath] : undefined, // Packt das Bild rein, falls gefunden
+      ...card
+    };
+  });
 
   // 2. Inhaltsverzeichnis dynamisch aufbauen!
   const tocItems = [
     { id: 'viaduct-map', label: t('contentPages.destinations.mapTitle'), icon: <Map size={16}/> },
     ...tableData.map((card) => ({
       id: card.id,
-      label: card.destination,
+      label: card.destination, 
     })),
     { id: 'instagram', label: t('contentPages.destinations.igTitle', 'Instagram'), icon: <Instagram size={16}/> },
   ];
 
   return (
-    <div className="max-w-4xl mx-auto md:px-4 md:py-8 animate-in fade-in slide-in-from-bottom-4">
+    <div className="max-w-6xl mx-auto px-4 py-8 animate-in fade-in slide-in-from-bottom-4">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 font-heading mb-2">{t('contentPages.destinations.title')}</h1>
         <p className="text-slate-600 text-lg">{t('contentPages.destinations.subtitle')}</p>
@@ -39,6 +57,7 @@ export default function Destinations() {
       <TableOfContents items={tocItems} />
 
       <div className="space-y-6 mt-8">
+        
         {/* Nativer Viaduct Embed */}
         <div id="viaduct-map" className="bg-white rounded-3xl p-5 sm:p-6 mb-6 scroll-mt-24">
           <div className="flex items-center gap-3 mb-4">
@@ -59,7 +78,7 @@ export default function Destinations() {
         </div>
 
         {/* Die dynamischen Destination Cards */}
-        <div className="bg-white rounded-3xl p-5">
+        <div className="bg-transparent rounded-3xl pt-2">
           <TableOverview columns={columns} data={tableData} />
         </div>
 

@@ -1,4 +1,4 @@
-import { Map, Dog, AlertCircle, TrainFront, TrainTrack, Ticket } from 'lucide-react';
+import { Map, Dog, TrainFront, TrainTrack } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import DogRulesMap from './DogRulesMap';
 // import InfoCard from '../layout/InfoCard';
@@ -12,20 +12,6 @@ export default function DoggoTips() {
     { key: 'country', label: t('contentPages.doggoTips.columns.country') },
     { key: 'price', label: t('contentPages.doggoTips.columns.price') },
     { key: 'comment', label: t('contentPages.doggoTips.columns.comment') },
-  ];
-
-  const tableDataOld = [
-    { id: '1', highlight: true, country: t('contentPages.doggoTips.rows.trenitalia.country'), price: t('contentPages.doggoTips.rows.trenitalia.price'), comment: t('contentPages.doggoTips.rows.trenitalia.comment') },
-    { id: '2', highlight: true, country: t('contentPages.doggoTips.rows.sncf.country'), price: t('contentPages.doggoTips.rows.sncf.price'), comment: t('contentPages.doggoTips.rows.sncf.comment') },
-    { id: '3', country: t('contentPages.doggoTips.rows.db.country'), price: t('contentPages.doggoTips.rows.db.price'), comment: t('contentPages.doggoTips.rows.db.comment') },
-    { id: '4', country: t('contentPages.doggoTips.rows.oebb.country'), price: t('contentPages.doggoTips.rows.oebb.price'), comment: t('contentPages.doggoTips.rows.oebb.comment') },
-    { id: '5', country: t('contentPages.doggoTips.rows.renfe.country'), price: t('contentPages.doggoTips.rows.renfe.price'), comment: (
-        <span className="flex items-start gap-1.5 text-red-600 font-medium">
-          <AlertCircle size={16} className="shrink-0 mt-0.5" />
-          {t('contentPages.doggoTips.rows.renfe.comment')}
-        </span>
-      ) 
-    },
   ];
 
     // 1. Daten holen und IDs vergeben
@@ -64,9 +50,6 @@ export default function DoggoTips() {
         
         <div id="germany" className="bg-white rounded-3xl p-6 sm:p-8 scroll-mt-24">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 bg-green-50 text-green-600 rounded-xl">
-              <Dog size={24} strokeWidth={2} />
-            </div>
             <h2 className="text-xl font-bold text-slate-800 font-heading">{t('landing.title')}</h2>
           </div>
           
