@@ -6,14 +6,14 @@ export default function DogRulesMap() {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-      <div className="px-5 py-4 border-b border-slate-200 bg-slate-50 flex items-center gap-2.5">
-        <Map size={18} className="text-slate-500" />
-        <h3 className="font-semibold text-slate-700 text-sm">{t('landing.map.title')}</h3>
+    <div className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 bg-primary/10 rounded-xl shrink-0"><Map className="text-primary" /></div>
+        <h3 className="text-lg font-bold text-slate-800">{t('landing.map.title')}</h3>
       </div>
       
       {/* SVG Wrapper */}
-      <div className="w-full relative bg-slate-50/50 p-6 flex justify-center items-center">
+      <div className="w-full relative bg-white p-6 flex justify-center items-center">
         <img 
           src={mapSvgUrl} 
           alt="Map of German transport networks" 
@@ -23,7 +23,7 @@ export default function DogRulesMap() {
       </div>
 
       {/* Legende */}
-      <div className="px-5 py-4 bg-white border-t border-slate-100">
+      <div className="px-5 py-4 bg-white">
         <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
           {t('landing.map.legendTitle')}
         </p>
@@ -48,7 +48,7 @@ export default function DogRulesMap() {
       </div>
 
       {/* Footer Area */}
-      <div className="p-4 text-[11px] text-slate-400 bg-slate-50 border-t border-slate-100 text-center leading-relaxed">
+      <div className="p-4 text-[11px] text-slate-400 bg-slate-50 text-center leading-relaxed">
         {t('landing.map.attribution')}
       </div>
     </div>

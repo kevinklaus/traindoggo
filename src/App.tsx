@@ -76,7 +76,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-secondary/5 from-slate-50 via-white to-primary/[0.03] flex flex-col">
+    <div className="min-h-screen bg-primary/10 from-slate-50 via-white to-primary/[0.03] flex flex-col">
       <Header 
         dogMode={params.dogMode} 
         activePage={activePage} 

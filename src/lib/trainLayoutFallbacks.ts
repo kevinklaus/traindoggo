@@ -44,8 +44,6 @@ export function getFallbackCompositionSections(leg: Leg, t: TFunction): Composit
   const trainType = getTrainType(leg);
   const product = (leg.line?.product || '').toLowerCase();
   const name = (leg.line?.name || '').toLowerCase();
-
-  console.log('Determining fallback composition for leg:', { trainType, product, name });
   
   if (trainType === 'ice' || name.startsWith('ice') || name.startsWith('TGV') || name.startsWith('OGV')|| name.startsWith('Eurostar') || name.startsWith('freccia') || name.startsWith('italo')) {
     return [

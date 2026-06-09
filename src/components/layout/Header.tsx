@@ -68,7 +68,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
   return (
     <>
       <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 h-[64px] sm:h-[73px] flex items-center">
-        <div className="max-w-7xl mx-auto px-4 w-full flex items-center justify-between gap-4 min-w-0">
+        <div className="max-w-6xl mx-auto px-4 w-full flex items-center justify-between gap-4 min-w-0">
           
           <div className="flex-1 flex justify-start min-w-0">
             <button 
@@ -77,7 +77,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
             >
               <LogoMark />
               <div className="flex flex-col justify-center min-w-0 text-left">
-                <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight font-heading leading-tight truncate">
+                <h1 className="text-lg font-semibold font-body sm:text-xl text-slate-800 leading-tight truncate">
                   Train Doggo
                 </h1>
                 <p className="hidden text-[13px] text-slate-500 font-body leading-snug mt-0.5 truncate">
@@ -96,7 +96,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
                   className={`
-                    group relative flex items-center justify-center px-3 py-2 rounded-xl text-sm font-semibold transition-colors
+                    group relative flex items-center justify-center px-3 py-2 rounded-xl text-sm transition-colors
                     ${item.alwaysVisibleOnTablet ? 'flex' : 'hidden lg:flex'}
                     ${isActive ? 'text-primary bg-primary/5' : 'text-slate-600 hover:text-primary hover:bg-slate-50'}
                   `}
@@ -123,7 +123,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
           <div className="flex-1 flex items-center justify-end gap-1 sm:gap-3 shrink-0">
             <button 
               onClick={toggleLanguage}
-              className="flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-2 text-sm font-semibold text-slate-600 hover:text-primary hover:bg-slate-50 rounded-xl transition-colors"
+              className="flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-2 text-sm text-slate-600 hover:text-primary hover:bg-slate-50 rounded-xl transition-colors"
               title={t('header.langSwitch', 'Change Language')}
             >
               <Globe size={18} className="shrink-0" />
@@ -172,7 +172,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
                     <button 
                       key={item.id}
                       onClick={() => handleNavClick(item.id)}
-                      className={`group flex items-center w-full px-3 py-3 text-left font-semibold rounded-xl transition-colors
+                      className={`group flex items-center w-full px-3 py-3 text-left rounded-xl transition-colors
                         ${isActive ? 'text-primary bg-primary/5' : 'text-slate-700 hover:bg-slate-50 hover:text-primary'}
                       `}
                     >
@@ -198,7 +198,7 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
                 </span>
                 <button 
                   onClick={() => { toggleLanguage(); setIsMobileMenuOpen(false); }}
-                  className="flex items-center justify-between w-full px-3 py-3 text-left font-semibold text-slate-700 hover:bg-slate-50 rounded-xl transition-colors"
+                  className="flex items-center justify-between w-full px-3 py-3 text-left text-slate-700 hover:bg-slate-50 rounded-xl transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <Globe size={18} className="text-slate-400" />

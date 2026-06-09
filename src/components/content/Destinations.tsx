@@ -1,7 +1,7 @@
 import { Map, Instagram, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import TableOfContents from './TableOfContents';
-import TableOverview from './TableOverview';
+import CardOverview from './CardOverview';
 
 // VITE GLOB IMPORT: Holt auf einen Schlag ALLE Bilder aus dem Ordner!
 // Das { eager: true, as: 'url' } sorgt dafür, dass Vite direkt die fertigen URLs liefert.
@@ -14,7 +14,7 @@ const destinationImages = import.meta.glob('./images/*.{png,jpg,jpeg,webp}', {
 export default function Destinations() {
   const { t } = useTranslation();
 
-  const columns = [
+  const cardFields = [
     { key: 'destination', label: t('contentPages.destinations.tableCols.destination', 'Ziel') },
     { key: 'description', label: t('contentPages.destinations.tableCols.description', 'Beschreibung') },
     { key: 'travel', label: t('contentPages.destinations.tableCols.travel', 'Anreise-Tipp') }
@@ -23,7 +23,7 @@ export default function Destinations() {
   // 1. Daten holen und IDs + Bilder vergeben
   const rawCards = t('contentPages.destinations.cards', { returnObjects: true }) as any[];
   
-  const tableData = rawCards.map((card, index) => {
+  const cardsData = rawCards.map((card, index) => {
     // Finde das passende Bild aus dem Glob-Import anhand der imageId
     // Wir suchen nach dem Dateinamen, z.B. "montblanc.jpg" in den importierten Pfaden
     const matchedImagePath = Object.keys(destinationImages).find(path => 
@@ -40,7 +40,7 @@ export default function Destinations() {
   // 2. Inhaltsverzeichnis dynamisch aufbauen!
   const tocItems = [
     { id: 'viaduct-map', label: t('contentPages.destinations.mapTitle'), icon: <Map size={16}/> },
-    ...tableData.map((card) => ({
+    ...cardsData.map((card) => ({
       id: card.id,
       label: card.destination, 
     })),
@@ -48,7 +48,7 @@ export default function Destinations() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 animate-in fade-in slide-in-from-bottom-4">
+    <div className="max-w-4xl mx-auto px-4 py-8 animate-in fade-in slide-in-from-bottom-4">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 font-heading mb-2">{t('contentPages.destinations.title')}</h1>
         <p className="text-slate-600 text-lg">{t('contentPages.destinations.subtitle')}</p>
@@ -77,9 +77,9 @@ export default function Destinations() {
           />
         </div>
 
-        {/* Die dynamischen Destination Cards */}
+        {/* Die dynamischen Destination cardFields */}
         <div className="bg-white rounded-3xl p-4">
-          <TableOverview columns={columns} data={tableData} />
+          <CardOverview cardFields={cardFields} data={cardsData} />
         </div>
 
         {/* Instagram Modul mit direktem Button */}
@@ -99,10 +99,10 @@ export default function Destinations() {
               href="https://www.instagram.com/traindoggo" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="inline-flex items-center gap-2.5 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white px-5 py-3 rounded-xl font-bold hover:opacity-90 transition-opacity shadow-sm"
+              className="inline-flex items-center gap-2.5 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white px-5 py-3 rounded-xl font-bold hover:opacity-80 hover:text-secondary transition-opacity shadow-sm"
             >
               <Instagram size={20} />
-              <span className="capitalize">Zu Instagram @traindoggo</span>
+              <span>Instagram @traindoggo</span>
             </a>
           </div>
         </div>

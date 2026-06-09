@@ -28,34 +28,32 @@ export default function Footer({ onShowImprint }: Props) {
       <footer className="bg-secondary text-white relative" role="contentinfo">
         <div className="max-w-4xl mx-auto px-4 pt-2 pb-10">
           <div className="flex flex-col items-center text-center gap-6">
-            
-            {/* Hier sitzt jetzt die neue LogoMark als zentrales Markenzeichen */}
             <div className="hover:scale-105 transition-transform">
               <LogoMark size="large" />
             </div>
 
             <div className="space-y-2 max-w-md">
-              <h2 className="text-lg font-bold tracking-tight font-heading">Train Doggo</h2>
-              <p className="text-xs sm:text-sm text-white/70 font-body leading-relaxed">
+              <h2 className="text-lg font-bold font-body">Train Doggo</h2>
+              <p className="text-xs sm:text-sm text-white/80 font-body leading-relaxed">
                 {t('footer.text')}
               </p>
             </div>
 
             {/* Social Icons */}
             <div className="flex items-center gap-3 mt-2">
-              <a href="https://instagram.com/traindoggo" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-highlight transition-all hover:scale-105 border border-highlight">
+              <a href="https://instagram.com/traindoggo" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-xl bg-white hover:bg-highlight text-secondary transition-all hover:scale-105">
                 <Instagram size={22} strokeWidth={2} />
               </a>
-              <a href="https://github.com/kevinklaus/traindoggo" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-highlight transition-all hover:scale-105 border border-highlight">
+              <a href="https://github.com/kevinklaus/traindoggo" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-xl bg-white hover:bg-highlight text-secondary transition-all hover:scale-105">
                 <Github size={22} strokeWidth={2} />
               </a>
-              <a href="https://kevinklaus.github.io" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-highlight transition-all hover:scale-105 border border-highlight">
+              <a href="https://kevinklaus.github.io" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-xl bg-white hover:bg-highlight text-secondary transition-all hover:scale-105">
                 <Globe size={22} strokeWidth={2} />
               </a>
-              {/* <a href="mailto:kevintheklaus@gmail.com" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-highlight transition-all hover:scale-105 border border-highlight">
+              {/* <a href="mailto:kevintheklaus@gmail.com" className="flex items-center justify-center w-10 h-10 rounded-xl bg-white hover:bg-highlight text-secondary transition-all hover:scale-105">
                 <Mail size={22} strokeWidth={2} />
               </a> */}
-              <a href="https://www.linkedin.com/in/kevinklaus" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/12 hover:bg-white/22 text-highlight transition-all hover:scale-105 border border-highlight">
+              <a href="https://www.linkedin.com/in/kevinklaus" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-xl bg-white hover:bg-highlight text-secondary transition-all hover:scale-105">
                 <Linkedin size={22} strokeWidth={2} />
               </a>
             </div>

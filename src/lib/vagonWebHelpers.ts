@@ -58,6 +58,7 @@ export function buildVagonWebParams(leg: Leg, currentLang: string) {
     '75': 'TCDD', // Türkei
     '76': 'VY',   // Norwegen
     '3822': 'VY',   // Norwegen 
+    '3236': 'WSTBA',   // Westbahn 
     '78': 'HZPP', // Kroatien
     '79': 'SZ',   // Slowenien
     '80': 'DB',   // Deutschland
@@ -107,6 +108,11 @@ export function buildVagonWebParams(leg: Leg, currentLang: string) {
   else if (opId.includes('regiojet') || opName.includes('regiojet')) {
     zeme = 'RJ';
     kategorie = 'RJ'; 
+  }
+  // Westbahn 
+  else if (opId.includes('westbahn') || opName.includes('westbahn')) {
+    zeme = 'WSTBA';
+    kategorie = ''; 
   }
   // SJ
   else if (opId.includes('sj') || opName.includes('sj')) {

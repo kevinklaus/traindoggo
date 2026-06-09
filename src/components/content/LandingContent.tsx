@@ -70,20 +70,23 @@ export default function LandingContent({
           <JourneyResults journeys={journeys} dogMode={params.dogMode} loading={loading} error={error} />
         </div>
       ) : (
-        <div className="max-w-4xl space-y-8 mt-12 w-full animate-in fade-in slide-in-from-bottom-4 pb-24">
+        <div className="max-w-4xl px-4 sm:px-0 space-y-8 mt-12 w-full animate-in fade-in slide-in-from-bottom-4 pb-24">
           {/* How it works (3 Steps) */}
           <div className="bg-white rounded-3xl p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-slate-800 font-heading text-center mb-8">
-              {t('landing.howItWorks.title')}
+            <div className="flex justify-center mb-2">
+              <PawPrint size={24} strokeWidth={2} className="fill-accent text-accent" />
+            </div>
+            <h2 className="text-xl text-slate-800 font-body text-center mb-12">
+              {t('landing.howItWorks.title')} 
             </h2>
             
             <div className="grid sm:grid-cols-3 gap-8 sm:gap-6 relative">
               {/* Verbindende Linie im Hintergrund (nur Desktop) */}
-              <div className="hidden sm:block absolute top-6 left-[16%] right-[16%] h-0.5 bg-accent/20 z-0" />
+              <div className="hidden sm:block absolute top-6 left-[16%] right-[16%] h-0.5 bg-highlight/20 z-0" />
               {/* Step 1 */}
               <div className="relative z-10 flex flex-col items-center text-center space-y-3">
-                <div className="w-12 h-12 rounded-3xl bg-accent flex items-center justify-center text-white mb-2">
-                  <Search size={22} strokeWidth={2} />
+                <div className="w-12 h-12 rounded-3xl bg-highlight flex items-center justify-center text-white mb-2">
+                  <Search size={22} strokeWidth={2.5} />
                 </div>
                 <h3 className="font-bold text-slate-800">{t('landing.howItWorks.step1.title')}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed max-w-[250px]">
@@ -93,8 +96,8 @@ export default function LandingContent({
 
               {/* Step 2 */}
               <div className="relative z-10 flex flex-col items-center text-center space-y-3">
-                <div className="w-12 h-12 rounded-3xl bg-accent flex items-center justify-center text-white mb-2">
-                  <Route size={22} strokeWidth={2} />
+                <div className="w-12 h-12 rounded-3xl bg-highlight flex items-center justify-center text-white mb-2">
+                  <Route size={22} strokeWidth={2.5} />
                 </div>
                 <h3 className="font-bold text-slate-800">{t('landing.howItWorks.step2.title')}</h3>
                 <p 
@@ -105,8 +108,8 @@ export default function LandingContent({
 
               {/* Step 3 */}
               <div className="relative z-10 flex flex-col items-center text-center space-y-3">
-                <div className="w-12 h-12 rounded-3xl bg-accent flex items-center justify-center text-white mb-2">
-                  <PawPrint size={22} strokeWidth={2} />
+                <div className="w-12 h-12 rounded-3xl bg-highlight flex items-center justify-center text-white mb-2">
+                  <PawPrint size={22} strokeWidth={2} className="fill-white" />
                 </div>
                 <h3 className="font-bold text-slate-800">{t('landing.howItWorks.step3.title')}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed max-w-[250px]">

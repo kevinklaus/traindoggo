@@ -2,13 +2,13 @@ import { Map, Dog, TrainFront, TrainTrack } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import DogRulesMap from './DogRulesMap';
 // import InfoCard from '../layout/InfoCard';
-import TableOverview from './TableOverview';
+import CardOverview from './CardOverview';
 import TableOfContents from './TableOfContents';
 
 export default function DoggoTips() {
   const { t } = useTranslation();
 
-  const tableColumns = [
+  const cardFields = [
     { key: 'country', label: t('contentPages.doggoTips.columns.country') },
     { key: 'price', label: t('contentPages.doggoTips.columns.price') },
     { key: 'comment', label: t('contentPages.doggoTips.columns.comment') },
@@ -16,7 +16,7 @@ export default function DoggoTips() {
 
     // 1. Daten holen und IDs vergeben
   const rawCards = t('contentPages.doggoTips.rows', { returnObjects: true }) as any[];
-  const tableData = rawCards.map((card, index) => ({
+  const cardsData = rawCards.map((card, index) => ({
     id: `dest-${index}`, // Diese ID referenzieren wir gleich im TOC
     ...card
   }));
@@ -24,7 +24,7 @@ export default function DoggoTips() {
     // 2. Inhaltsverzeichnis dynamisch aufbauen!
   const tocItems = [
     { id: 'germany', label: t('landing.title'), icon: <Dog size={16}/> },
-    ...tableData.map((card) => ({
+    ...cardsData.map((card) => ({
       id: card.id,
       label: card.country,
     })),
@@ -77,7 +77,7 @@ export default function DoggoTips() {
 
         <div id="prices" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <h3 className="text-lg font-bold text-slate-800 mb-4">{t('contentPages.doggoTips.tableTitle')}</h3>
-          <TableOverview columns={tableColumns} data={tableData} />
+          <CardOverview cardFields={cardFields} data={cardsData} />
         </div>
 
         <div id="dogrulesmap">

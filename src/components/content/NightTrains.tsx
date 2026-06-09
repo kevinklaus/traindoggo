@@ -1,7 +1,7 @@
 import { MoonStar, Map, Dog } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import InfoCard from './InfoCard';
-import TableOverview from './TableOverview';
+import CardOverview from './CardOverview';
 import TableOfContents from './TableOfContents';
 
 export default function NightTrains() {
@@ -15,23 +15,19 @@ export default function NightTrains() {
     { id: 'map', label: t('contentPages.nightTrains.mapTitle'), icon: <Map size={16}/> },
   ];
 
-  const tableColumns = [
+  const cardFields = [
     { key: 'operator', label: t('contentPages.nightTrains.columns.operator') },
     { key: 'countries', label: t('contentPages.nightTrains.columns.countries') },
-    { key: 'cabin', label: t('contentPages.nightTrains.columns.cabin') },
-    { key: 'seat', label: t('contentPages.nightTrains.columns.seat') },
+    { key: 'info', label: t('contentPages.nightTrains.columns.info') },
     { key: 'price', label: t('contentPages.nightTrains.columns.price') },
   ];
 
-  const tableData = [
-    { id: '1', highlight: true, operator: t('contentPages.nightTrains.rows.oebb.operator'), countries: t('contentPages.nightTrains.rows.oebb.countries'), cabin: t('contentPages.nightTrains.rows.oebb.cab'), seat: t('contentPages.nightTrains.rows.oebb.seat'), price: t('contentPages.nightTrains.rows.oebb.price') },
-    { id: '2', highlight: true, operator: t('contentPages.nightTrains.rows.cd.operator'), countries: t('contentPages.nightTrains.rows.cd.countries'), cabin: t('contentPages.nightTrains.rows.cd.cab'), seat: t('contentPages.nightTrains.rows.cd.seat'), price: t('contentPages.nightTrains.rows.cd.price') },
-    { id: '3', highlight: true, operator: t('contentPages.nightTrains.rows.trenitalia.operator'), countries: t('contentPages.nightTrains.rows.trenitalia.countries'), cabin: t('contentPages.nightTrains.rows.trenitalia.cab'), seat: t('contentPages.nightTrains.rows.trenitalia.seat'), price: t('contentPages.nightTrains.rows.trenitalia.price') },
-    { id: '4', highlight: true, operator: t('contentPages.nightTrains.rows.sncf.operator'), countries: t('contentPages.nightTrains.rows.sncf.countries'), cabin: t('contentPages.nightTrains.rows.sncf.cab'), seat: t('contentPages.nightTrains.rows.sncf.seat'), price: t('contentPages.nightTrains.rows.sncf.price') },
-    { id: '5', operator: t('contentPages.nightTrains.rows.es.operator'), countries: t('contentPages.nightTrains.rows.es.countries'), cabin: t('contentPages.nightTrains.rows.es.cab'), seat: t('contentPages.nightTrains.rows.es.seat'), price: t('contentPages.nightTrains.rows.es.price') },
-    { id: '6', operator: t('contentPages.nightTrains.rows.sj.operator'), countries: t('contentPages.nightTrains.rows.sj.countries'), cabin: t('contentPages.nightTrains.rows.sj.cab'), seat: t('contentPages.nightTrains.rows.sj.seat'), price: t('contentPages.nightTrains.rows.sj.price') },
-    { id: '7', operator: t('contentPages.nightTrains.rows.cfr.operator'), countries: t('contentPages.nightTrains.rows.cfr.countries'), cabin: t('contentPages.nightTrains.rows.cfr.cab'), seat: t('contentPages.nightTrains.rows.cfr.seat'), price: t('contentPages.nightTrains.rows.cfr.price') },
-  ];
+    // 1. Daten holen und IDs vergeben
+  const rawCards = t('contentPages.nightTrains.rows', { returnObjects: true }) as any[];
+  const cardsData = rawCards.map((card, index) => ({
+    id: `dest-${index}`, // Diese ID referenzieren wir gleich im TOC
+    ...card
+  }));
 
   return (
     <div className="max-w-4xl mx-auto md:px-4 md:py-8 animate-in fade-in slide-in-from-bottom-4">
@@ -48,7 +44,7 @@ export default function NightTrains() {
         <div id="overview" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <h3 className="text-lg font-bold text-slate-800 mb-2">{t('contentPages.nightTrains.tableTitle')}</h3>
           <p className="text-sm text-slate-600 mb-4">{t('contentPages.nightTrains.romaniaNote')}</p>
-          <TableOverview columns={tableColumns} data={tableData} />
+          <CardOverview cardFields={cardFields} data={cardsData} />
         </div>
 
     {/*     <div id="potty"><InfoCard icon={<AlertTriangle className="text-amber-500" />} title={t('contentPages.nightTrains.q2')} text={t('contentPages.nightTrains.a2')} /></div>

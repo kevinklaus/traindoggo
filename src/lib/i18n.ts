@@ -56,7 +56,7 @@ const deTranslations = {
       attribution: "Kartendaten: Christoph Sohn, CC BY-SA 4.0, via Wikimedia Commons. | Alle Angaben ohne Gewähr."
     },
     howItWorks: {
-      title: "So funktioniert Train Doggo",
+      title: "Bahnreisen mit Train Doggo",
       step1: {
         title: "1. Verbindung suchen",
         text: "Gib Start, Ziel und Datum ein. Du kannst Verbindungen in ganz Europa finden!"
@@ -248,19 +248,18 @@ const deTranslations = {
       columns: {
         operator: "Betreiber",
         countries: "Länder",
-        cabin: "Schlaf-/Liegewagen",
-        seat: "Sitzwagen",
+        info: "Infos",
         price: "Preis"
       },
-      rows: {
-        oebb: { operator: "ÖBB Nightjet", countries: "🇦🇹 🇩🇪 🇨🇭 🇮🇹 🇫🇷 🇳🇱 🇧🇪", cab: "Nur im Privatabteil", seat: "Erlaubt", price: "~30€ Pauschale" },
-        cd: { operator: "ČD Night", countries: "🇨🇿 🇸🇰 🇵🇱 🇭🇺 🇦🇹 🇩🇪 🇨🇭", cab: "Nur im Privatabteil", seat: "Erlaubt", price: "Hunde-Ticket (ca. 10€)" },
-        trenitalia: { operator: "Trenitalia", countries: "🇮🇹", cab: "Erlaubt im Abteil", seat: "Erlaubt", price: "~50€ (oft inkl. Set)" },
-        sncf: { operator: "SNCF Intercités", countries: "🇫🇷", cab: "Erlaubt", seat: "Erlaubt", price: "7 - 20€ Festpreis" },
-        es: { operator: "European Sleeper", countries: "🇧🇪 🇳🇱 🇩🇪 🇨🇿", cab: "Nur im Privatabteil", seat: "Erlaubt", price: "Hunde-Ticket" },
-        sj: { operator: "Snälltåget", countries: "🇸🇪 🇩🇪 🇦🇹", cab: "Spezielle Hundeabteile", seat: "Erlaubt", price: "Tierabteil-Preis" },
-        cfr: { operator: "Căile Ferate Române", countries: "🇷🇴 🇭🇺 🇦🇹", cab: "Hunde verboten!", seat: "Erlaubt", price: "Voll/Halbpreis" }
-      }
+      rows: [
+        { operator: "🇦🇹 ÖBB Nightjet", highlight: true, countries: "🇦🇹 🇩🇪 🇨🇭 🇮🇹 🇫🇷 🇳🇱 🇧🇪", info: "Hunde sind im Sitzwagen oder im Liege-/Schlafwagen willkommen, sofern das komplette Privatabteil gebucht wird.", price: "ca. 30€ Hundeticket" },
+        { operator: "🇨🇿 ČD Night", highlight: true, countries: "🇨🇿 🇸🇰 🇵🇱 🇭🇺 🇦🇹 🇩🇪 🇨🇭", info: "Hunde sind im Sitzwagen oder im Liege-/Schlafwagen willkommen, wenn das gesamte Privatabteil gebucht ist.", price: "ca. 10€ Hundeticket" },
+        { operator: "🇮🇹 InterCity Notte", highlight: true, countries: "🇮🇹", info: "Hunde sind im Privatabteil (»Cabina intera«) oder Sitzwagen (»Posto a sedere«) willkommen. Im Sommer oft gratis Promos!", price: "5€ Hundeticket" },
+        { operator: "🇫🇷 SNCF Intercités", highlight: true, countries: "🇫🇷", info: "Hunde sind im Sitzwagen oder Liegewagen willkommen, sofern das gesamte Abteil als »Espace Privatif« gebucht wird.", price: "7€ Festpreis" },
+        { operator: "🇧🇪 European Sleeper", countries: "🇧🇪 🇳🇱 🇩🇪 🇨🇿", info: "Hunde sind im Sitzwagen oder Liege-/Schlafwagen willkommen, sofern das gesamte Privatabteil gebucht wird.", price: "30€ Hundeticket" },
+        { operator: "🇸🇪 Snälltåget", countries: "🇸🇪 🇩🇪 🇦🇹", info: "Hunde sind in einem speziell ausgewiesenen Tierabteil willkommen. Empfehlung: sehr frühzeitig buchen.", price: "Kinderpreis (<16 Jahre)" },
+        { operator: "🇷🇴 Căile Ferate Române", countries: "🇷🇴 🇭🇺 🇦🇹", info: "Hunde sind im Sitzwagen willkommen. Achtung: Im Schlafwagen sind Hunde strikt verboten.", price: "Halbpreis-Ticket" }
+      ]
     },
     destinations: {
       title: "Hundefreundliche Reiseziele",
@@ -344,7 +343,7 @@ const enTranslations = {
       attribution: "Map data: Christoph Sohn, CC BY-SA 4.0, via Wikimedia Commons. | All information without warranty."
     },
     howItWorks: {
-      title: "How Train Doggo works",
+      title: "Travel on rails with Train Doggo",
       step1: {
         title: "1. Search connection",
         text: "Enter your start, destination, and date. Find connections all across Europe!"
@@ -536,19 +535,18 @@ const enTranslations = {
       columns: {
         operator: "Operator",
         countries: "Countries",
-        cabin: "Sleeper/Couchette",
-        seat: "Seated Car",
-        price: "Cost (approx.)"
+        info: "Information",
+        price: "Cost"
       },
-      rows: {
-        oebb: { operator: "ÖBB Nightjet", countries: "🇦🇹 🇩🇪 🇨🇭 🇮🇹 🇫🇷 🇳🇱 🇧🇪", cab: "Only in private cabin", seat: "Allowed", price: "~€30 flat fee" },
-        cd: { operator: "ČD Night", countries: "🇨🇿 🇸🇰 🇵🇱 🇭🇺 🇦🇹 🇩🇪 🇨🇭", cab: "Only in private cabin", seat: "Allowed", price: "Dog ticket (~€10)" },
-        trenitalia: { operator: "Trenitalia", countries: "🇮🇹", cab: "Allowed in cabin", seat: "Allowed", price: "~€50 (often incl. kit)" },
-        sncf: { operator: "SNCF Intercités", countries: "🇫🇷", cab: "Allowed", seat: "Allowed", price: "€7 - €20 fixed price" },
-        es: { operator: "European Sleeper", countries: "🇧🇪 🇳🇱 🇩🇪 🇨🇿", cab: "Only in private cabin", seat: "Allowed", price: "Pet ticket" },
-        sj: { operator: "Snälltåget", countries: "🇸🇪 🇩🇪 🇦🇹", cab: "Special pet cabins", seat: "Allowed", price: "Pet cabin rate" },
-        cfr: { operator: "Căile Ferate Române", countries: "🇷🇴 🇭🇺 🇦🇹", cab: "Dogs forbidden!", seat: "Allowed", price: "Full/Half fare" }
-      }
+      rows: [
+        { operator: "🇦🇹 ÖBB Nightjet", highlight: true, countries: "🇦🇹 🇩🇪 🇨🇭 🇮🇹 🇫🇷 🇳🇱 🇧🇪", info: "Dogs are welcome in seating cars or in sleeper/couchette cars if the entire private compartment is booked.", price: "~€30 dog ticket" },
+        { operator: "🇨🇿 ČD Night", highlight: true, countries: "🇨🇿 🇸🇰 🇵🇱 🇭🇺 🇦🇹 🇩🇪 🇨🇭", info: "Dogs are welcome in seating cars or in sleeper/couchette cars if the entire private compartment is booked.", price: "approx. €10 dog ticket" },
+        { operator: "🇮🇹 InterCity Notte", highlight: true, countries: "🇮🇹", info: "Dogs are welcome in private cabins (»Cabina intera«) or seating cars (»Posto a sedere«). Watch for free summer promos!", price: "€5 dog ticket" },
+        { operator: "🇫🇷 SNCF Intercités", highlight: true, countries: "🇫🇷", info: "Dogs are welcome in seating cars or couchettes, provided the entire compartment is booked as an »Espace Privatif«.", price: "€7 fixed price" },
+        { operator: "🇧🇪 European Sleeper", countries: "🇧🇪 🇳🇱 🇩🇪 🇨🇿", info: "Dogs are welcome in seating cars or in sleeper/couchette cars if the entire private compartment is booked.", price: "€30 dog ticket" },
+        { operator: "🇸🇪 Snälltåget", countries: "🇸🇪 🇩🇪 🇦🇹", info: "Dogs are welcome in designated pet carriages. Recommendation: book well in advance.", price: "Child fare (<16 years)" },
+        { operator: "🇷🇴 Căile Ferate Române", countries: "🇷🇴 🇭🇺 🇦🇹", info: "Dogs are welcome in seating cars. Note: strictly forbidden in sleeping cars.", price: "Half-fare ticket" }
+      ]
     },
     destinations: {
       title: "Dog-Friendly Destinations",

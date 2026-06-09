@@ -233,6 +233,12 @@ export function getTrainType(leg: Leg): 'ice' | 'ic' | 'ec' | 're' | 'rb' | 'oth
   if (name.startsWith('ic')) return 'ic';
   if (name.startsWith('ec')) return 'ec';
   if (name.startsWith('re')) return 're';
-  if (name.startsWith('rb')) return 'rb';
+  if (name.startsWith('rb')) return 're';
+  if (name.startsWith('nj')) return 'ic';
+  if (name.startsWith('RGJ')) return 'ic';
+  if (name.startsWith('mex')) return 're';
+  if (name.startsWith('s')) return 're';
+  if (name.startsWith('D')) return 'ic';
+  if (name.startsWith('en')) return 'ic';
   return 'other';
 }

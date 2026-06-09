@@ -1,4 +1,3 @@
-import { Hash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export interface ToCItem {
@@ -33,7 +32,7 @@ export default function TableOfContents({ items }: Props) {
           <button
             key={item.id}
             onClick={() => scrollTo(item.id)}
-            className="flex items-center text-left gap-2 bg-white px-3 py-2 rounded-full text-sm font-semibold text-secondary hover:text-primary hover:shadow-sm hover:border-primary/30 transition-all"
+            className="flex items-center text-left gap-2 bg-white px-3 py-2 rounded-full text-sm text-secondary hover:bg-highlight transition-all"
           >
             {item.icon? item.icon: ""}
             <span>{item.label}</span>

@@ -4,15 +4,15 @@ const INJECTED_CSS = `
   #hlavicka, #hlavicka_respon, #horizmenu, #horizmenu_respon, #cesta3, #cesta4, #pravanavigace0, #zapati { display: none !important; }
   
   /* FIX: Komplettes Reset aller vagonWEB Hintergrund-Ebenen auf Weiß */
-  body, html, #obalovydiv, .obsah, .clearboth, .overflow_x, .obsah_razeni { background: #55556d !important; background-color: #55556d !important; margin: 0; padding: 0; }
+  body, html, #obalovydiv, .obsah, .clearboth, .overflow_x, .obsah_razeni { background: #424270 !important; background-color: #424270 !important; margin: 0; padding: 0; }
   body { padding: 10px 0 !important; }
   
   ::-webkit-scrollbar { width: 0px; height: 8px; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   
   /* FIX: Zug-Container in App-Blau zwingen */
-  table.vlacek { background-color: #55556d !important; border-radius: 12px; padding: 8px; border: none !important; margin: 0 auto; }
-  .vlak_zahlavi { background-color: #55556d !important; border-radius: 6px 6px 0 0; }
+  table.vlacek { background-color: #424270 !important; border-radius: 12px; padding: 8px; border: none !important; margin: 0 auto; }
+  .vlak_zahlavi { background-color: #424270 !important; border-radius: 6px 6px 0 0; }
   
   /* FIX: Alle verbleibenden grünen Rahmen (Klassen wie .tab-, .vlak_trat) unsichtbar machen */
   .vlak_trat, [class^="tab-"], table.tab td, table.monitoring td { border-color: transparent !important; border-top-color: transparent !important; border-bottom-color: transparent !important; }
