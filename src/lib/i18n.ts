@@ -94,7 +94,7 @@ const deTranslations = {
       from: "Bitte Startbahnhof wählen",
       to: "Bitte Zielbahnhof wählen"
     },
-    submitBtn: "Verbindungen suchen",
+    submitBtn: "Suchen",
     loadingBtn: "Suche läuft…"
   },
   journeys: {
@@ -381,7 +381,7 @@ const enTranslations = {
       from: "Please select a departure station",
       to: "Please select a destination station"
     },
-    submitBtn: "Search journeys",
+    submitBtn: "Search",
     loadingBtn: "Searching…"
   },
   journeys: {

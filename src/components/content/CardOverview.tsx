@@ -24,13 +24,13 @@ const MobileAccordion = ({ label, content }: { label: string; content: React.Rea
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="md:hidden border border-primary/60 bg-white/60 rounded-xl overflow-hidden">
+    <div className="md:hidden bg-highlight rounded-xl overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center p-3 font-semibold text-[13px] text-primary cursor-pointer select-none"
+        className="w-full flex justify-between items-center p-3 font-semibold text-[13px] text-secondary cursor-pointer select-none"
       >
-        <Route size={16} className="text-primary" />
-        <span className="text-sm text-primary">{label}</span>
+        <Route size={16} className="" />
+        <span className="text-sm">{label}</span>
         <ChevronDown 
           size={16} 
           className={`transition-transform duration-300 text-primary ${isOpen ? 'rotate-180' : ''}`} 
@@ -39,7 +39,7 @@ const MobileAccordion = ({ label, content }: { label: string; content: React.Rea
       {/* Der Grid-Trick: Animiert sanft von 0 Höhe auf volle Inhalts-Höhe */}
       <div
         className={`grid transition-all duration-300 ease-in-out ${
-          isOpen ? 'grid-cards-[1fr] opacity-100' : 'grid-cards-[0fr] opacity-0'
+          isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
         }`}
       >
         <div className="overflow-hidden">
@@ -126,8 +126,8 @@ export default function CardOverview({ cardFields, data }: Props) {
                       
                       {/* Ansicht Desktop: Immer offen */}
                       <div className="hidden md:flex gap-2 items-center mb-4">
-                        <Route size={16} className="text-primary" />
-                        <span className="text-sm font-bold text-primary">{col.label}</span>
+                        <Route size={16} className="text-secondary" />
+                        <span className="text-sm font-bold text-secondary">{col.label}</span>
                       </div>
                       <div className="hidden md:block">
                          <div className="text-[14.5px] text-slate-700 leading-relaxed whitespace-pre-wrap">

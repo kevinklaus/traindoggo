@@ -55,24 +55,26 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
     return () => window.removeEventListener('resize', checkScroll);
   }, [currentDateStr]);
 
-  const handleScroll = (dir: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const amount = scrollRef.current.clientWidth * 0.75;
-      scrollRef.current.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' });
-    }
-  };
+  // const handleScroll = (dir: 'left' | 'right') => {
+  //   if (scrollRef.current) {
+  //     const amount = scrollRef.current.clientWidth * 0.75;
+  //     scrollRef.current.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' });
+  //   }
+  // };
 
   return (
     <div className="w-full mt-2 mb-6">
       
-      <div className="mb-2 px-1">
-        <div className="flex items-center gap-2 mb-0.5">
-          <PawPrint size={18} strokeWidth={2} className="text-primary fill-primary" />
+      <div className=" rounded-2xl mb-2 py-2 px-1">
+        <div className="flex items-center gap-3 mb-0.5">
+          <div className="relative top-[10px] rounded-full bg-accent p-1">
+            <PawPrint size={16} strokeWidth={2} className="text-white fill-white" />
+          </div>
           <span className="text-[14px] font-bold text-slate-800 capitalize">
             {t('journeys.recommended.title')}
           </span>
         </div>
-        <p className="text-[13px] text-slate-600 ml-[26px] leading-snug">
+        <p className="text-[13px] text-slate-600 ml-[36px] leading-snug">
           {t('journeys.recommended.subtitle')}
         </p>
       </div>
@@ -80,8 +82,8 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
       {/* Wrapper für Pfeile und Scroll-Area - items-stretch erzwingt gleiche Höhe! */}
       <div className="flex items-stretch gap-1.5 md:gap-2 w-full">
         
-        {/* Linker Pfeil - pt-4 pb-3 synchronisiert die Höhe mit dem Scroll-Container */}
-        <div className={`flex flex-col pt-4 pb-3 shrink-0 ${showLeftArrow ? '' : 'invisible'}`}>
+        {/* Linker Pfeil - pt-4 pb-3 synchronisiert die Höhe mit dem Scroll-Container
+        <div className={`hidden sm:flex flex-col pt-4 pb-3 shrink-0 ${showLeftArrow ? '' : 'sm:hidden'}`}>
           <button 
             onClick={() => handleScroll('left')}
             className="flex-1 px-1.5 md:px-2 rounded-xl border-2 border-slate-200 bg-white text-slate-500 hover:border-primary hover:text-primary transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -89,7 +91,7 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
           >
             <ChevronLeft size={20} />
           </button>
-        </div>
+        </div> */}
 
         {/* Scroll Container 
           - pr-4 & pt-4: Schafft den inneren Platz, damit die absolut positionierten Pfoten nicht von overflow-x-auto abgeschnitten werden.
@@ -115,27 +117,27 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
                     ? 'active-day bg-primary border-primary text-white transform scale-[1.02] z-10' 
                     : recommended 
                       ? 'bg-white border-primary/40 text-slate-700 hover:border-primary hover:bg-blue-50 z-0' 
-                      : 'bg-white border-slate-100 text-slate-600 hover:border-slate-300 hover:bg-slate-50 z-0'
+                      : 'bg-white text-slate-600 hover:border-secondary hover:bg-slate-50 z-0'
                   }
                 `}
               >
-                <span className={`text-[14px] font-bold capitalize leading-tight ${isActive ? 'text-white' : 'text-slate-800'}`}>
+                <span className={`text-[14px] font-bold capitalize leading-tight ${isActive ? 'text-white' : 'text-secodary'}`}>
                   {/* Auf Mobile kurz (Di), auf Desktop lang (Dienstag) */}
                   <span className="md:hidden">{formatterDayShort.format(d).replace('.', '')}</span>
                   <span className="hidden md:inline">{formatterDayLong.format(d)}</span>
                 </span>
                 
-                <span className={`text-[11px] mt-0.5 ${isActive ? 'text-white/90' : 'text-slate-500'}`}>
+                <span className={`text-[11px] mt-0.5 ${isActive ? 'text-white/90' : 'text-secondary'}`}>
                   {formatterDate.format(d)}
                 </span>
                 
                 {/* Schwebende Pfote - Nutzt den durch pt-4 & pr-4 freigeschaufelten Platz im Scroll-Container */}
                 {recommended && (
-                  <div className={`absolute -top-3 -right-3 flex items-center justify-center w-[24px] h-[24px] rounded-full bg-white text-primary`}>
+                  <div className={`absolute -top-2 -right-2 md:-top-3 md:-right-3 w-[22px] h-[22px] flex items-center justify-center w-[22px] h-[22px] rounded-full bg-accent text-white`}>
                     <PawPrint 
-                      size={16} 
+                      size={14} 
                       strokeWidth={2} 
-                      className={`fill-primary`}
+                      className={`fill-white`}
                       aria-label={t('journeys.recommended.recommendedForDogs')}
                     />
                   </div>
@@ -146,7 +148,7 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
         </div>
 
         {/* Rechter Pfeil */}
-        <div className={`flex flex-col pt-4 pb-3 shrink-0 ${showRightArrow ? '' : 'invisible'}`}>
+        {/* <div className={`hidden sm:flex flex-col pt-4 pb-3 shrink-0 ${showLeftArrow ? '' : 'sm:hidden'}`}>
           <button 
             onClick={() => handleScroll('right')}
             className="flex-1 px-1.5 md:px-2 rounded-xl border-2 border-slate-200 bg-white text-slate-500 hover:border-primary hover:text-primary transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -154,7 +156,7 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
           >
             <ChevronRight size={20} />
           </button>
-        </div>
+        </div> */}
 
       </div>
     </div>
