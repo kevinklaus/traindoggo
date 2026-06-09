@@ -115,6 +115,11 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
             
             const isRedundantWalkDuration = blockDurationMin === getLegDurationMinutes(leg);
 
+            // NEU: Extrahiere nur die *echten* Zwischenhalte (Start- und Zielbahnhof des Legs wegschneiden)
+            const intermediateStops = leg.stopovers && leg.stopovers.length > 2 
+              ? leg.stopovers.slice(1, -1) 
+              : [];
+
             return (
               <div key={i} role="listitem" className="flex flex-col">
                 
@@ -219,7 +224,8 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                             </div>
                           )}
 
-                          {leg.stopovers && leg.stopovers.length > 0 && (
+                          {/* NEU: Button wird nur gerendert, wenn es echte ZWISCHENHALTE gibt */}
+                          {intermediateStops.length > 0 && (
                             <button
                               type="button"
                               onClick={() => setExpandedStopsLeg(expandedStopsLeg === i ? null : i)}
@@ -230,27 +236,21 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
                               }`}
                             >
                               {expandedStopsLeg === i ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                              <span>{leg.stopovers.length === 1 ? t('journeys.timeline.stop_one') : t('journeys.timeline.stop_other', { count: leg.stopovers.length })}</span>
+                              <span>{intermediateStops.length === 1 ? t('journeys.timeline.stop_one') : t('journeys.timeline.stop_other', { count: intermediateStops.length })}</span>
                             </button>
                           )}
 
-                          {expandedStopsLeg === i && leg.stopovers && (
-                            <div className="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 animate-fade-in max-w-md">
-                              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">{t('journeys.timeline.stopovers')}</p>
-                              {leg.stopovers.map((stopover: any, idx: number) => (
+                          {/* NEU: Die Liste mappt nun über die bereinigten intermediateStops */}
+                          {expandedStopsLeg === i && intermediateStops.length > 0 && (
+                            <div className="mt-5 p-1 rounded-xl space-y-2 animate-fade-in max-w-md">
+                              {intermediateStops.map((stopover: any, idx: number) => (
                                 <div key={idx} className="flex justify-between items-center text-xs text-slate-600 py-0.5">
                                   <div className="flex items-center gap-2 min-w-0">
-                                    <span className="tabular-nums font-medium text-slate-400 w-9 text-right shrink-0">
+                                    <span className="tabular-nums font-medium text-slate-500 w-8 shrink-0">
                                       {stopover.arrival ? formatTime(stopover.arrival) : formatTime(stopover.departure)}
                                     </span>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
                                     <span className="truncate font-medium text-slate-700">{abbreviateStationName(stopover.stop?.name || t('journeys.timeline.station'))}</span>
                                   </div>
-                                  {stopover.arrivalPlatform && (
-                                    <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded ml-2 shrink-0 tabular-nums">
-                                      Pl. {stopover.arrivalPlatform.replace(/^(platform|pl\.?)\s*/i, '')}
-                                    </span>
-                                  )}
                                 </div>
                               ))}
                             </div>

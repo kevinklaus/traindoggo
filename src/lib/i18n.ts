@@ -133,7 +133,7 @@ const deTranslations = {
       towards: "Richtung",
       dogTips: "Hunde-Tipps & Layout",
       stop_one: "1 Halt",
-      stop_other: "{{count}} Halte",
+      stop_other: "{{count}} Zwischenhalte",
       stopovers: "Zwischenhalte",
       station: "Bahnhof",
       transfer: "Umstieg",
@@ -215,6 +215,8 @@ const deTranslations = {
       a2: "Züge warten nicht. Plane beim Buchen Umstiege von mindestens 20-30 Minuten ein, am besten an großen Bahnhöfen mit Grünflächen in der Nähe. Im Zug gibt es keine Möglichkeit für ein Geschäft.",
       q3: "Was gehört ins Zug-Gepäck?",
       a3: "Eine vertraute Decke (gibt Sicherheit und schützt die Sitze/Boden), ein faltbarer Reisenapf, Wasser und Kausnacks zur Beruhigung beim Druckausgleich (Tunnel).",
+      q4: "Muss ich Plätze für uns reservieren?",
+      a4: "Tickets immer vorab online buchen! Hunde bekommen zwar keinen eigenen Sitzplatz, aber in Frankreich, Spanien, Schweden, Dänemark und Italien herrscht im Fernverkehr für Menschen oft strenge Reservierungspflicht. Gerade Plätze in speziellen Hunde-Zonen sind extrem schnell vergriffen.",
       tableTitle: "Übersicht Europa: Hundetickets im Fernverkehr",
       columns: {
         country: "Land",
@@ -222,14 +224,22 @@ const deTranslations = {
         comment: "Besonderheiten",
       },
       rows: [
-        { country: "🇩🇪 Deutschland (DB)", price: "50% des Vollpreises", comment: "Sehr teuer, aber gute Platzauswahl in ICE/ICE über den DB Navigator. Oft kulante Maulkorbpflicht." },
-        { country: "🇦🇹 Österreich (ÖBB)", price: "10% des Vollpreises", comment: "Sehr verlässliche Bahnanbindung bis in die Berge. Strikte Maulkorbpflicht." },
-        { country: "🇫🇷 Frankreich (SNCF)", highlight: true, price: "7 - 20€ (Festpreis)", comment: "Günstiger als bei der DB! Bei SNCF Connect nur bei eigener Buchung hinzuzufügen." },
-        { country: "🇮🇹 Italien (Trenitalia)", highlight: true, price: "1 - 5€ (Festpreis)", comment: "Echt günstig! Sehr einfach in bei Trenitalia buchbar." },
-        { country: "🇪🇸 Spanien (Renfe)", price: "meist 10€ (Festpreis)", comment: "Im AVE sind Hunde >10kg oft komplett verboten! Ausnahme: TGV nach Barcelona." },
-        { country: "🇨🇭 Schweiz (SBB)", price: "25 CHF (Tageskarte)", comment: "Sehr verlässliche Bahnanbindung bis in die Berge. Tagesticket oder Jahres-Hunde-Pass verfügbar." },
-        { country: "🇨🇿 Tschechien (ČD)", highlight: true, price: "30/50 CZK (~1-2€)", comment: "Innerhlab Tschechines sehr günstig bei ČD buchbar." },
-        { country: "🇵🇱 Polen (PKP)", highlight: true, price: "15 PLN (~3.50€)", comment: "Festpreis für alle Strecken, sehr entspannt." }
+        { country: "🇩🇪 Deutschland (DB)", price: "50% des Flexpreises", comment: "Gute Platzauswahl im ICE via DB Navigator. Oft kulante Maulkorbpflicht." },
+        { country: "🇦🇹 Österreich (ÖBB)", price: "10% des Vollpreises", comment: "Sehr zuverlässig bis tief in die Berge. Strikte Maulkorbpflicht!" },
+        { country: "🇨🇭 Schweiz (SBB)", price: "25 CHF (Tageskarte)", comment: "Traumhafte Strecken! Hunde-Tagesticket oder Jahrespass verfügbar." },
+        { country: "🇫🇷 Frankreich (SNCF)", highlight: true, price: "7€ (Festpreis)", comment: "Pünktlich & günstig im TGV. Reservierungspflicht!" },
+        { country: "🇮🇹 Italien (Trenitalia)", highlight: true, price: "1 - 5€ (Festpreis)", comment: "Echt günstig! Reservierungspflicht im Fernverkehr." },
+        { country: "🇪🇸 Spanien (Renfe)", price: "Variable (~10€)", comment: "Reservierungspflicht. Im Hochgeschwindigkeitszug (AVE) sind Hunde >10kg oft verboten!" },
+        { country: "🇬🇧 Großbritannien (National Rail)", price: "Kostenlos", comment: "Im Inland fahren Hunde gratis. Achtung: Eurostar/Eurotunnel verbieten Hunde komplett!" },
+        { country: "🇧🇪 Belgien (SNCB)", highlight: true, price: "3,30€ (Festpreis)", comment: "Zuschlag pro Fahrt. Tipp für dich: Das 10-Fahrten-Ticket für ~99€ lohnt sich enorm." },
+        { country: "🇳🇱 Niederlande (NS)", highlight: true, price: "3,30€ (Tageskarte)", comment: "Gute Verbindungen. Große Hunde brauchen einfach die »Dagkaart Hond«." },
+        { country: "🇩🇰 Dänemark (DSB)", price: "Kinder-Ticket", comment: "Gemütliche Anreise, Reservierungspflicht! Rejsekort & Orangetickets lohnen sich oft." },
+        { country: "🇸🇪 Schweden (SJ)", price: "Kostenlos (Tierzone)", comment: "Bis zu 2 Hunde gratis in der Tierzone. Zwingend sehr früh buchen (Reservierungspflicht)!" },
+        { country: "🇵🇱 Polen (PKP)", highlight: true, price: "15 PLN (~3.50€)", comment: "Dresden–Breslau easy. Geheimtipp: Inlandsbuchung ab Zgorzelec oft 40% günstiger!" },
+        { country: "🇭🇺 Ungarn (MÁV)", price: "Entfernungsabhängig", comment: "Oft abenteuerlich, aber billig (~1-3€). Ticket einfach in der App buchbar." },
+        { country: "🇨🇿 Tschechien (ČD)", highlight: true, price: "30/50 CZK (~1-2€)", comment: "Inland fast gratis, Maulkorbpflicht beachten." },
+        { country: "🇸🇰 Slowakei (ZSSK)", highlight: true, price: "50% des Normalpreises", comment: "Extrem günstig und einfach zu buchen. Sehr entspannte Reise in Bus & Bahn." },
+        { country: "🇭🇷 Kroatien (HŽPP)", price: "50% des Normalpreises", comment: "Europäischer Heimtierausweis (Impfpass) & Maulkorb zwingend erforderlich (wird oft kontrolliert!)." }
       ],
     },
     nightTrains: {
@@ -502,6 +512,8 @@ const enTranslations = {
       a2: "Trains don't wait. When booking, plan layovers of at least 20-30 minutes, ideally at large stations with nearby green spaces. There are no facilities on board for dogs to relieve themselves.",
       q3: "What should I pack?",
       a3: "A familiar blanket (provides security and protects the floor), a collapsible travel bowl, water, and chew snacks to help them calm down and equalize ear pressure in tunnels.",
+      q4: "Do I need to reserve seats for us?",
+      a4: "Always book tickets online in advance! While dogs don't get their own seat, trains in France, Spain, Sweden, Denmark, and Italy often have mandatory seat reservations for humans. Seats in designated pet zones sell out extremely fast.",
       tableTitle: "Overview Europe: Dog Tickets on Long-Distance Trains",
       columns: {
         country: "Country",
@@ -509,14 +521,22 @@ const enTranslations = {
         comment: "Notes"
       },
       rows: [
-        { country: "🇩🇪 Germany (DB)", price: "50% of normal fare", comment: "Great seat selection over DB Navigator App. Often lenient with muzzles" },
-        { country: "🇦🇹 Austria (ÖBB)", price: "10% of full fare", comment: "Very reliable train connection to the mountains. Often strict with muzzles" },
-        { country: "🇫🇷 France (SNCF)", price: "€7 - €20 (fixed)", comment: "Cheaper than DB. Can only be booked with your own ticket." },
-        { country: "🇮🇹 Italy (Trenitalia)", price: "€1 - €5 (fixed)", comment: "Very cheap! Bookable online at Trenitalia." },
-        { country: "🇪🇸 Spain (Renfe)", price: "Variable", comment: "Warning: Dogs >10kg are strictly forbidden on AVE (high-speed) trains! (Exception: TGV to Barcelona)" },
-        { country: "🇨🇭 Switzerland (SBB)", price: "25 CHF (Day Pass)", comment: "Very reliable train connection to the mountains. Day pass or annual dog pass available." },
-        { country: "🇨🇿 Czechia (ČD)", price: "approx. €1 - €3", comment: "Domestic travel is almost free, muzzles required." },
-        { country: "🇵🇱 Poland (PKP)", price: "15 PLN (~€3.50)", comment: "Fixed price for all routes, very relaxed." }
+        { country: "🇩🇪 Germany (DB)", price: "50% of flex fare", comment: "Great seat selection via DB app. Often lenient with muzzles." },
+        { country: "🇦🇹 Austria (ÖBB)", price: "10% of full fare", comment: "Very reliable connections to the mountains. Strictly enforced muzzles!" },
+        { country: "🇨🇭 Switzerland (SBB)", price: "25 CHF (Day Pass)", comment: "Dreamy routes! Dog day passes or annual passes available." },
+        { country: "🇫🇷 France (SNCF)", highlight: true, price: "€7 (fixed)", comment: "Punctual & extremely cheap on the TGV. Mandatory reservations!" },
+        { country: "🇮🇹 Italy (Trenitalia)", highlight: true, price: "€1 - €5 (fixed)", comment: "Extremely cheap! Mandatory reservations on high-speed lines." },
+        { country: "🇪🇸 Spain (Renfe)", price: "Variable (~€10)", comment: "Mandatory reservations. Warning: Dogs >10kg are strictly forbidden on AVE!" },
+        { country: "🇬🇧 Great Britain (National Rail)", price: "Free", comment: "Dogs travel free domestically. Warning: Eurostar/Eurotunnel strictly bans dogs!" },
+        { country: "🇧🇪 Belgium (SNCB)", highlight: true, price: "€3.30 (fixed)", comment: "Flat pet fee. Tip for humans: check the 10-trip ticket (Standard Multi)." },
+        { country: "🇳🇱 Netherlands (NS)", highlight: true, price: "€3.30 (Day Pass)", comment: "Great connections. Simply buy the »Dagkaart Hond«." },
+        { country: "🇩🇰 Denmark (DSB)", price: "Child ticket", comment: "Cozy travel, mandatory reservations! Rejsekort & Orange tickets are highly recommended." },
+        { country: "🇸🇪 Sweden (SJ)", price: "Free (Pet Zone)", comment: "Two dogs free in the pet zone. Must book very early (mandatory reservations)!" },
+        { country: "🇵🇱 Poland (PKP)", highlight: true, price: "15 PLN (~€3.50)", comment: "Dresden–Wroclaw is easy. Tip: Often 40% cheaper when booking from Zgorzelec." },
+        { country: "🇭🇺 Hungary (MÁV)", price: "Distance-based", comment: "An adventurous but very affordable travel experience." },
+        { country: "🇨🇿 Czechia (ČD)", highlight: true, price: "30/50 CZK (~€1-2)", comment: "Domestic travel is almost free, muzzles required." },
+        { country: "🇸🇰 Slovakia (ZSSK)", highlight: true, price: "50% of normal fare", comment: "Extremely cheap and easy to book. Very relaxed travel on buses & trains." },
+        { country: "🇭🇷 Croatia (HŽPP)", price: "50% of normal fare", comment: "European pet passport (vaccination record) & muzzle strictly required (often checked!)." }
       ]
     },
     nightTrains: {
