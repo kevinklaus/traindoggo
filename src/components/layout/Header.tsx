@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Route, Menu, X, Globe, MoonStar, Bone, TrainFront } from 'lucide-react';
+import { Route, Menu, X, Globe, MoonStar, Bone, TrainFront, Dog } from 'lucide-react';
 import { LogoMark } from '../ui/Primitives';
 import type { DogMode } from '../../lib/types';
 import { useTranslation } from 'react-i18next';
@@ -62,6 +62,11 @@ export default function Header({ dogMode, activePage, onNavigate, onLogoClick }:
       id: 'nightTrains',
       label: t('nav.nightTrains', 'Nachtzüge'), 
       icon: <MoonStar size={18} />
+    },
+    { 
+      id: 'about',
+      label: t('contentPages.aboutUs.title'), 
+      icon: <Dog size={18} />
     },
   ];
 

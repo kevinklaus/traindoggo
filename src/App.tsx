@@ -14,8 +14,9 @@ import Imprint from './components/content/Imprint';
 import DoggoTips from './components/content/DoggoTips';
 import NightTrains from './components/content/NightTrains';
 import Destinations from './components/content/Destinations';
+import AboutUs from './components/content/AboutUs';
 
-export type Page = 'home' | 'tips' | 'destinations' | 'nightTrains';
+export type Page = 'home' | 'tips' | 'destinations' | 'nightTrains' | 'about';
 
 export default function App() {
   const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
@@ -111,6 +112,7 @@ export default function App() {
         {activePage === 'tips' && <DoggoTips />}
         {activePage === 'destinations' && <Destinations />}
         {activePage === 'nightTrains' && <NightTrains />}
+        {activePage === 'about' && <AboutUs />}
 
       </main>
 

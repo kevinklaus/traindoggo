@@ -295,6 +295,33 @@ const deTranslations = {
       mapDesc: "Hier auf der Viaduct-Karte seht ihr, wo Aslan und ich schon überall unterwegs waren. Schreibt mir gerne, wenn ihr Fragen zu bestimmten Routen habt – ich teile meine Erfahrungen jederzeit sehr gerne!",
       igTitle: "Impressionen auf Instagram",
       igDesc: "Folge @traindoggo für aktuelle Reiseeindrücke und kleine Ausflüge von uns.",
+    },
+      aboutUs: {
+      title: "Über uns",
+      subtitle: "Von Kevin & Aslan nach Train Doggo",
+      intro1: "Hi, ich bin Kevin! Product & UX Lead, Entwickler und der Zweibeiner hinter diesem Projekt. Und der flauschige neben mir ist Aslan – ein rumänischer Straßenhund-Mix und etwa 35 Kilo schwer.",
+      intro2: "Seit fünf Jahren sind wir beide quasi ständig auf Schienen unterwegs. Warum? Weil ich mir damals fest vorgenommen habe, dass ich meine schönsten Urlaube und Abenteuer unbedingt mit Aslan teilen möchte.",
+      compassTitle: "Wir waren schon in allen Himmelsrichtungen unterwegs",
+      compassText: "Im Westen haben wir Spanien, Frankreich und Belgien erkundet, im Süden die Schweiz, Österreich, Kroatien und Italien, hoch im Norden waren wir in Dänemark und Schweden und im Osten ging es durch Polen, Slovenien, Ungarn und die Slowakei.",
+      trainTitle: "Bahnreisen mit Hund",
+      trainText: "Wir haben viele tolle, aber ehrlicherweise auch immer wieder ziemlich anstrengende Bahnmomente erlebt. Genau deshalb gibt es diese Seite. Wir wollen unsere Erfahrungen jetzt teilen und mit Train Doggo dazu beitragen, dass auch andere Menschen mit großen (oder kleinen) Hunden einen entspannten Start ins Reisen mit der Bahn haben.",
+      whatIsTitle: "Das ist Train Doggo 🚂",
+      whatIsText1: "Train Doggo soll das Tool sein, dass euch bei Bahnreisen hilft, selbst mit großem Hund an der Leine ohne Stress ans Ziel zu kommen. Es soll helfen, den Flickenteppich aus Regeln, Wagenreihungen und Tarifen in Europa zu durchblicken und die Fahrt für euch entspannter zu machen. Wir haben die große Hoffnung, dass Train Doggo euch inspiriert mit eurem Hund eine Bahnreise anzutreten. Wir konnten mit Zügen schon so viele tolle Ecken entdecken und das wünsche ich mir auch für euch und eure Doggos.",
+      whatIsText2: "Train Doggo ist Open-Source und aktuell noch in der Beta-Phase. Das bedeutet: Es ist noch nicht alles perfekt, aber es wächst! Wenn euch Fehler auffallen, ihr Wünsche habt oder einfach nur Hallo sagen wollt – schreibt mir jederzeit super gerne an",
+      roadmapTitle: "Das haben wir noch vor",
+      roadmapIntro: "Meine To-Do-Liste ist noch lang. Hier sind ein paar Features, an denen ich gerade arbeite:",
+      roadmapItems: [
+        "Gassi-Pausen Modus: Empfehlungen für Bahnhöfe, die einen leichten Zugang zu Parks oder Grünflächen für die schnelle Pinkelpause haben.",
+        "Maximale Reisezeit: Eine smarte Routenplanung, bei der du angeben kannst, dass dein Hund z. B. spätestens alle 3 Stunden eine Pause braucht.",
+        "Buchungs-Guides & Direktlinks: Einfache Erklärungen und direkte Links, wie und wo man die Hunde-Tickets bei den jeweiligen Anbietern (DB, ČD etc.) bucht.",
+        "Inspirationen auf der Startseite: Beispielrouten für tolle Trips (wie Berlin–Bozen, Frankfurt–Barcelona oder Freiburg–Sapri), um direkt loszulegen.",
+        "Train Doggo als App: Die Seite wird zur Progressive Web App (PWA), damit du sie dir wie eine echte App direkt aufs Handy laden kannst.",
+        "Kleine Design-Liebe: Ein Darkmode speziell für die Nachtzug-Seite und ein süßer kleiner Zug als Lade-Animation (Spinner)."
+      ],
+      joinTitle: "Mach mit! 🤝",
+      joinText: "Da Train Doggo ein Herzensprojekt und Open-Source ist, freue ich mich über alle, die das Projekt unterstützen oder weiterentwickeln wollen. Ob mit Feedback, coolen Ideen oder direktem Code – schau gerne auf unserem GitHub vorbei.",
+      outro: "Wir wünschen euch eine gute Reise mit vielen neuen Entdeckungen!",
+      signatures: "Kevin & Aslan",
     }
   },
 };
@@ -592,8 +619,35 @@ const enTranslations = {
       mapDesc: "Here on the Viaduct map you can see everywhere Aslan and I have traveled so far. Feel free to message me if you have questions about specific routes – I'm always happy to share my experiences!",
       igTitle: "Impressions on Instagram",
       igDesc: "Follow @traindoggo for recent travel impressions and short trips. 🐾",
-    }
-  },
+    },
+    aboutUs: {
+      title: "About us",
+      subtitle: "From Kevin & Aslan to Train Doggo",
+      intro1: "Hi, I'm Kevin! Product & UX Lead, developer, and the two-legged half of this project. The fluffy one next to me is Aslan – a Romanian rescue mix weighing in at about 35 kilos.",
+      intro2: "For the past five years, we've basically been living on the rails. Why? Because I promised myself I would share all my best holidays and adventures with Aslan.",
+      compassTitle: "We've traveled in every direction",
+      compassText: "To the West we explored Spain, France, and Belgium. South took us to Switzerland, Austria, Croatia, and Italy. Up North we visited Denmark and Sweden, and East lead us through Poland, Slovenia, Hungary, and Slovakia.",
+      trainTitle: "Train travel with a dog",
+      trainText: "We've had many amazing, but honestly also quite exhausting train moments along the way. That's exactly why this site exists. We want to share our experiences and use Train Doggo to help others with large (or small) dogs have a relaxed start to their rail journeys.",
+      whatIsTitle: "This is Train Doggo 🚂",
+      whatIsText1: "Train Doggo is meant to be the tool that helps you reach your destination without stress, even with a big dog on a leash. It's designed to help you navigate the patchwork of rules, carriage layouts, and tariffs in Europe, making your journey more relaxed. Our greatest hope is that Train Doggo inspires you to take a train trip with your dog. We've discovered so many wonderful places by train, and I wish the same for you and your doggos.",
+      whatIsText2: "Train Doggo is open-source and currently in beta. This means: Not everything is perfect yet, but it's growing! If you notice bugs, have feature requests, or just want to say hi – feel free to reach out anytime at",
+      roadmapTitle: "What's coming next",
+      roadmapIntro: "My to-do list is still long. Here are a few features I'm currently working on:",
+      roadmapItems: [
+        "Potty-Break Mode: Station recommendations with easy access to parks or green areas for a quick pee break.",
+        "Maximum Travel Time: Smart routing where you can specify that your dog needs a break every 3 hours, for example.",
+        "Booking Guides & Direct Links: Simple explanations and direct links on how and where to book dog tickets with different operators (DB, ČD, etc.).",
+        "Homepage Inspiration: Example routes for great trips (like Berlin–Bozen, Frankfurt–Barcelona, or Freiburg–Sapri) to get you started immediately.",
+        "Train Doggo App: The site will become a Progressive Web App (PWA) so you can install it directly on your phone like a real app.",
+        "Design Love: A dark mode specifically for the night train page and a cute little train as a loading animation (spinner)."
+      ],
+      joinTitle: "Join in! 🤝",
+      joinText: "Since Train Doggo is a passion project and open-source, I welcome anyone who wants to support or help develop the project. Whether it's feedback, cool ideas, or direct code – feel free to check out our GitHub.",
+      outro: "We wish you a great journey with many new discoveries!",
+      signatures: "Kevin & Aslan"
+    },
+  }, 
 };
 
 i18n

@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import SearchForm from '../JourneySearch/SearchForm';
 import RecommendedDays from '../JourneySearch/RecommendedDays';
 import JourneyResults from '../JourneySearch/JourneyResults';
+import HeroImage from '../layout/HeroImage'; // <-- 1. IMPORTIEREN
 import type { SearchParams, Journey } from '../../lib/types';
-import HeroImg from './hero.jpg';
+import HeroImg from './images/hero.jpg';
 
-interface Props {
+interface Props { /* ... (deine Props bleiben unverändert) ... */
   params: SearchParams;
   setParams: (p: SearchParams) => void;
   handleSearch: (p?: SearchParams) => void;
@@ -18,42 +19,23 @@ interface Props {
 }
 
 export default function LandingContent({
-  params, 
-  setParams, 
-  handleSearch, 
-  handleDayChange, 
-  loading, 
-  error, 
-  searched, 
-  journeys
+  params, setParams, handleSearch, handleDayChange, loading, error, searched, journeys
 }: Props) {
   const { t } = useTranslation();
 
   return (
     <div className="w-full flex flex-col items-center animate-in fade-in">
       
-      {/* 1. Hero Image Section */}
-      <div className="relative w-full h-[260px] sm:h-[340px] md:h-[380px] lg:h-[460px] rounded-3xl overflow-hidden shadow-sm">
-        <img 
-          src={HeroImg} 
-          alt="Hund reist im Zug" 
-          className="absolute inset-0 w-full h-full object-cover object-[center_65%] sm:object-[center_60%] md:object-[center_51%]"
-        />
-        {/* Weicher Gradient, damit der Text immer gut lesbar bleibt */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-slate-900/5 to-transparent flex flex-col justify-end p-6 sm:p-10 pb-16 sm:pb-24 md:pb-28">
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-heading font-bold text-white mb-2 leading-tight">
-            {t('landing.heroTitle')}
-          </h1>
-          <p className="hidden sm:block text-white text-sm sm:text-base md:text-xl max-w-xl">
-            {t('landing.heroSubtitle')}
-          </p>
-        </div>
-      </div>
+      {/* 2. NEUE KOMPONENTE NUTZEN */}
+      <HeroImage 
+        src={HeroImg} 
+        alt="Hund reist im Zug" 
+        title={t('landing.heroTitle')} 
+        subtitle={t('landing.heroSubtitle')}
+        imagePositionClass="object-[center_65%] sm:object-[center_60%] md:object-[center_51%]"
+      />
 
-      {/* 2. Floating Search Form 
-          Durch w-[92%] auf Mobile und w-[85%] auf Desktop wirkt das Hero-Bild dahinter viel präsenter.
-          Der erhöhte negative Margin (-mt-20) verstärkt den Floating-Effekt auf großen Screens.
-      */}
+      {/* Floating Search Form */}
       <section className="w-[92%] sm:w-[88%] md:w-[85%] max-w-xl bg-white rounded-3xl p-5 sm:p-6 md:p-8 relative z-10 -mt-12 sm:-mt-16 md:-mt-20">
         <SearchForm 
           params={params} 
