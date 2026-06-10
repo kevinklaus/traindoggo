@@ -48,7 +48,7 @@ export default function Destinations() {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 animate-in fade-in slide-in-from-bottom-4">
+    <div className="max-w-4xl mx-auto sm:px-4 py-8 animate-in fade-in slide-in-from-bottom-4">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 font-heading mb-2">{t('contentPages.destinations.title')}</h1>
         <p className="text-slate-600 text-lg">{t('contentPages.destinations.subtitle')}</p>

@@ -24,7 +24,7 @@ const MobileAccordion = ({ label, content }: { label: string; content: React.Rea
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="md:hidden bg-highlight rounded-xl overflow-hidden">
+    <div className="md:hidden bg-white rounded-xl overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center p-3 font-semibold text-[13px] text-secondary cursor-pointer select-none"
