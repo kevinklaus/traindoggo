@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { ArrowDownUp } from 'lucide-react';
+import { ArrowDownUp, Route, Timer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { SearchParams } from '../../lib/types';
-// import { searchStationsByCoords } from '../lib/api'; // <-- 1. Auskommentiert
 import StationInput from '../ui/StationInput';
 import DateTimeInput from '../ui/DateTimeInput';
+import SelectInput from '../ui/SelectInput';
 import { Spinner, TOKENS, IconButton } from '../ui/Primitives';
 
 interface Props {
@@ -18,31 +18,12 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
   const { t } = useTranslation();
   const [shaking, setShaking] = useState(false);
   const [validationMsg, setValidationMsg] = useState<string | null>(null);
-  // const [locating, setLocating] = useState(false); // <-- 2. Auskommentiert
   const today = new Date().toISOString().split('T')[0];
 
-/*   const dogModes: { key: DogMode; label: string; desc: string; icon: React.ReactNode }[] = [
-    { key: 'none', label: t('searchForm.dogModes.none', 'No dog'), desc: t('searchForm.dogModes.noneSub', 'Standard ticket'), icon: null },
-    { key: 'small', label: t('searchForm.dogModes.small', 'Small dog'), desc: t('searchForm.dogModes.smallSub', 'Free in carrier'), icon: <Dog size={14} /> },
-    { key: 'large', label: t('searchForm.dogModes.large', 'Large dog'), desc: t('searchForm.dogModes.largeSub', 'Dog ticket required'), icon: <Dog size={16} /> },
-  ]; */
-
-  /* 3. Funktion komplett auskommentiert
-  async function handleLocate() {
-    if (!navigator.geolocation) return;
-    setLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        try {
-          const stations = await searchStationsByCoords(pos.coords.latitude, pos.coords.longitude);
-          if (stations.length > 0) onChange({ ...params, from: stations[0] });
-        } catch { } finally { setLocating(false); }
-      },
-      () => setLocating(false),
-      { timeout: 8000 }
-    );
-  }
-  */
+  // Einheitlicher State-Handler für alle Formularfelder
+  const handleParamChange = (key: keyof SearchParams, value: any) => {
+    onChange({ ...params, [key]: value });
+  };
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,8 +31,8 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
       setShaking(true);
       setValidationMsg(
         !params.from && !params.to
-          ? t('searchForm.validation.both', 'Please select departure and destination stations')
-          : !params.from ? t('searchForm.validation.from', 'Please select a departure station') : t('searchForm.validation.to', 'Please select a destination station')
+          ? t('searchForm.validation.both', 'Bitte Start- und Zielbahnhof wählen')
+          : !params.from ? t('searchForm.validation.from', 'Bitte Startbahnhof wählen') : t('searchForm.validation.to', 'Bitte Zielbahnhof wählen')
       );
       setTimeout(() => setShaking(false), 500);
       return;
@@ -62,37 +43,33 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-      {/* 1. Station Routing Setup Block */}
+      
+      {/* 1. ROUTING BLOCK (Start & Ziel) */}
       <div className="space-y-3">
         <StationInput
           id="station-from"
-          label={t('searchForm.fromLabel', 'From')}
+          label={t('searchForm.fromLabel', 'Von')}
           value={params.from}
-          onChange={(s) => onChange({ ...params, from: s })}
+          onChange={(s) => handleParamChange('from', s)}
           placeholder={t('searchForm.fromPlaceholder', 'z. B. München Hbf')}
-          // showLocationButton       // <-- 4. Auskommentiert
-          // onLocate={handleLocate}  // <-- 4. Auskommentiert
-          // locating={locating}      // <-- 4. Auskommentiert
         />
 
         <div className="flex gap-1.5 items-start">
           <div className="flex-1 min-w-0">
             <StationInput
               id="station-to"
-              label={t('searchForm.toLabel', 'To')}
+              label={t('searchForm.toLabel', 'Nach')}
               value={params.to}
-              onChange={(s) => onChange({ ...params, to: s })}
+              onChange={(s) => handleParamChange('to', s)}
               placeholder={t('searchForm.toPlaceholder', 'z. B. Berlin Hbf')}
             />
           </div>
           <div className="flex flex-col shrink-0">
-            <span className="block text-xs font-semibold opacity-0 select-none mb-1.5" aria-hidden="true">
-              &nbsp;
-            </span>
+            <span className="block text-xs font-semibold opacity-0 select-none mb-1.5" aria-hidden="true">&nbsp;</span>
             <IconButton 
               onClick={() => onChange({ ...params, from: params.to, to: params.from })} 
-              aria-label={t('searchForm.swapAria', 'Swap departure and destination')} 
-              title={t('searchForm.swapTitle', 'Swap direction')}
+              aria-label={t('searchForm.swapAria', 'Abfahrt und Ziel tauschen')} 
+              title={t('searchForm.swapTitle', 'Richtung tauschen')}
             >
               <ArrowDownUp size={18} strokeWidth={2.25} />
             </IconButton>
@@ -100,77 +77,79 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
         </div>
       </div>
 
-      {/* 2. Temporal Configuration Grid */}
+      {/* 2. ZEIT BLOCK (Datum & Uhrzeit) */}
       <div className="grid grid-cols-2 gap-3 min-w-0">
         <DateTimeInput
           id="search-date"
-          label={t('searchForm.dateLabel', 'Date')}
+          label={t('searchForm.dateLabel', 'Datum')}
           iconType="date"
           value={params.date}
           min={today}
-          onChange={(e) => onChange({ ...params, date: e.target.value })}
+          onChange={(e) => handleParamChange('date', e.target.value)}
           onClick={(e) => 'showPicker' in e.currentTarget && e.currentTarget.showPicker()}
         />
         <DateTimeInput
           id="search-time"
-          label={t('searchForm.timeLabel', 'Time')}
+          label={t('searchForm.timeLabel', 'Zeit')}
           iconType="time"
           step={60}
           value={params.time}
-          onChange={(e) => onChange({ ...params, time: e.target.value })}
+          onChange={(e) => handleParamChange('time', e.target.value)}
           onClick={(e) => 'showPicker' in e.currentTarget && e.currentTarget.showPicker()}
         />
       </div>
 
-      {/* 3. Dog Logistics Parameter Matrices (Auskommentiert laut Original) */}
-{/* <div>
-        <span className="block text-xs font-semibold text-slate-600 tracking-wide mb-2 select-none">
-          Dog logistics
-        </span>
-        <div className="grid grid-cols-3 gap-2">
-          {dogModes.map(({ key, label, desc, icon }) => {
-            const isActive = params.dogMode === key;
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => onChange({ ...params, dogMode: key })}
-                className={`${TOKENS.buttons.dogChip} ${
-                  isActive 
-                    ? 'border-primary bg-primary/5 text-primary' 
-                    : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                }`}
-                aria-pressed={isActive}
-                aria-label={`${label}: ${desc}`}
-              >
-                {icon && <span className="flex justify-center mb-1 text-current">{icon}</span>}
-                <div className="font-semibold">{label}</div>
-                <div className="text-xs mt-0.5 opacity-70 font-normal">{desc}</div>
-              </button>
-            );
-          })}
-        </div>
-      </div> */}
+      {/* 3. DOGGO OPTIONEN BLOCK (Umstiege & Pee Break) */}
+      <div className="grid grid-cols-2 gap-3 min-w-0">
+        <SelectInput
+          id="max-changes"
+          label={t('searchForm.maxChanges', 'Max. Umstiege')}
+          icon={<Route size={18} />}
+          value={params.maxChanges ?? ''}
+          onChange={(e) => handleParamChange('maxChanges', e.target.value === '' ? undefined : Number(e.target.value))}
+        >
+          <option value="">{t('searchForm.changesAny', 'Beliebig')}</option>
+          <option value="0">{t('searchForm.changesDirect', 'Direkt (0)')}</option>
+          <option value="1">{t('searchForm.changesOne', 'Max. 1 Umstieg')}</option>
+          <option value="2">{t('searchForm.changesTwo', 'Max. 2 Umstiege')}</option>
+        </SelectInput>
 
+        <SelectInput
+          id="min-transfer-time"
+          label={t('searchForm.minTransfer', 'Gassi-Puffer')}
+          icon={<Timer size={18} />}
+          value={params.minTransferTime ?? ''}
+          onChange={(e) => handleParamChange('minTransferTime', e.target.value === '' ? undefined : Number(e.target.value))}
+        >
+          <option value="">{t('searchForm.transferStandard', 'Standard')}</option>
+          <option value="15">15 Min</option>
+          <option value="30">30 Min</option>
+          <option value="45">45 Min</option>
+          <option value="60">1 Stunde</option>
+          <option value="90">1.5 Stunden</option>
+          <option value="120">2 Stunden</option>
+        </SelectInput>
+      </div>
+
+      {/* 4. AKTION & VALIDIERUNG */}
       {validationMsg && (
         <div className="text-sm text-red-600 font-medium" role="alert" aria-live="polite">
           {validationMsg}
         </div>
       )}
 
-      {/* 4. Action Request Execution Trigger */}
       <button 
         type="submit" 
         className={`${TOKENS.buttons.primarySubmit} ${shaking ? 'animate-shake' : ''}`} 
-        aria-label={t('searchForm.submitBtn', 'Search journeys')}
+        aria-label={t('searchForm.submitBtn', 'Suchen')}
       >
         {loading ? (
           <span className="inline-flex items-center justify-center gap-2.5">
             <Spinner className="h-4 w-4 text-white" />
-            <span>{t('searchForm.loadingBtn', 'Searching…')}</span>
+            <span>{t('searchForm.loadingBtn', 'Suche läuft…')}</span>
           </span>
         ) : (
-          t('searchForm.submitBtn', 'Search journeys')
+          t('searchForm.submitBtn', 'Suchen')
         )}
       </button>
     </form>

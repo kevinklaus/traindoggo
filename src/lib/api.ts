@@ -57,7 +57,9 @@ export async function searchJourneys(
   fromId: string,
   toId: string,
   departure: string,
-  results = 10 // <--- HIER WAR DER ÜBELTÄTER! Limit auf 10 erhöht.
+  maxChanges?: number,       // <--- NEU
+  minTransferTime?: number,  // <--- NEU
+  results = 10 
 ): Promise<JourneysResponse> {
   if (useMockApi) return searchJourneysMock(fromId, toId, departure);
 
@@ -68,6 +70,16 @@ export async function searchJourneys(
     results: String(results)
   });
 
-  const res = await fetch(`/api/journeys?${params.toString()}`);
+  // HIER KOMMT DIE MAGIE FÜR DIE URL:
+  // Wir hängen die Werte an, falls sie existieren
+  if (maxChanges !== undefined && maxChanges !== null) {
+    params.append('maxChanges', String(maxChanges));
+  }
+  if (minTransferTime !== undefined && minTransferTime !== null) {
+    params.append('minTransferTime', String(minTransferTime));
+  }
+
+  // Aufruf an deinen Vercel Proxy (z.B. /api/journeys oder /api/journeyProxy)
+  const res = await fetch(`/api/journeyProxy?${params.toString()}`);
   return handleResponse(res, 'Journey') as Promise<JourneysResponse>;
 }

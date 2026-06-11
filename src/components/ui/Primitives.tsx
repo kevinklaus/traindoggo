@@ -31,9 +31,17 @@ export const TOKENS = {
 // ============================================================================
 // LOGO COMPONENT
 // ============================================================================
-export function LogoMark({ size = 'default' }: { size?: 'default' | 'large' }) {
-  const wrap = size === 'large' ? 'w-16 h-16 rounded-full' : 'w-10 h-10 sm:w-10 sm:h-10 rounded-full';
-  const iconSize = size === 'large' ? 36 : 22;
+export function LogoMark({ size = 'default' }: { size?: 'default' | 'large' | 'small'}) {
+  let wrap = 'w-10 h-10 sm:w-10 sm:h-10 rounded-full';
+  let iconSize = 22;
+  if (size === 'small') {
+    wrap = 'w-5 h-5 rounded-full';
+    iconSize = 13;
+  }
+  if (size === 'large') {
+    wrap = 'w-16 h-16 rounded-full';
+    iconSize = 36;
+  }
   return (
     <div
       className={`relative flex items-center justify-center bg-accent shrink-0 ${wrap}`}

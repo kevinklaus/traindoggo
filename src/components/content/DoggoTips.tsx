@@ -26,6 +26,7 @@ export default function DoggoTips() {
     { id: 'germany', label: t('landing.title'), icon: <Dog size={16}/> },
     ...cardsData.map((card) => ({
       id: card.id,
+      highlight: card.highlight,
       label: card.country,
     })),
     { id: 'dogrulesmap', label: t('landing.map.title'), icon: <Map size={16}/> },

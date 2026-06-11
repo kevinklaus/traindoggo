@@ -8,9 +8,11 @@ import {
   filterValidLegs,
   getLegDurationMinutes,
 } from '../../lib/helpers';
-import { calculateJourneyPrice } from '../../lib/pricing';
+import { calculateDoggoScore } from '../../lib/doggoScore'; // <-- NEU IMPORTIERT
+
 import JourneyTimeline from './JourneyTimeline';
 import JourneyTimelineBar from './JourneyTimelineBar';
+import DoggoScoreBadge from './DoggoScoreBadge'; // <-- NEU IMPORTIERT
 import { TOKENS } from '../ui/Primitives';
 
 interface Props {
@@ -70,7 +72,8 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
   const arrival = lastLeg?.arrival ?? '';
   const duration = departure && arrival ? formatDuration(departure, arrival) : '--';
   
-  const price = calculateJourneyPrice(journey, dogMode);
+  // WIR BERECHNEN JETZT DEN SCORE STATT DEN PREIS
+  const doggoScore = calculateDoggoScore(journey, dogMode);
 
   const worstLoadFactor = getJourneyLoadFactor(legs);
   const loadConfig = getLoadFactorConfig(worstLoadFactor, t);
@@ -113,22 +116,10 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
             </div>
           </div>
 
+          {/* HIER WIRD JETZT DER SCORE ANGEZEIGT (WENN EIN HUND AUSGEWÄHLT IST) */}
           <div className="text-right shrink-0">
-            {price ? (
-              <>
-                <div className="text-xl sm:text-2xl font-bold text-primary font-heading whitespace-nowrap">
-                  €{price.totalPrice.toFixed(2)}
-                </div>
-                {dogMode !== 'none' && (
-                  <div className="text-xs text-slate-500 mt-0.5 whitespace-nowrap">
-                    {dogMode === 'large' ? t('journeys.price.incl') : t('journeys.price.free')}
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="text-sm font-medium text-slate-400 mt-1 whitespace-nowrap">
-                {t('journeys.price.check')}
-              </div>
+            {dogMode !== 'none' && (
+              <DoggoScoreBadge score={doggoScore} />
             )}
           </div>
         </div>

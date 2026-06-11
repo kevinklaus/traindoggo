@@ -8,11 +8,11 @@ export default function NightTrains() {
   const { t } = useTranslation();
 
   const tocItems = [
-    { id: 'cabins', label: t('contentPages.nightTrains.q1'), icon: <MoonStar size={16}/> },
-    { id: 'overview', label: t('contentPages.nightTrains.tableTitle'), icon: <Dog size={16}/> },
+    { id: 'cabins', highlight: false, label: t('contentPages.nightTrains.q1'), icon: <MoonStar size={16}/> },
+    { id: 'overview', highlight: false, label: t('contentPages.nightTrains.tableTitle'), icon: <Dog size={16}/> },
 /*  { id: 'potty', label: t('contentPages.nightTrains.q2'), icon: <AlertTriangle size={16}/> },
     { id: 'tickets', label: t('contentPages.nightTrains.q3'), icon: <Ticket size={16}/> }, */
-    { id: 'map', label: t('contentPages.nightTrains.mapTitle'), icon: <Map size={16}/> },
+    { id: 'map', highlight: false, label: t('contentPages.nightTrains.mapTitle'), icon: <Map size={16}/> },
   ];
 
   const cardFields = [

@@ -60,7 +60,10 @@ export function CarriageViewer({ url}: Props) {
           try {
             const iframe = e.target as HTMLIFrameElement;
             const doc = iframe.contentDocument || iframe.contentWindow?.document;
-            const img = doc?.querySelector('img.mapa_sedadel') || doc?.querySelector('img[src*="mapa_sedadel"]') as HTMLImageElement;
+            const img = (
+              doc?.querySelector('img.mapa_sedadel') || 
+              doc?.querySelector('img[src*="mapa_sedadel"]')
+            ) as HTMLImageElement | null;
             if (img && doc) {
               doc.head.innerHTML = '';
               doc.body.innerHTML = `

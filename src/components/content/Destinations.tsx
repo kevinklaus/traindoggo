@@ -42,6 +42,7 @@ export default function Destinations() {
     { id: 'viaduct-map', label: t('contentPages.destinations.mapTitle'), icon: <Map size={16}/> },
     ...cardsData.map((card) => ({
       id: card.id,
+      highlight: card.highlight,
       label: card.destination, 
     })),
     { id: 'instagram', label: t('contentPages.destinations.igTitle', 'Instagram'), icon: <Instagram size={16}/> },

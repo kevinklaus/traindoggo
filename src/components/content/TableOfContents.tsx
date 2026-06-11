@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
+import { LogoMark } from '../ui/Primitives';
 
 export interface ToCItem {
-  id: string;
+  id: string
+  highlight?: boolean;
   label: string;
   icon?: React.ReactNode;
 }
@@ -36,6 +38,7 @@ export default function TableOfContents({ items }: Props) {
           >
             {item.icon? item.icon: ""}
             <span>{item.label}</span>
+            {item.highlight? <LogoMark size='small'/> : ''}
           </button>
         ))}
       </div>

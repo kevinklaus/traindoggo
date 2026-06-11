@@ -46,6 +46,7 @@ export interface Leg {
   stopovers?: Stopover[];
   distance?: number;
   walking?: boolean;
+  loadFactor?: 'low' | 'low-to-medium' | 'medium' | 'high' | 'very-high' | string;
 }
 
 export interface Ticket {
@@ -79,6 +80,8 @@ export interface SearchParams {
   date: string;
   time: string;
   dogMode: DogMode;
+  maxChanges?: number;       
+  minTransferTime?: number; 
 }
 
 export interface PriceEstimate {

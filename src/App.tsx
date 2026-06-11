@@ -53,8 +53,18 @@ export default function App() {
     setActivePage('home'); // Springe zurück auf Home, wenn eine Suche gestartet wird
 
     try {
-      const departure = `${searchParams.date}T${searchParams.time}:00`;
-      const result = await searchJourneys(searchParams.from.id, searchParams.to.id, departure);
+      const localDate = new Date(`${searchParams.date}T${searchParams.time}:00`);
+      const departure = localDate.toISOString();
+      
+      // HIER IST DIE ANPASSUNG: Wir übergeben maxChanges und minTransferTime
+      const result = await searchJourneys(
+        searchParams.from.id, 
+        searchParams.to.id, 
+        departure,
+        searchParams.maxChanges,
+        searchParams.minTransferTime
+      );
+      
       setJourneys(result.journeys ?? []);
       if (!result.journeys?.length) {
         setError('No journeys found for this route and time.');
