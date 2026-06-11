@@ -207,7 +207,7 @@ export function getLegColorTheme(product?: string, name?: string, isWalking?: bo
     };
   }
 
-  if (prod === 'night' || prod === 'EN' || prod === 'NJ' || trName.includes('night') || trName.includes('sleeper')) {
+  if (trName === 'ICN' || prod === 'night' || prod === 'EN' || prod === 'NJ' || trName.includes('night') || trName.includes('sleeper')) {
     return {
       badge: 'bg-secondary text-white',
       border: 'border-solid border-secondary/40',

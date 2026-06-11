@@ -1,4 +1,4 @@
-import { Map, Instagram, MapPin } from 'lucide-react';
+import { Map, Instagram } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import TableOfContents from './TableOfContents';
 import CardOverview from './CardOverview';

@@ -70,6 +70,33 @@ const deTranslations = {
         text: "Du findest mit unseren Empfehlungen den Sitzplatz mit dem meisten Raum für Pfoten."
       }
     },
+    inspiration: {
+      title: "Inspiration für eure nächste Reise",
+      subtitle: "Vorkonfigurierte Routen mit hundefreundlichen Umstiegszeiten und optimalen Verbindungen. Mit einem Klick direkt in die Suche übernehmen.",
+      searchRoute: "Route suchen",
+      fields: {
+        route: "Route",
+        description: "Beschreibung",
+        doggoInfo: "Doggo Info"
+      },
+      trips: {
+      berlinBozen: {
+        headline: "Berlin ➔ Bozen 🇮🇹",
+        desc: "Mit dem ICE und RailJet in die Alpen. Die Route bietet eine entspannte Durchquerung Süddeutschlands mit idealen Gassi-Spots beim Umstieg in München.",
+        travel: "Gassi-Tipp: München Hbf hat direkt am Bahnhof einen Park beim Neptunbrunnen."
+      },
+      frankfurtBarcelona: {
+        headline: "Frankfurt ➔ Barcelona 🇪🇸",
+        desc: "High-Speed durch Frankreich mit dem TGV. Eine atemberaubende Fahrt entlang der Küste mit genug Zeit für ein Croissant in Paris.",
+        travel: "Achtung: In Paris ist meist ein Bahnhofswechsel (Gare de l'Est zu Gare de Lyon) nötig. Hunde fahren in der Metro kostenlos mit!"
+      },
+      freiburgSapri: {
+        headline: "Freiburg ➔ Sapri 🇮🇹",
+        desc: "Mit dem Nachtzug nach Bella Italia. Der InterCityNotte bringt euch entspannt in den Süden Neapels ans türkisblaue Meer.",
+        travel: "Buchung: Im InterCityNotte muss ein eigenes Abteil (»Cabina intera«) gebucht werden, wenn ein großer Hund mitreist."
+      }
+    }
+    },
   },
   searchForm: {
     fromLabel: "Von",
@@ -392,6 +419,34 @@ const enTranslations = {
       step3: {
         title: "3. Find a seat",
         text: "Find the seat with the most paw-room using our recommendations."
+      },
+      
+    },
+    inspiration: {
+      title: "Inspiration for your next trip",
+      subtitle: "Pre-configured routes with dog-friendly transfer times and optimal connections. Apply them to your search with just one click.",
+      searchRoute: "Search route",
+      fields: {
+        route: "Route",
+        description: "Description",
+        doggoInfo: "Doggo Info"
+      },
+      trips: {
+        berlinBozen: {
+          headline: "Berlin ➔ Bolzano 🇮🇹",
+          desc: "Take the ICE and RailJet to the Alps. This route offers a relaxed journey through southern Germany with ideal potty breaks during your transfer in Munich.",
+          travel: "Doggo tip: Munich Central Station has a park right next to the station at the Neptune Fountain (Neptunbrunnen)."
+        },
+        frankfurtBarcelona: {
+          headline: "Frankfurt ➔ Barcelona 🇪🇸",
+          desc: "High-speed through France with the TGV. A breathtaking journey along the coast with enough time for a croissant in Paris.",
+          travel: "Note: A station change is usually required in Paris (Gare de l'Est to Gare de Lyon). Dogs travel for free on the Metro!"
+        },
+        freiburgSapri: {
+          headline: "Freiburg ➔ Sapri 🇮🇹",
+          desc: "Take the night train to Bella Italia. The InterCityNotte brings you relaxed to the turquoise sea south of Naples.",
+          travel: "Booking: You must book a private compartment (»Cabina intera«) on the InterCityNotte if you are traveling with a large dog."
+        }
       }
     },
   },
