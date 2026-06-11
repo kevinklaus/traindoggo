@@ -328,8 +328,8 @@ const deTranslations = {
       subtitle: "Von Kevin & Aslan nach Train Doggo",
       intro1: "Hi, ich bin Kevin! Product & UX Lead, Entwickler und der Zweibeiner hinter diesem Projekt. Und der flauschige neben mir ist Aslan – ein rumänischer Straßenhund-Mix und etwa 35 Kilo schwer.",
       intro2: "Seit fünf Jahren sind wir beide quasi ständig auf Schienen unterwegs. Warum? Weil ich mir damals fest vorgenommen habe, dass ich meine schönsten Urlaube und Abenteuer unbedingt mit Aslan teilen möchte.",
-      compassTitle: "Wir waren schon in allen Himmelsrichtungen unterwegs",
-      compassText: "Im Westen haben wir Spanien, Frankreich und Belgien erkundet, im Süden die Schweiz, Österreich, Kroatien und Italien, hoch im Norden waren wir in Dänemark und Schweden und im Osten ging es durch Polen, Slovenien, Ungarn und die Slowakei.",
+      compassTitle: "Züge in jede Richtung",
+      compassText: "Wir waren schon in allen Himmelsrichtungen unterwegs. Im Westen haben wir Spanien, Frankreich und Belgien erkundet, im Süden die Schweiz, Österreich, Kroatien und Italien, hoch im Norden waren wir in Dänemark und Schweden und im Osten ging es durch Polen, Slovenien, Ungarn und die Slowakei.",
       trainTitle: "Bahnreisen mit Hund",
       trainText: "Wir haben viele tolle, aber ehrlicherweise auch immer wieder ziemlich anstrengende Bahnmomente erlebt. Genau deshalb gibt es diese Seite. Wir wollen unsere Erfahrungen jetzt teilen und mit Train Doggo dazu beitragen, dass auch andere Menschen mit großen (oder kleinen) Hunden einen entspannten Start ins Reisen mit der Bahn haben.",
       whatIsTitle: "Das ist Train Doggo 🚂",
@@ -348,7 +348,7 @@ const deTranslations = {
       joinTitle: "Mach mit! 🤝",
       joinText: "Da Train Doggo ein Herzensprojekt und Open-Source ist, freue ich mich über alle, die das Projekt unterstützen oder weiterentwickeln wollen. Ob mit Feedback, coolen Ideen oder direktem Code – schau gerne auf unserem GitHub vorbei.",
       outro: "Wir wünschen euch eine gute Reise mit vielen neuen Entdeckungen!",
-      signatures: "Kevin & Aslan",
+      signatures: "Kevin & Aslan 🐾",
     }
   },
 };
@@ -680,8 +680,8 @@ const enTranslations = {
       subtitle: "From Kevin & Aslan to Train Doggo",
       intro1: "Hi, I'm Kevin! Product & UX Lead, developer, and the two-legged half of this project. The fluffy one next to me is Aslan – a Romanian rescue mix weighing in at about 35 kilos.",
       intro2: "For the past five years, we've basically been living on the rails. Why? Because I promised myself I would share all my best holidays and adventures with Aslan.",
-      compassTitle: "We've traveled in every direction",
-      compassText: "To the West we explored Spain, France, and Belgium. South took us to Switzerland, Austria, Croatia, and Italy. Up North we visited Denmark and Sweden, and East lead us through Poland, Slovenia, Hungary, and Slovakia.",
+      compassTitle: "Trains wherever you look",
+      compassText: "We've taken trains in every direction. To the West we explored Spain, France, and Belgium. South took us to Switzerland, Austria, Croatia, and Italy. Up North we visited Denmark and Sweden, and East lead us through Poland, Slovenia, Hungary, and Slovakia.",
       trainTitle: "Train travel with a dog",
       trainText: "We've had many amazing, but honestly also quite exhausting train moments along the way. That's exactly why this site exists. We want to share our experiences and use Train Doggo to help others with large (or small) dogs have a relaxed start to their rail journeys.",
       whatIsTitle: "This is Train Doggo 🚂",
@@ -700,7 +700,7 @@ const enTranslations = {
       joinTitle: "Join in! 🤝",
       joinText: "Since Train Doggo is a passion project and open-source, I welcome anyone who wants to support or help develop the project. Whether it's feedback, cool ideas, or direct code – feel free to check out our GitHub.",
       outro: "We wish you a great journey with many new discoveries!",
-      signatures: "Kevin & Aslan"
+      signatures: "Kevin & Aslan 🐾"
     },
   }, 
 };

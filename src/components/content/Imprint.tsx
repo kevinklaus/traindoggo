@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 
 const imprintMd = `
 Kevin Klaus, Seestr. 11, 15366 Hoppegarten, Germany
-[kevintheklaus@gmail.com](mailto:kevintheklaus@gmail.com)  
+[hi.traindoggo@gmail.com](mailto:hi.traindoggo@gmail.com)  
 
 **Datenschutz & Haftungsausschluss** Dies ist ein nicht-kommerzielles Portfolio-Projekt. Alle angezeigten Reisedaten und Hunde-Regelungen stammen aus Community-Daten und sind **ohne Gewähr**. Es werden keine personenbezogenen Daten gespeichert oder verarbeitet.
 `;
