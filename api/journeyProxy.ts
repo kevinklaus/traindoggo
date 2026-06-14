@@ -36,11 +36,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
 
     // Debugging
-    console.log('--- DEBUG HAFAS CALL ---');
-    console.log('1. FROM:', from);
-    console.log('2. TO:', to);
-    console.log('3. OPTIONS:', JSON.stringify(hafasOptions, null, 2));
-    console.log('------------------------');
+    // console.log('--- DEBUG HAFAS CALL ---');
+    // console.log('1. FROM:', from);
+    // console.log('2. TO:', to);
+    // console.log('3. OPTIONS:', JSON.stringify(hafasOptions, null, 2));
+    // console.log('------------------------');
+
    // 5. Aufruf mit dem nun übersetzten und vollständigen hafasOptions-Objekt
     const hResponse = await client.journeys(from as string, to as string, hafasOptions);
 

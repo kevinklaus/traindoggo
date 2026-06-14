@@ -6,6 +6,8 @@ import InfoCard from './InfoCard';
 // Lege hierfür einfach ein passendes Foto von euch beiden ab!
 import AboutImg from './images/about.jpg'; 
 import AboutEndImg from './images/aboutEnd.jpg'; 
+import KevinImg from './images/kevin.jpg'; 
+
 
 export default function AboutUs() {
   const { t } = useTranslation();
@@ -27,6 +29,7 @@ export default function AboutUs() {
         
         {/* Intro Section */}
         <div className="bg-white rounded-3xl p-5 sm:p-8">
+          <img src={KevinImg} alt="Kevin" className='mb-4 rounded-full object-cover h-[150px] w-[150px]' />
           <p className="text-slate-700 leading-relaxed text-[15px] sm:text-[16px] mb-4">
             {t('contentPages.aboutUs.intro1')}
           </p>
@@ -59,12 +62,12 @@ export default function AboutUs() {
           </p>
           <p className="text-slate-700 leading-relaxed text-[15px] sm:text-[16px]">
             {t('contentPages.aboutUs.whatIsText2')} <br className="hidden sm:block" />
-            <a href="mailto:hi.traindoggo@gmail.com" title="E-Mail an Train Doggo schreiben" className={linkStyles}>
+            <a href="mailto:hi.traindoggo@gmail.com" title="E-Mail an Train Doggo schreiben" className={linkStyles  + ' mr-1'}>
               hi.traindoggo@gmail.com
             </a> 
              oder 
-            <a href="https://www.linkedin.com/me/kevin-klaus" target="_blank" rel="noopener noreferrer" title="Kevins LinkedIn Profil aufrufen" className={linkStyles}>
-              LinkedIn
+            <a href="https://www.linkedin.com/me/kevin-klaus" target="_blank" rel="noopener noreferrer" title="Kevins LinkedIn Profil aufrufen" className={linkStyles + ' ml-1'}>
+                LinkedIn
             </a>.
           </p>
         </div>
