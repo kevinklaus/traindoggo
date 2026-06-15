@@ -351,7 +351,7 @@ const deTranslations = {
       intro1: "Hi, ich bin Kevin! Product & UX Lead, Entwickler und der Zweibeiner hinter diesem Projekt. Und der flauschige neben mir ist Aslan – ein rumänischer Straßenhund-Mix und etwa 35 Kilo schwer.",
       intro2: "Seit fünf Jahren sind wir beide quasi ständig auf Schienen unterwegs. Warum? Weil ich mir damals fest vorgenommen habe, dass ich meine schönsten Urlaube und Abenteuer unbedingt mit Aslan teilen möchte.",
       compassTitle: "Züge in jede Richtung",
-      compassText: "Wir waren schon in allen Himmelsrichtungen unterwegs. Im Westen haben wir Spanien, Frankreich und Belgien erkundet, im Süden die Schweiz, Österreich, Kroatien und Italien, hoch im Norden waren wir in Dänemark und Schweden und im Osten ging es durch Polen, Slovenien, Ungarn und die Slowakei.",
+      compassText: "Wir waren schon in allen Himmelsrichtungen mit Hund in Zügen unterwegs. Richtung Westen haben wir Spanien, Frankreich und Belgien erkundet. Im Süden die Schweiz, Österreich, Kroatien und Italien inkl. Sardinien. Hoch im Norden waren wir in Dänemark und Schweden und im Osten ging es durch Polen, Slovenien, Ungarn und die Slowakei.",
       trainTitle: "Bahnreisen mit Hund",
       trainText: "Wir haben viele tolle, aber ehrlicherweise auch immer wieder ziemlich anstrengende Bahnmomente erlebt. Genau deshalb gibt es diese Seite. Wir wollen unsere Erfahrungen jetzt teilen und mit Train Doggo dazu beitragen, dass auch andere Menschen mit großen (oder kleinen) Hunden einen entspannten Start ins Reisen mit der Bahn haben.",
       whatIsTitle: "Das ist Train Doggo 🚂",

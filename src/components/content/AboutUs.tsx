@@ -26,11 +26,11 @@ export default function AboutUs() {
         imagePositionClass="object-cover object-[center_65%] sm:object-[center_60%] md:object-[center_51%]"
       />
 
-      <div className="max-w-3xl justify-center px-4 sm:px-0 space-y-6 mt-12 w-full w-[92%] sm:w-[88%] md:w-[85%] relative z-10 -mt-12 sm:-mt-16 md:-mt-20">
+      <div className="max-w-3xl justify-center px-4 sm:px-0 space-y-6 w-full w-[92%] sm:w-[88%] md:w-[85%] relative z-10 -mt-12 sm:-mt-16 md:-mt-20">
         {/* Das ist Train Doggo */}
-        <div className="bg-white rounded-3xl p-5 sm:p-8 mt-6">
+        <div className="bg-white rounded-3xl p-5 sm:p-8">
             <LogoMark size='large'/>
-          <h2 className="mt-8 text-xl font-bold text-slate-800 font-heading mb-4">
+          <h2 className="mt-6 text-xl font-bold text-slate-800 font-heading mb-4">
             {t('contentPages.aboutUs.whatIsTitle')}
           </h2>
           <p className="text-slate-700 leading-relaxed text-[15px] sm:text-[16px] mb-4">
@@ -50,7 +50,7 @@ export default function AboutUs() {
 
         {/* Intro Section */}
         <div className="bg-white rounded-3xl p-5 sm:p-8">
-          <img src={KevinImg} alt="Kevin" className='mb-8 rounded-full object-cover h-[150px] w-[150px]' />
+          <img src={KevinImg} alt="Kevin" className='mb-4 md:mb-6 rounded-full object-cover h-[90px] w-[90px] md:h-[130px] md:w-[130px]' />
           <p className="text-slate-700 leading-relaxed text-[15px] sm:text-[16px] mb-4">
             {t('contentPages.aboutUs.intro1')}
           </p>
@@ -62,14 +62,14 @@ export default function AboutUs() {
         {/* InfoCards für die Himmelsrichtungen und Bahnmomente */}
         <div className="grid md:grid-cols-2 gap-6">
             <InfoCard 
-            icon={<TrainFront className="text-primary" />} 
-            title={t('contentPages.aboutUs.trainTitle')} 
-            text={t('contentPages.aboutUs.trainText')} 
+                icon={<Compass className="text-primary" />} 
+                title={t('contentPages.aboutUs.compassTitle')} 
+                text={t('contentPages.aboutUs.compassText')} 
             />
             <InfoCard 
-            icon={<Compass className="text-primary" />} 
-            title={t('contentPages.aboutUs.compassTitle')} 
-            text={t('contentPages.aboutUs.compassText')} 
+                icon={<TrainFront className="text-primary" />} 
+                title={t('contentPages.aboutUs.trainTitle')} 
+                text={t('contentPages.aboutUs.trainText')} 
             />
         </div>
 
