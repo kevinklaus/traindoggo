@@ -17,14 +17,20 @@ interface Props {
   error: string | null;
   searched: boolean;
   journeys: Journey[];
+  onLoadEarlier?: () => void;
+  onLoadLater?: () => void;
+  hasEarlier?: boolean;
+  hasLater?: boolean;
+  loadingEarlier?: boolean;
+  loadingLater?: boolean;
 }
 
 export default function LandingContent({
-  params, setParams, handleSearch, handleDayChange, loading, error, searched, journeys
+  params, setParams, handleSearch, handleDayChange, loading, error, searched, journeys,
+  onLoadEarlier, onLoadLater, hasEarlier, hasLater, loadingEarlier, loadingLater
 }: Props) {
   const { t } = useTranslation();
 
-  // 1. i18n-ready CardData
   const exampleTrips: CardData[] = [
     {
       id: 'berlin-bozen',
@@ -73,7 +79,6 @@ export default function LandingContent({
     }
   ];
 
-  // 2. i18n-ready Fields
   const exampleFields = [
     { key: 'headline', label: t('landing.inspiration.fields.route', 'Route') },
     { key: 'description', label: t('landing.inspiration.fields.description', 'Beschreibung') },
@@ -115,7 +120,18 @@ export default function LandingContent({
       {searched ? (
         <div className="max-w-3xl mt-8 w-full animate-in fade-in slide-in-from-bottom-4">
           <RecommendedDays currentDateStr={params.date} onDateChange={handleDayChange} />
-          <JourneyResults journeys={journeys} dogMode={params.dogMode} loading={loading} error={error} />
+          <JourneyResults 
+            journeys={journeys} 
+            dogMode={params.dogMode} 
+            loading={loading} 
+            error={error} 
+            onLoadEarlier={onLoadEarlier}
+            onLoadLater={onLoadLater}
+            hasEarlier={hasEarlier}
+            hasLater={hasLater}
+            loadingEarlier={loadingEarlier}
+            loadingLater={loadingLater}
+          />
         </div>
       ) : (
         <div className="max-w-6xl px-4 sm:px-0 mt-16 w-full animate-in fade-in slide-in-from-bottom-4 pb-24 space-y-24">

@@ -56,30 +56,34 @@ export async function searchStationsByCoords(lat: number, lon: number): Promise<
 export async function searchJourneys(
   fromId: string,
   toId: string,
-  departure: string,
-  maxChanges?: number,       // <--- NEU
-  minTransferTime?: number,  // <--- NEU
+  departure?: string,        // <--- GEÄNDERT: Ist jetzt optional (?)
+  maxChanges?: number,       
+  minTransferTime?: number,  
+  earlierRef?: string,       // <--- NEU
+  laterRef?: string,         // <--- NEU
   results = 10 
 ): Promise<JourneysResponse> {
-  if (useMockApi) return searchJourneysMock(fromId, toId, departure);
+  // Fallback für den Mock-Modus
+  if (useMockApi) return searchJourneysMock(fromId, toId, departure || '');
 
+  // Basis-Parameter, die immer da sind
   const params = new URLSearchParams({
     from: fromId,
     to: toId,
-    departure,
     results: String(results)
   });
 
   // HIER KOMMT DIE MAGIE FÜR DIE URL:
-  // Wir hängen die Werte an, falls sie existieren
-  if (maxChanges !== undefined && maxChanges !== null) {
-    params.append('maxChanges', String(maxChanges));
-  }
-  if (minTransferTime !== undefined && minTransferTime !== null) {
-    params.append('minTransferTime', String(minTransferTime));
-  }
+  // Wir hängen die Werte nur an, wenn sie wirklich existieren
+  if (departure) params.append('departure', departure);
+  if (maxChanges !== undefined && maxChanges !== null) params.append('maxChanges', String(maxChanges));
+  if (minTransferTime !== undefined && minTransferTime !== null) params.append('minTransferTime', String(minTransferTime));
+  
+  // Die neuen Pagination-Tokens
+  if (earlierRef) params.append('earlierRef', earlierRef);
+  if (laterRef) params.append('laterRef', laterRef);
 
-  // Aufruf an deinen Vercel Proxy (z.B. /api/journeys oder /api/journeyProxy)
+  // Aufruf an deinen Vercel Proxy
   const res = await fetch(`/api/journeyProxy?${params.toString()}`);
   return handleResponse(res, 'Journey') as Promise<JourneysResponse>;
 }

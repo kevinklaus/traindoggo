@@ -38,8 +38,13 @@ export default function App() {
   const [apiUnavailable, setApiUnavailable] = useState(false);
   const [showImprint, setShowImprint] = useState(false);
 
-  // State für das Page-Routing
   const [activePage, setActivePage] = useState<Page>('home');
+
+  // Pagination States
+  const [earlierRef, setEarlierRef] = useState<string | null>(null);
+  const [laterRef, setLaterRef] = useState<string | null>(null);
+  const [loadingEarlier, setLoadingEarlier] = useState(false);
+  const [loadingLater, setLoadingLater] = useState(false);
 
   useEffect(() => {
     setMockApiMode(useMockApi);
@@ -50,13 +55,12 @@ export default function App() {
     setLoading(true);
     setError(null);
     setSearched(true);
-    setActivePage('home'); // Springe zurück auf Home, wenn eine Suche gestartet wird
+    setActivePage('home'); 
 
     try {
       const localDate = new Date(`${searchParams.date}T${searchParams.time}:00`);
       const departure = localDate.toISOString();
       
-      // HIER IST DIE ANPASSUNG: Wir übergeben maxChanges und minTransferTime
       const result = await searchJourneys(
         searchParams.from.id, 
         searchParams.to.id, 
@@ -66,6 +70,9 @@ export default function App() {
       );
       
       setJourneys(result.journeys ?? []);
+      setEarlierRef(result.earlierRef ?? null);
+      setLaterRef(result.laterRef ?? null);
+
       if (!result.journeys?.length) {
         setError('No journeys found for this route and time.');
       }
@@ -74,11 +81,45 @@ export default function App() {
       const message = err instanceof Error ? err.message : 'Search failed. Please try again.';
       setError(message);
       setJourneys([]);
+      setEarlierRef(null);
+      setLaterRef(null);
       setApiUnavailable(!useMockApi);
     } finally {
       setLoading(false);
     }
   }, [params, useMockApi]);
+
+  const handleLoadEarlier = useCallback(async () => {
+    if (!params.from || !params.to || !earlierRef) return;
+    setLoadingEarlier(true);
+    try {
+      const result = await searchJourneys(
+        params.from.id, params.to.id, undefined, params.maxChanges, params.minTransferTime, earlierRef, undefined
+      );
+      setJourneys(prev => [...(result.journeys ?? []), ...prev]);
+      setEarlierRef(result.earlierRef ?? null);
+    } catch (err) {
+      console.error("Failed to load earlier journeys", err);
+    } finally {
+      setLoadingEarlier(false);
+    }
+  }, [params, earlierRef]);
+
+  const handleLoadLater = useCallback(async () => {
+    if (!params.from || !params.to || !laterRef) return;
+    setLoadingLater(true);
+    try {
+      const result = await searchJourneys(
+        params.from.id, params.to.id, undefined, params.maxChanges, params.minTransferTime, undefined, laterRef
+      );
+      setJourneys(prev => [...prev, ...(result.journeys ?? [])]);
+      setLaterRef(result.laterRef ?? null);
+    } catch (err) {
+      console.error("Failed to load later journeys", err);
+    } finally {
+      setLoadingLater(false);
+    }
+  }, [params, laterRef]);
 
   const handleDayChange = (newDateStr: string) => {
     const newParams = { ...params, date: newDateStr };
@@ -104,7 +145,6 @@ export default function App() {
 
       <main className="max-w-6xl mx-auto px-4 py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
         
-        {/* Die Startseite wird jetzt komplett an LandingContent delegiert */}
         {activePage === 'home' && (
           <LandingContent 
             params={params}
@@ -115,10 +155,15 @@ export default function App() {
             error={error}
             searched={searched}
             journeys={journeys}
+            onLoadEarlier={handleLoadEarlier}
+            onLoadLater={handleLoadLater}
+            hasEarlier={!!earlierRef}
+            hasLater={!!laterRef}
+            loadingEarlier={loadingEarlier}
+            loadingLater={loadingLater}
           />
         )}
 
-        {/* Content Seiten Routing */}
         {activePage === 'tips' && <DoggoTips />}
         {activePage === 'destinations' && <Destinations />}
         {activePage === 'nightTrains' && <NightTrains />}
