@@ -12,7 +12,7 @@ import { calculateDoggoScore } from '../../lib/doggoScore';
 
 import JourneyTimeline from './JourneyTimeline';
 import JourneyTimelineBar from './JourneyTimelineBar';
-import DoggoScoreBadge from './DoggoScoreBadge'; // <-- NEU IMPORTIERT
+import DoggoScoreBadge from './DoggoScoreBadge';
 import { TOKENS } from '../ui/Primitives';
 
 interface Props {
@@ -63,7 +63,7 @@ function getLoadFactorConfig(factor: string | null, t: TFunction) {
 }
 
 export default function JourneyCard({ journey, dogMode, index }: Props) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(); // i18n wird hier nicht mehr für das Datum gebraucht
   const legs = filterValidLegs(journey.legs);
   const firstLeg = legs[0];
   const lastLeg = legs[legs.length - 1];
@@ -71,8 +71,20 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
   const departure = firstLeg?.departure ?? '';
   const arrival = lastLeg?.arrival ?? '';
   const duration = departure && arrival ? formatDuration(departure, arrival) : '--';
+
+  // DATUMS-BERECHNUNG: Nur noch den +1 / +2 Tageswechsel für die Ankunft berechnen
+  let dayDiff = 0;
+
+  if (departure && arrival) {
+    const depDate = new Date(departure);
+    const arrDate = new Date(arrival);
+    
+    // Normalisieren, um exakt die Kalendertage zu vergleichen (ohne Uhrzeit)
+    const depDay = new Date(depDate.getFullYear(), depDate.getMonth(), depDate.getDate());
+    const arrDay = new Date(arrDate.getFullYear(), arrDate.getMonth(), arrDate.getDate());
+    dayDiff = Math.round((arrDay.getTime() - depDay.getTime()) / (1000 * 60 * 60 * 24));
+  }
   
-  // WIR BERECHNEN JETZT DEN SCORE STATT DEN PREIS
   const doggoScore = calculateDoggoScore(journey, dogMode);
 
   const worstLoadFactor = getJourneyLoadFactor(legs);
@@ -87,13 +99,22 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
         
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
+            
+            {/* Der fette Datums-String wurde hier entfernt */}
+
             <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
               <span className="text-xl sm:text-2xl font-bold text-slate-900 tabular-nums font-heading whitespace-nowrap">
-                {formatTime(firstLeg?.departure)}
+                {formatTime(departure)}
               </span>
               <ArrowRight size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
               <span className="text-xl sm:text-2xl font-bold text-slate-900 tabular-nums font-heading whitespace-nowrap">
-                {formatTime(lastLeg?.arrival)}
+                {formatTime(arrival)}
+                {/* HIER WIRD WEITERHIN DER +1 / +2 TAG ANGEZEIGT (z.B. für Nachtzüge) */}
+                {dayDiff > 0 && (
+                  <sup className="text-xs sm:text-sm font-bold text-slate-500 ml-0.5">
+                    +{dayDiff}
+                  </sup>
+                )}
               </span>
             </div>
 
@@ -116,7 +137,6 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
             </div>
           </div>
 
-          {/* HIER WIRD JETZT DER SCORE ANGEZEIGT (WENN EIN HUND AUSGEWÄHLT IST) */}
           <div className="text-right shrink-0">
           {dogMode !== 'none' && (
               <DoggoScoreBadge result={doggoScore} />

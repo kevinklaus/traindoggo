@@ -38,7 +38,8 @@ export default function LandingContent({
         minTransferTime: 45, 
         maxChanges: 1,       
         dogMode: 'large'
-      }
+      },
+      imageId: 'suedtirol'
     },
     {
       id: 'frankfurt-barcelona',
@@ -52,7 +53,8 @@ export default function LandingContent({
         time: '06:30', 
         minTransferTime: 90, 
         maxChanges: 1,
-      }
+      },
+      imageId: 'montblanc'
     },
     {
       id: 'freiburg-sapri',
@@ -63,10 +65,11 @@ export default function LandingContent({
       actionPayload: { 
         from: { id: '8000107', name: 'Freiburg(Breisgau) Hbf', type: 'stop' }, 
         to: { id: '8300333', name: 'Sapri', type: 'stop' }, 
-        time: '18:00', 
-        minTransferTime: 45, 
+        time: '10:00', 
+        minTransferTime: 180, 
         maxChanges: 1,
-      }
+      },
+      imageId: 'sapri'
     }
   ];
 
@@ -121,7 +124,7 @@ export default function LandingContent({
           <section className="space-y-8">
             <div className="text-center max-w-2xl mx-auto space-y-3">
               <div className="flex justify-center mb-2">
-                <Sparkles size={24} className="text-primary" />
+                <Sparkles size={32} className="text-accent fill-accent" />
               </div>
               <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-800">
                 {t('landing.inspiration.title', 'Inspiration für eure nächste Reise')}
@@ -136,12 +139,12 @@ export default function LandingContent({
               data={exampleTrips} 
               onAction={handleExampleSearch}
               actionLabel={t('landing.inspiration.searchRoute', 'Route suchen')}
-              colorClass='primary'
+              colorClass='white'
             />
           </section>
 
           {/* How it works */}
-          <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 max-w-4xl mx-auto">
+          <section className="bg-white rounded-3xl p-6 sm:p-8 max-w-4xl mx-auto">
             <div className="flex justify-center mb-2">
               <PawPrint size={24} strokeWidth={2} className="fill-accent text-accent" />
             </div>

@@ -21,21 +21,7 @@ export default function Destinations() {
   ];
 
   // 1. Daten holen und IDs + Bilder vergeben
-  const rawCards = t('contentPages.destinations.cards', { returnObjects: true }) as any[];
-  
-  const cardsData = rawCards.map((card, index) => {
-    // Finde das passende Bild aus dem Glob-Import anhand der imageId
-    // Wir suchen nach dem Dateinamen, z.B. "montblanc.jpg" in den importierten Pfaden
-    const matchedImagePath = Object.keys(destinationImages).find(path => 
-      path.includes(`/${card.imageId}.`)
-    );
-
-    return {
-      id: `dest-${index}`, // Diese ID referenzieren wir gleich im TOC
-      image: matchedImagePath ? destinationImages[matchedImagePath] : undefined, // Packt das Bild rein, falls gefunden
-      ...card
-    };
-  });
+  const cardsData = t('contentPages.destinations.cards', { returnObjects: true }) as any[];
 
   // 2. Inhaltsverzeichnis dynamisch aufbauen!
   const tocItems = [

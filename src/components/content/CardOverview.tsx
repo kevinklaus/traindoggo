@@ -2,6 +2,10 @@ import { PawPrint, ChevronDown, Dog, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
+// 1. VITE GLOB IMPORT: Holt automatisch alle Bilder aus dem lokalen Ordner
+// Wichtig: Das passiert außerhalb der Komponente, damit es nur einmal geladen wird!
+const localImages = import.meta.glob('./images/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' }) as Record<string, string>;
+
 export interface cardField {
   key: string;
   label: string;
@@ -11,6 +15,7 @@ export interface CardData {
   id: string;
   highlight?: boolean;
   image?: string; 
+  imageId?: string; // <-- NEUES FELD: Damit wir nur noch die ID übergeben müssen
   actionPayload?: any; 
   [key: string]: any;
 }
@@ -60,32 +65,44 @@ export default function CardOverview({ cardFields, data, onAction, actionLabel, 
   const cardData = cardFields.slice(1);
   const color = colorClass ? colorClass : 'highlight';
 
-  // 1. Vollständige Klassen in einem Mapping definieren
   const gradientMap: Record<string, { base: string, high: string }> = {
-    highlight: {
-      base: 'from-highlight/10 to-highlight/10',
-      high: 'from-highlight/30 to-highlight/30'
+    // ... (Dein bestehendes gradientMap bleibt unverändert)
+    highlight: { 
+      base: 'from-highlight/10 to-highlight/10', 
+      high: 'from-highlight/30 to-highlight/30' 
     },
-    secondary: {
-      base: 'from-secondary/15 to-secondary/15',
-      high: 'from-secondary/20 to-secondary/20'
+    accent: { 
+      base: 'from-accent/15 to-accent/15', 
+      high: 'from-accent/20 to-accent/20' 
     },
-    primary: {
-      base: 'from-primary/20 to-primary/20',
-      high: 'from-primary/30 to-primary/30'
+    secondary: { 
+      base: 'from-secondary/5 to-secondary/5', 
+      high: 'from-secondary/15 to-secondary/15' 
+    },
+    primary: { 
+      base: 'from-primary/10 to-primary/10', 
+      high: 'from-primary/20 to-primary/20' 
+    },
+    white: { 
+      base: '', 
+      high: '' 
     }
   };
-
-  // 2. Fallback einbauen, falls eine unregistrierte Farbe übergeben wird
-  const safeColor = gradientMap[color] ? color : 'highlight';
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-5 mb-6">
       {data.map(card => {
-        // 3. Die korrekte Klasse aus dem Map ziehen
         const bgGradient = card.highlight 
-          ? gradientMap[safeColor].high 
-          : gradientMap[safeColor].base;
+          ? gradientMap[color].high 
+          : gradientMap[color].base;
+
+        // 2. BILD-AUFLÖSUNG: Wir prüfen, ob eine imageId übergeben wurde 
+        // und suchen den exakten Pfad im glob-Objekt
+        let resolvedImage = card.image;
+        if (card.imageId) {
+          const matchedPath = Object.keys(localImages).find(path => path.includes(`/${card.imageId}.`));
+          if (matchedPath) resolvedImage = localImages[matchedPath];
+        }
 
         return (
           <div 
@@ -93,9 +110,10 @@ export default function CardOverview({ cardFields, data, onAction, actionLabel, 
             id={card.id} 
             className={`flex flex-col bg-white bg-gradient-to-b ${bgGradient} rounded-2xl transition-all overflow-hidden relative scroll-mt-24`}
           >
-            {card.image && (
+            {/* 3. BILD-RENDERING: Nutzt jetzt resolvedImage */}
+            {resolvedImage && (
               <div className="w-full h-32 sm:h-40 bg-slate-100 overflow-hidden relative">
-                <img src={card.image} alt={card[headline.key]} className="w-full h-full object-cover" />
+                <img src={resolvedImage} alt={card[headline.key]} className="w-full h-full object-cover" />
               </div>
             )}
 

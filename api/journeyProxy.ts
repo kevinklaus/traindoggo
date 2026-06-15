@@ -21,7 +21,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       departure: departure as string,
       stopovers: true,
       remarks: true,
-      results: 5
+      results: 10
     };
 
     // 3. Wenn das Frontend maxChanges schickt, mappen wir es auf "transfers"
@@ -35,7 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
 
-    // Debugging
+    // // Debugging
     // console.log('--- DEBUG HAFAS CALL ---');
     // console.log('1. FROM:', from);
     // console.log('2. TO:', to);
@@ -47,12 +47,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // HAFAS Typ-Fix: Prüfen ob es direkt ein Array ist, sonst safely auf .journeys zugreifen
     const journeys = Array.isArray(hResponse) ? hResponse : (hResponse as any).journeys || [];
+    
+    // NEU: Wir sichern uns die Pagination-Tokens (falls HAFAS sie im Objekt mitliefert)
+    const earlierRef = Array.isArray(hResponse) ? undefined : (hResponse as any).earlierRef;
+    const laterRef = Array.isArray(hResponse) ? undefined : (hResponse as any).laterRef;
 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
 
+    // NEU: Wir reichen die Tokens mit ans Frontend durch
     return res.status(200).json({
-      journeys: journeys
+      journeys: journeys,
+      earlierRef: earlierRef,
+      laterRef: laterRef
     });
   } catch (error: any) {
     console.error('[ÖBB RUNTIME ERROR]', error.message);

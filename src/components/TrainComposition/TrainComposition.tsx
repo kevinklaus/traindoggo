@@ -21,8 +21,6 @@ export default function TrainComposition({ leg, onClose, badge = "bg-red-600 tex
   const iframeRef = useRef<HTMLIFrameElement>(null);
   
   const trainName = leg.line?.name ?? t('composition.trains.train', 'Zug');
-
-  console.log("Leg", leg)
   
   const vagonWeb = useVagonWeb(leg, i18n.language, trainName, iframeRef);
   

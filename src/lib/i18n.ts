@@ -82,18 +82,18 @@ const deTranslations = {
       trips: {
       berlinBozen: {
         headline: "Berlin ➔ Bozen 🇮🇹",
-        desc: "Mit dem ICE und RailJet in die Alpen. Die Route bietet eine entspannte Durchquerung Süddeutschlands mit idealen Gassi-Spots beim Umstieg in München.",
-        travel: "Gassi-Tipp: München Hbf hat direkt am Bahnhof einen Park beim Neptunbrunnen."
+        desc: "Im RailJet krasse Blicke auf die Alpen genießen und gemütlich vorbei am Stau auf dem Brenner. In Südtirol die Bergluft, Wein und Obst genießen.",
+        travel: "Gassi-Tipp: In München ist 5 Geh-Minuten nördlich des Hauptbahnhofs der Neptunbrunnen mit einem kleinen Park."
       },
       frankfurtBarcelona: {
         headline: "Frankfurt ➔ Barcelona 🇪🇸",
-        desc: "High-Speed durch Frankreich mit dem TGV. Eine atemberaubende Fahrt entlang der Küste mit genug Zeit für ein Croissant in Paris.",
-        travel: "Achtung: In Paris ist meist ein Bahnhofswechsel (Gare de l'Est zu Gare de Lyon) nötig. Hunde fahren in der Metro kostenlos mit!"
+        desc: "Atemberaubende Aussicht aus dem TGV auf die Mittelmeer-Küste. Nimm dir Zeit für ein Croissant und eine Gassi-Pause in Paris.",
+        travel: "In Paris müsst ihr mit der Metro von Gare de l'Est zu Gare de Lyon. Hunde fahren kostenlos mit und ihr könnt den Umstig für eine Gassi-Pause nutzen."
       },
       freiburgSapri: {
         headline: "Freiburg ➔ Sapri 🇮🇹",
-        desc: "Mit dem Nachtzug nach Bella Italia. Der InterCityNotte bringt euch entspannt in den Süden Neapels ans türkisblaue Meer.",
-        travel: "Buchung: Im InterCityNotte muss ein eigenes Abteil (»Cabina intera«) gebucht werden, wenn ein großer Hund mitreist."
+        desc: "Im EC nach Mailand die Alpen genißen. Nachts im InterCityNotte durch Bella Italia und mit Blick auf das türkisblaue Meer des Cilento aufwachen.",
+        travel: "Im InterCityNotte mit Hund ein eigenes Abteil buchen (»Cabina intera«). Oft für insgesamt rund 150 Euro zu haben."
       }
     }
     },
@@ -451,19 +451,19 @@ const enTranslations = {
       },
       trips: {
         berlinBozen: {
-          headline: "Berlin ➔ Bolzano 🇮🇹",
-          desc: "Take the ICE and RailJet to the Alps. This route offers a relaxed journey through southern Germany with ideal potty breaks during your transfer in Munich.",
-          travel: "Doggo tip: Munich Central Station has a park right next to the station at the Neptune Fountain (Neptunbrunnen)."
+        headline: "Berlin ➔ Bolzano 🇮🇹",
+        desc: "Enjoy stunning views of the Alps in the RailJet and comfortably bypass the traffic jams on the Brenner Pass. Savor the mountain air, wine, and fresh fruit in South Tyrol.",
+        travel: "Doggo tip: In Munich, there's a small park at the Neptune Fountain (Neptunbrunnen), just a 5-minute walk north of the central station."
         },
         frankfurtBarcelona: {
           headline: "Frankfurt ➔ Barcelona 🇪🇸",
-          desc: "High-speed through France with the TGV. A breathtaking journey along the coast with enough time for a croissant in Paris.",
-          travel: "Note: A station change is usually required in Paris (Gare de l'Est to Gare de Lyon). Dogs travel for free on the Metro!"
+          desc: "Breathtaking views of the Mediterranean coast from the TGV. Take your time for a croissant and a potty break in Paris.",
+          travel: "In Paris, you'll need to take the Metro from Gare de l'Est to Gare de Lyon. Dogs travel for free, and you can use the transfer for a potty break."
         },
         freiburgSapri: {
           headline: "Freiburg ➔ Sapri 🇮🇹",
-          desc: "Take the night train to Bella Italia. The InterCityNotte brings you relaxed to the turquoise sea south of Naples.",
-          travel: "Booking: You must book a private compartment (»Cabina intera«) on the InterCityNotte if you are traveling with a large dog."
+          desc: "Enjoy the Alps on the EC to Milan. Ride through Bella Italia at night in the InterCityNotte and wake up to a view of the turquoise sea of the Cilento.",
+          travel: "When traveling with a dog, book a private compartment (»Cabina intera«) on the InterCityNotte. Often available for around 150 euros in total."
         }
       }
     },
