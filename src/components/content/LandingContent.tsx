@@ -29,6 +29,7 @@ export default function LandingContent({
     {
       id: 'berlin-bozen',
       headline: t('landing.inspiration.trips.berlinBozen.headline', 'Berlin ➔ Bozen'),
+      highlight: true,
       description: t('landing.inspiration.trips.berlinBozen.desc', 'Mit dem ICE direkt in die Alpen. Die Route bietet eine entspannte Durchquerung Süddeutschlands mit idealen Gassi-Spots in München.'),
       travel: t('landing.inspiration.trips.berlinBozen.travel', 'Gassi-Tipp: München Hbf hat einen kleinen Park nahe Gleis 11.'),
       actionPayload: { 
@@ -41,6 +42,7 @@ export default function LandingContent({
     },
     {
       id: 'frankfurt-barcelona',
+      highlight: true,
       headline: t('landing.inspiration.trips.frankfurtBarcelona.headline', 'Frankfurt ➔ Barcelona'),
       description: t('landing.inspiration.trips.frankfurtBarcelona.desc', 'High-Speed durch Frankreich mit dem TGV. Eine atemberaubende Fahrt entlang der Küste mit ausreichend Puffer in Paris.'),
       travel: t('landing.inspiration.trips.frankfurtBarcelona.travel', 'Achtung: In Paris ist meist ein Bahnhofswechsel (Gare de l\'Est zu Gare de Lyon) nötig. Die Metro erlaubt Hunde!'),
@@ -54,6 +56,7 @@ export default function LandingContent({
     },
     {
       id: 'freiburg-sapri',
+      highlight: true,
       headline: t('landing.inspiration.trips.freiburgSapri.headline', 'Freiburg ➔ Sapri'),
       description: t('landing.inspiration.trips.freiburgSapri.desc', 'Mit dem Nachtzug nach Bella Italia. Der Nightjet bringt euch entspannt in den Süden Neapels ans türkisblaue Meer.'),
       travel: t('landing.inspiration.trips.freiburgSapri.travel', 'Buchung: Im Nightjet muss ein eigenes Abteil gebucht werden, wenn ein großer Hund mitreist.'),
@@ -133,6 +136,7 @@ export default function LandingContent({
               data={exampleTrips} 
               onAction={handleExampleSearch}
               actionLabel={t('landing.inspiration.searchRoute', 'Route suchen')}
+              colorClass='primary'
             />
           </section>
 

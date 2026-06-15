@@ -112,12 +112,12 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
                 key={dateStr}
                 onClick={() => onDateChange(dateStr)}
                 className={`
-                  snap-center shrink-0 flex flex-col items-center justify-center py-1 px-2 md:py-2 md:px-2 rounded-xl border-2 transition-all min-w-[72px] md:min-w-[96px] relative focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 overflow-visible
+                  snap-center shrink-0 flex flex-col items-center justify-center py-1 px-2 md:py-2 md:px-2 rounded-xl  transition-all min-w-[72px] md:min-w-[96px] relative focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 overflow-visible
                   ${isActive 
                     ? 'active-day bg-primary border-primary text-white transform scale-[1.02] z-10' 
                     : recommended 
-                      ? 'bg-white border-primary/40 text-slate-700 hover:border-primary hover:bg-blue-50 z-0' 
-                      : 'bg-white text-slate-600 hover:border-secondary hover:bg-slate-50 z-0'
+                      ? 'bg-white border-2 border-primary/40 text-slate-700 hover:border-primary hover:bg-blue-50 z-0' 
+                      : 'bg-white text-slate-600 hover:border-2 hover:border-secondary hover:bg-slate-50 z-0'
                   }
                 `}
               >

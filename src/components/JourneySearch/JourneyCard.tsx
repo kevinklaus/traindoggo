@@ -8,7 +8,7 @@ import {
   filterValidLegs,
   getLegDurationMinutes,
 } from '../../lib/helpers';
-import { calculateDoggoScore } from '../../lib/doggoScore'; // <-- NEU IMPORTIERT
+import { calculateDoggoScore } from '../../lib/doggoScore';
 
 import JourneyTimeline from './JourneyTimeline';
 import JourneyTimelineBar from './JourneyTimelineBar';
@@ -118,8 +118,8 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
 
           {/* HIER WIRD JETZT DER SCORE ANGEZEIGT (WENN EIN HUND AUSGEWÄHLT IST) */}
           <div className="text-right shrink-0">
-            {dogMode !== 'none' && (
-              <DoggoScoreBadge score={doggoScore} />
+          {dogMode !== 'none' && (
+              <DoggoScoreBadge result={doggoScore} />
             )}
           </div>
         </div>

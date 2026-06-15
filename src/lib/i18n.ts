@@ -73,7 +73,7 @@ const deTranslations = {
     inspiration: {
       title: "Inspiration für eure nächste Reise",
       subtitle: "Vorkonfigurierte Routen mit hundefreundlichen Umstiegszeiten und optimalen Verbindungen. Mit einem Klick direkt in die Suche übernehmen.",
-      searchRoute: "Route suchen",
+      searchRoute: "Verbindung suchen",
       fields: {
         route: "Route",
         description: "Beschreibung",
@@ -351,6 +351,24 @@ const deTranslations = {
       signatures: "Kevin & Aslan 🐾",
     }
   },
+  score: {
+    details: "Details zum Score",
+    base: "Startwert",
+    direct: "Bonus für Direktverbindung",
+    transfers: "{{val}} Umstiege",
+    transferShort: "Stressiger Umstieg ({{val}} Min)",
+    transferMid: "Knapper Umstieg ({{val}} Min)",
+    transferPerfect: "Perfekte Gassi-Pause ({{val}} Min)",
+    transferLong: "Langes Warten ({{val}} Min)",
+    nightLong: "Nachtzug über 12 Std.",
+    dayLong: "Tagesetappe über 6 Std.",
+    transferGood: "Entspannter Aufenthalt ({{val}} Min)",
+    legLong: "Etappe ohne Pause über 9 Std.",
+    legMid: "Etappe ohne Pause über 7 Std.",
+    loadVeryHigh: "Zug sehr voll",
+    loadHigh: "Zug gut gefüllt",
+    capped: "Ausgleich (Limit bei 0-100)"
+  },
 };
 
 const enTranslations = {
@@ -425,7 +443,7 @@ const enTranslations = {
     inspiration: {
       title: "Inspiration for your next trip",
       subtitle: "Pre-configured routes with dog-friendly transfer times and optimal connections. Apply them to your search with just one click.",
-      searchRoute: "Search route",
+      searchRoute: "Search connections",
       fields: {
         route: "Route",
         description: "Description",
@@ -702,6 +720,25 @@ const enTranslations = {
       outro: "We wish you a great journey with many new discoveries!",
       signatures: "Kevin & Aslan 🐾"
     },
+  },
+  score: {
+    details: "Score details",
+    base: "Base score",
+    direct: "Direct journey bonus",
+    transfers: "{{val}} transfers",
+    transferShort: "Stressful transfer ({{val}} min)",
+    transferMid: "Tight transfer ({{val}} min)",
+    transferPerfect: "Perfect potty break ({{val}} min)",
+    transferLong: "Long wait ({{val}} min)",
+    nightLong: "Night train > 12h",
+    dayLong: "Day segment > 6h",
+    legLong: "Segment > 9h",
+    legMid: "Segment > 7h",
+    loadVeryHigh: "Very crowded train",
+    loadHigh: "Crowded train",
+    capped: "Score limit adjustment (0-100)",
+    transferGood: "Relaxed layover ({{val}} min)",
+
   }, 
 };
 

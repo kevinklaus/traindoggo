@@ -44,7 +44,7 @@ export default function NightTrains() {
         <div id="overview" className="bg-white rounded-3xl p-5 sm:p-6 mt-6 scroll-mt-24">
           <h3 className="text-lg font-bold text-slate-800 mb-2">{t('contentPages.nightTrains.tableTitle')}</h3>
           <p className="text-sm text-slate-600 mb-4">{t('contentPages.nightTrains.romaniaNote')}</p>
-          <CardOverview cardFields={cardFields} data={cardsData} />
+          <CardOverview cardFields={cardFields} data={cardsData} colorClass='primary'/>
         </div>
 
     {/*     <div id="potty"><InfoCard icon={<AlertTriangle className="text-amber-500" />} title={t('contentPages.nightTrains.q2')} text={t('contentPages.nightTrains.a2')} /></div>
