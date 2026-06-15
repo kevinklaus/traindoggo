@@ -72,7 +72,7 @@ const deTranslations = {
     },
     inspiration: {
       title: "Inspiration für eure nächste Reise",
-      subtitle: "Vorkonfigurierte Routen mit hundefreundlichen Umstiegszeiten und optimalen Verbindungen. Mit einem Klick direkt in die Suche übernehmen.",
+      subtitle: "Hundefreundliche Bahn-Verbindungen an die schönsten Reiseziele",
       searchRoute: "Verbindung suchen",
       fields: {
         route: "Route",
@@ -122,7 +122,22 @@ const deTranslations = {
       to: "Bitte Zielbahnhof wählen"
     },
     submitBtn: "Suchen",
-    loadingBtn: "Suche läuft…"
+    loadingBtn: "Suche läuft…",
+    // Umstiege
+    maxChanges: "Max. Umstiege",
+    changesAny: "Egal",
+    changesDirect: "Direkt (0)",
+    changesOne: "Max. 1 Umstieg",
+    changesTwo: "Max. 2 Umstiege",
+    // Gassi-Puffer
+    minTransfer: "Gassi-Puffer",
+    transferAny: "Egal",
+    transfer15: "15 Min",
+    transfer30: "30 Min",
+    transfer45: "45 Min",
+    transfer60: "1 Stunde",
+    transfer90: "1.5 Stunden",
+    transfer120: "2 Stunden"
   },
   journeys: {
     searching: "Suche Verbindungen…",
@@ -444,7 +459,7 @@ const enTranslations = {
     },
     inspiration: {
       title: "Inspiration for your next trip",
-      subtitle: "Pre-configured routes with dog-friendly transfer times and optimal connections. Apply them to your search with just one click.",
+      subtitle: "Dog-friendly rail connections to beautiful destinations",
       searchRoute: "Search connections",
       fields: {
         route: "Route",
@@ -494,7 +509,23 @@ const enTranslations = {
       to: "Please select a destination station"
     },
     submitBtn: "Search",
-    loadingBtn: "Searching…"
+    loadingBtn: "Searching…",
+    // Transfers
+    maxChanges: "Max. changes",
+    changesAny: "Any",
+    changesDirect: "Direct (0)",
+    changesOne: "Max. 1 change",
+    changesTwo: "Max. 2 changes",
+
+    // Potty Buffer
+    minTransfer: "Potty buffer",
+    transferAny: "Any",
+    transfer15: "15 min",
+    transfer30: "30 min",
+    transfer45: "45 min",
+    transfer60: "1 hour",
+    transfer90: "1.5 hours",
+    transfer120: "2 hours"
   },
   journeys: {
     searching: "Searching for journeys…",

@@ -121,13 +121,13 @@ export default function SearchForm({ params, onChange, onSearch, loading }: Prop
           value={params.minTransferTime ?? ''}
           onChange={(e) => handleParamChange('minTransferTime', e.target.value === '' ? undefined : Number(e.target.value))}
         >
-          <option value="">{t('searchForm.transferStandard', 'Standard')}</option>
-          <option value="15">15 Min</option>
-          <option value="30">30 Min</option>
-          <option value="45">45 Min</option>
-          <option value="60">1 Stunde</option>
-          <option value="90">1.5 Stunden</option>
-          <option value="120">2 Stunden</option>
+          <option value="">{t('searchForm.transferAny', 'Egal')}</option>
+          <option value="15">{t('searchForm.transfer15', '15 Min')}</option>
+          <option value="30">{t('searchForm.transfer30', '30 Min')}</option>
+          <option value="45">{t('searchForm.transfer45', '45 Min')}</option>
+          <option value="60">{t('searchForm.transfer60', '1 Stunde')}</option>
+          <option value="90">{t('searchForm.transfer90', '1.5 Stunden')}</option>
+          <option value="120">{t('searchForm.transfer120', '2 Stunden')}</option>
         </SelectInput>
       </div>
 
