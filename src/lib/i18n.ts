@@ -55,19 +55,24 @@ const deTranslations = {
       noVerbund: "DB Hundeticket erforderlich",
       attribution: "Kartendaten: Christoph Sohn, CC BY-SA 4.0, via Wikimedia Commons. | Alle Angaben ohne Gewähr."
     },
-    howItWorks: {
-      title: "Bahnreisen mit Train Doggo",
-      step1: {
-        title: "1. Verbindung suchen",
-        text: "Gib Start, Ziel und Datum ein. Du kannst Verbindungen in ganz Europa finden!"
+    features: {
+      title: "Das ist Train Doggo",
+      subtitle: "Bahn-Tipps für dich und deinen Hund",
+      score: {
+        title: "Der Doggo Score",
+        text: "Wir bewerten Verbindungen nach Umstiegsstress, Gassi-Puffern, Zugauslastung und Pinkel-Limits. So siehst du sofort, wie hundefreundlich eine Fahrt wirklich ist."
       },
-      step2: {
-        title: "2. Beste Route wählen",
-        text: "Wir warnen vor knappen Umstiegen und zeigen dir genaue Wagenlayouts. <br/><span class='text-primary font-medium mt-1 inline-block'> Bald neu: Tipps für entspannte Gassi-Pausen!</span>"
+      layouts: {
+        title: "Europaweite Sitzpläne",
+        text: "Kein Raten mehr beim Buchen. Mit detaillierten Wagenreihungen für Fernverkehrszüge in ganz Europa findest du den Platz mit der meisten Bodenfläche."
       },
-      step3: {
-        title: "3. Sitzplatz finden",
-        text: "Du findest mit unseren Empfehlungen den Sitzplatz mit dem meisten Raum für Pfoten."
+      destinations: {
+        title: "Erprobte Reiseziele",
+        text: "Lass dich von unseren persönlichen Erfahrungen inspirieren – egal ob mit kleinem Begleiter oder einem 35kg-Hund, wir kennen die besten entspannten Routen."
+      },
+      community: {
+        title: "Community & Hilfe",
+        text: "Unsicher bei einer Strecke oder den Tarif-Regeln in einem bestimmten Land? Frag uns einfach!"
       }
     },
     inspiration: {
@@ -441,21 +446,25 @@ const enTranslations = {
       noVerbund: "Dog ticket from DB required",
       attribution: "Map data: Christoph Sohn, CC BY-SA 4.0, via Wikimedia Commons. | All information without warranty."
     },
-    howItWorks: {
-      title: "Travel on rails with Train Doggo",
-      step1: {
-        title: "1. Search connection",
-        text: "Enter your start, destination, and date. Find connections all across Europe!"
+    features: {
+      title: "This is Train Doggo",
+      subtitle: "Train tips for you and your dog",
+      score: {
+        title: "The Doggo Score",
+        text: "We rate connections based on transfer stress, potty buffers, train occupancy, and bladder limits. See how dog-friendly a journey really is."
       },
-      step2: {
-        title: "2. Choose the best route",
-        text: "We warn about tight transfers and show you detailed carriage layouts. <br/><span class='text-primary font-medium mt-1 inline-block'> Coming soon: Tips for relaxed potty breaks!</span>"
+      layouts: {
+        title: "European Seat Maps",
+        text: "No more guessing when booking. With detailed carriage layouts for long-distance trains across Europe, we'll help you find the seat with the most floor space."
       },
-      step3: {
-        title: "3. Find a seat",
-        text: "Find the seat with the most paw-room using our recommendations."
+      destinations: {
+        title: "Tested Destinations",
+        text: "Get inspired by our personal experiences – whether with a small companion or a 35kg dog, we know the most relaxed routes."
       },
-      
+      community: {
+        title: "Community & Support",
+        text: "Unsure about a route or the tariff rules in a specific country? Just ask us!"
+      }
     },
     inspiration: {
       title: "Inspiration for your next trip",

@@ -31,6 +31,7 @@ export default function LandingContent({
 }: Props) {
   const { t } = useTranslation();
 
+  // --- 1. DATEN FÜR INSPIRATIONEN (3-Spaltig) ---
   const exampleTrips: CardData[] = [
     {
       id: 'berlin-bozen',
@@ -85,13 +86,49 @@ export default function LandingContent({
     { key: 'travel', label: t('landing.inspiration.fields.doggoInfo', 'Doggo Info') }
   ];
 
+  // --- 2. DATEN FÜR FEATURES (2x2 Grid) ---
+  const featureFields = [
+    { key: 'headline', label: '' },
+    { key: 'description', label: '' }
+  ];
+
+  const featuresData: CardData[] = [
+    {
+      id: 'feat-score',
+      headline: t('landing.features.score.title', 'Der Doggo Score'),
+      description: t('landing.features.score.text', 'Wir bewerten Routen nach Umstiegsstress, Gassi-Puffern, Zugauslastung und Pinkel-Limits. So siehst du sofort, wie hundefreundlich eine Fahrt wirklich ist.'),
+    },
+    {
+      id: 'feat-layouts',
+      headline: t('landing.features.layouts.title', 'Europaweite Sitzpläne'),
+      description: t('landing.features.layouts.text', 'Kein Raten mehr beim Buchen. Mit detaillierten Wagenreihungen für Fernverkehrszüge in ganz Europa findest du den Platz mit der meisten Bodenfläche.'),
+    },
+    {
+      id: 'feat-destinations',
+      headline: t('landing.features.destinations.title', 'Erprobte Reiseziele'),
+      // Wir integrieren die Info zu größeren Hunden (z.B. 35kg), um echte Erfahrung zu signalisieren
+      description: t('landing.features.destinations.text', 'Lass dich von unseren persönlichen Erfahrungen inspirieren – egal ob mit kleinem Begleiter oder einem 35kg-Hund, wir kennen die besten entspannten Routen.'),
+    },
+    {
+      id: 'feat-community',
+      headline: t('landing.features.community.title', 'Community & Hilfe'),
+      // JSX direkt in die Daten pushen für den E-Mail Link
+      description: (
+        <span className="flex flex-col gap-3">
+          <span>{t('landing.features.community.text', 'Unsicher bei einer Strecke oder den Tarif-Regeln in einem bestimmten Land? Frag uns einfach!')}</span>
+          <a 
+            href="mailto:hi.traindoggo@gmail.com" 
+            className="text-primary hover:text-accent transition-colors font-bold w-fit"
+          >
+            hi.traindoggo@gmail.com
+          </a>
+        </span>
+      ),
+    }
+  ];
+
   const handleExampleSearch = (payload: Partial<SearchParams>) => {
-    const searchConfig: SearchParams = {
-      ...params,
-      ...payload,
-      date: params.date 
-    };
-    
+    const searchConfig: SearchParams = { ...params, ...payload, date: params.date };
     setParams(searchConfig);
     handleSearch(searchConfig);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -109,12 +146,7 @@ export default function LandingContent({
       />
 
       <section className="w-[92%] sm:w-[88%] md:w-[85%] max-w-xl bg-white rounded-3xl p-5 sm:p-6 md:p-8 relative z-10 -mt-12 sm:-mt-16 md:-mt-20 shadow-xl shadow-slate-200/40">
-        <SearchForm 
-          params={params} 
-          onChange={setParams} 
-          onSearch={() => handleSearch(params)} 
-          loading={loading} 
-        />
+        <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={loading} />
       </section>
 
       {searched ? (
@@ -146,7 +178,7 @@ export default function LandingContent({
                 {t('landing.inspiration.title', 'Inspiration für eure nächste Reise')}
               </h2>
               <p className="text-slate-600">
-                {t('landing.inspiration.subtitle', 'Vorkonfigurierte Routen mit hundefreundlichen Umstiegszeiten und optimalen Verbindungen. Mit einem Klick direkt in die Suche übernehmen.')}
+                {t('landing.inspiration.subtitle')}
               </p>
             </div>
             
@@ -159,49 +191,27 @@ export default function LandingContent({
             />
           </section>
 
-          {/* How it works */}
-          <section className="bg-white rounded-3xl p-6 sm:p-8 max-w-4xl mx-auto">
-            <div className="flex justify-center mb-2">
-              <PawPrint size={24} strokeWidth={2} className="fill-accent text-accent" />
+          {/* Features / Why Train Doggo Section (ERSETZT DIE ALTE HTML STRUKTUR) */}
+          <section className="space-y-8 max-w-4xl mx-auto w-full">
+            <div className="text-center max-w-2xl mx-auto space-y-3">
+              <div className="flex justify-center mb-2">
+                <PawPrint size={32} className="text-accent fill-accent" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-800">
+                {t('landing.features.title')}
+              </h2>
+              <p className="text-slate-600">
+                {t('landing.features.subtitle')}
+              </p>
             </div>
-            <h2 className="text-xl text-slate-800 font-body text-center mb-12 font-bold">
-              {t('landing.howItWorks.title')} 
-            </h2>
             
-            <div className="grid sm:grid-cols-3 gap-8 sm:gap-6 relative">
-              <div className="hidden sm:block absolute top-6 left-[16%] right-[16%] h-0.5 bg-highlight/20 z-0" />
-              
-              <div className="relative z-10 flex flex-col items-center text-center space-y-3">
-                <div className="w-12 h-12 rounded-3xl bg-highlight flex items-center justify-center text-white mb-2 shadow-sm">
-                  <Search size={22} strokeWidth={2.5} />
-                </div>
-                <h3 className="font-bold text-slate-800">{t('landing.howItWorks.step1.title')}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed max-w-[250px]">
-                  {t('landing.howItWorks.step1.text')}
-                </p>
-              </div>
-
-              <div className="relative z-10 flex flex-col items-center text-center space-y-3">
-                <div className="w-12 h-12 rounded-3xl bg-highlight flex items-center justify-center text-white mb-2 shadow-sm">
-                  <Route size={22} strokeWidth={2.5} />
-                </div>
-                <h3 className="font-bold text-slate-800">{t('landing.howItWorks.step2.title')}</h3>
-                <p 
-                  className="text-sm text-slate-600 leading-relaxed max-w-[250px]"
-                  dangerouslySetInnerHTML={{ __html: t('landing.howItWorks.step2.text') }} 
-                />
-              </div>
-
-              <div className="relative z-10 flex flex-col items-center text-center space-y-3">
-                <div className="w-12 h-12 rounded-3xl bg-highlight flex items-center justify-center text-white mb-2 shadow-sm">
-                  <PawPrint size={22} strokeWidth={2} className="fill-white" />
-                </div>
-                <h3 className="font-bold text-slate-800">{t('landing.howItWorks.step3.title')}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed max-w-[250px]">
-                  {t('landing.howItWorks.step3.text')}
-                </p>
-              </div>
-            </div>
+            {/* Hier übergeben wir das 2-Spalten Layout via gridClass */}
+            <CardOverview 
+              cardFields={featureFields} 
+              data={featuresData} 
+              colorClass="secondary"
+              gridClass="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6" 
+            />
           </section>
 
         </div>

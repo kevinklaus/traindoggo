@@ -15,17 +15,18 @@ export interface CardData {
   id: string;
   highlight?: boolean;
   image?: string; 
-  imageId?: string; // <-- NEUES FELD: Damit wir nur noch die ID übergeben müssen
+  imageId?: string; 
   actionPayload?: any; 
   [key: string]: any;
 }
 
-interface Props {
+export interface Props {
   cardFields: cardField[];
   data: CardData[];
   onAction?: (payload: any) => void;
   actionLabel?: string;
   colorClass?: string;
+  gridClass?: string; 
 }
 
 const MobileAccordion = ({ label, content }: { label: string; content: React.ReactNode }) => {
@@ -56,7 +57,8 @@ const MobileAccordion = ({ label, content }: { label: string; content: React.Rea
   );
 };
 
-export default function CardOverview({ cardFields, data, onAction, actionLabel, colorClass }: Props) {
+export default function CardOverview({ cardFields, data, onAction, actionLabel, colorClass, gridClass }: Props) {
+
   const { t } = useTranslation();
 
   if (!cardFields || cardFields.length === 0) return null;
@@ -89,8 +91,11 @@ export default function CardOverview({ cardFields, data, onAction, actionLabel, 
     }
   };
 
+  // Standard-Grid (3 Spalten) nutzen, falls kein spezifisches Grid übergeben wird
+  const appliedGrid = gridClass || "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-5 mb-6";
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-5 mb-6">
+    <div className={appliedGrid}>
       {data.map(card => {
         const bgGradient = card.highlight 
           ? gradientMap[color].high 
@@ -190,7 +195,7 @@ export default function CardOverview({ cardFields, data, onAction, actionLabel, 
 
               {/* Der neue CTA-Footer bleibt unverändert erhalten */}
               {card.actionPayload && onAction && (
-                <div className="mt-4 flex md:justify-end ">
+                <div className="mt-4 flex justify-end ">
                   <button
                     type="button"
                     onClick={() => onAction(card.actionPayload)}
