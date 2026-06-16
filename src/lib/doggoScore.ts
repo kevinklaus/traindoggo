@@ -49,7 +49,7 @@ export function calculateDoggoScore(journey: Journey, dogMode: DogMode): DoggoSc
         } else if (transferMin >= 15 && transferMin < 25) { 
           score -= 15; breakdown.push({ key: 'transferMid', points: -15, val: transferMin }); 
         } else if (transferMin >= 25 && transferMin <= 45) { 
-          score += 5; breakdown.push({ key: 'transferPerfect', points: 5, val: transferMin }); 
+          score += 5; breakdown.push({ key: 'quickBreak', points: 5, val: transferMin }); 
         } else if (transferMin > 45 && transferMin <= 120) { 
           score += 20; breakdown.push({ key: 'transferGood', points: 20, val: transferMin }); 
         }
@@ -63,17 +63,22 @@ export function calculateDoggoScore(journey: Journey, dogMode: DogMode): DoggoSc
       const depHour = new Date(leg.departure).getHours();
       const arrHour = new Date(leg.arrival).getHours();
       
-      const isNightTrain = (depHour >= 17 || depHour <= 2) && (arrHour >= 4 && arrHour <= 10) && durationMin > 240;
+      const isNightTrain = (depHour >= 17 || depHour <= 2) && (arrHour >= 4 && arrHour <= 10) && durationMin > 320;
 
       if (isNightTrain) {
         if (durationMin > 720) { 
-          score -= 15; breakdown.push({ key: 'nightLong', points: -15 }); 
+          score -= 10; breakdown.push({ key: 'nightLong', points: -10 }); 
         }
       } else {
         if (durationMin > 540) { 
           // Über 9h
-          score -= 15; breakdown.push({ key: 'legLong', points: -15 }); 
-        } else if (durationMin > 320) { 
+          score -= 25; breakdown.push({ key: 'legLong', points: -25 }); 
+        } 
+        else if (durationMin > 380) { 
+          // Über 8h
+          score -= 15; breakdown.push({ key: 'legMid', points: -15 }); 
+        }
+        else if (durationMin > 320) { 
           // Über 6h
           score -= 5; breakdown.push({ key: 'legMid', points: -5 }); 
         }
@@ -86,7 +91,6 @@ export function calculateDoggoScore(journey: Journey, dogMode: DogMode): DoggoSc
   }
 
   const total = Math.max(0, Math.min(100, score));
-  // der `capped`-eintrag wird hier bewusst weggelassen
-  
+
   return { total, breakdown };
 }
