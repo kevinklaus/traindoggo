@@ -1,4 +1,4 @@
-import { PawPrint, ChevronDown, Dog, Search } from 'lucide-react';
+import { PawPrint, ChevronDown, Dog, Route } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
@@ -32,7 +32,7 @@ export interface Props {
 const MobileAccordion = ({ label, content }: { label: string; content: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="md:hidden bg-white rounded-xl overflow-hidden">
+    <div className="md:hidden bg-white shadow-sm rounded-xl overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center p-3 font-semibold text-[13px] text-primary cursor-pointer select-none hover:bg-slate-50 transition-colors"
@@ -199,9 +199,9 @@ export default function CardOverview({ cardFields, data, onAction, actionLabel, 
                   <button
                     type="button"
                     onClick={() => onAction(card.actionPayload)}
-                    className="inline-flex items-center gap-2 bg-white text-primary hover:text-white hover:bg-primary px-4 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.97]"
+                    className="inline-flex items-center gap-2 bg-white text-primary shadow-sm hover:text-white hover:bg-primary px-4 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-[0.97]"
                   >
-                    <Search size={16} strokeWidth={2.5} />
+                    <Route size={16} strokeWidth={2.5} />
                     <span>{actionLabel || 'Suchen'}</span>
                   </button>
                 </div>

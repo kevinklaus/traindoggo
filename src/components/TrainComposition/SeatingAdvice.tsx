@@ -20,13 +20,13 @@ export function SeatingAdvice({exampleGross, t }: Props) {
     <div>
         {/* 2. Der illustrative Hunde-Sitzplan (4-Box-Grid mit Bildern) */}
         {exampleGross && (
-        <div className="mt-4 p-4 rounded-2xl bg-secondary/10 shrink-0">
+        <div className="mt-4 p-4 rounded-2xl bg-primary/5 shrink-0">
           <div className="text-secondary flex items-center gap-2 mb-4">
             <Armchair size={18} className="" />
             <span className="text-md font-bold text-slate-800">{t('composition.advice.title', 'Sitzplatz-Empfehlung')}</span>
           </div>
           {/* Grid Layout für Mobile & Desktop */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
 
             {/* BOX 1: 2. KL GROSSRAUM */}
             <div className="bg-white rounded-xl p-4 flex flex-col">
@@ -80,12 +80,15 @@ export function SeatingAdvice({exampleGross, t }: Props) {
           </div>
           
           {/* Legende bleibt bestehen, um die visuellen Codes deiner Bilder zu erklären */}
-          <div className="flex gap-6 mt-6 justify-center text-[11px] text-slate-600 font-medium">
+          <div className="flex flex-cols-2 sm:flex-cols-3 gap-x-6 gap-y-2 justify-center text-sm text-slate-800 font-medium">
             <div className="flex items-center gap-1.5">
-              <PawPrint size={14} className="text-primary fill-primary" /> = Empfohlener Platz
+              <PawPrint size={14} className="text-primary fill-primary" /> = Empfehlung
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-4 border-l-[3px] border-indigo-950 bg-indigo-100 rounded-[2px]"></div> = Rückenlehne
+            </div>
+            <div className="flex items-center gap-1.5">
+              <PawPrint size={14} className="text-red-500" /> = Nicht empfohlen
             </div>
           </div>
             {/* Text um die Bilder zu erklären */}

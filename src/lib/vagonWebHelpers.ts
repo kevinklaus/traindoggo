@@ -219,7 +219,7 @@ export function buildVagonWebParams(leg: Leg, currentLang: string) {
   params.append('rok', currentYear.toString());
   params.append('lang', langCode);
 
-  console.log("🚂 VagonWeb Params:", Object.fromEntries(params.entries()));
+  // console.log("🚂 VagonWeb Params:", Object.fromEntries(params.entries()));
 
   return params.toString();
 }

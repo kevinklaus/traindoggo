@@ -37,6 +37,12 @@ export default function StationInput({
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const wrapRef = useRef<HTMLDivElement>(null);
 
+  // Close dropdown when another element is clicked, but this is handled by wrapRef
+  // We need to ensure that when one opens, others close.
+  // We can achieve this by using a custom event or a shared state if they were in the same parent.
+  // Since they are not, we can use a DOM-based approach:
+  // Whenever we open this one, we close all others.
+
   useEffect(() => {
     if (value) setQuery(value.name);
   }, [value]);
@@ -53,14 +59,43 @@ export default function StationInput({
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  const openDropdown = () => {
+    // Custom event to close other dropdowns
+    const event = new CustomEvent('close-other-dropdowns', { detail: { id } });
+    document.dispatchEvent(event);
+        setOpen(true);
+  };
+
+  useEffect(() => {
+    const handleCloseOthers = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail.id !== id) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('close-other-dropdowns', handleCloseOthers);
+    return () => document.removeEventListener('close-other-dropdowns', handleCloseOthers);
+  }, [id]);
+
   const search = useCallback((q: string) => {
     clearTimeout(timer.current);
-    if (q.length < 2) {
+
+
+    // Check if the current query is already exactly the value (the selected station)
+    // If so, do not trigger a search.
+    if (value && value.name === q) {
       setResults([]);
-      setOpen(false);
-      setErrorConfig(null);
+    setOpen(false);
+
       return;
     }
+
+    if (q.length < 2) {
+        setResults([]);
+    setOpen(false);
+    setErrorConfig(null);
+      return;
+  }
     timer.current = setTimeout(async () => {
       setLoading(true);
       setErrorConfig(null);
@@ -68,17 +103,18 @@ export default function StationInput({
         const stations = await searchStations(q);
         setResults(stations);
         setErrorConfig(null);
-        setOpen(stations.length > 0);
+        openDropdown();
       } catch (err) {
         // FIXED: This catch block will now trigger instantly on the very first 503 response
         setResults([]);
         setErrorConfig({ msg: 'Deutsche Bahn lookup engine currently down', status: 503 });
-        setOpen(true);
+        openDropdown();
       } finally {
         setLoading(false);
       }
     }, 150);
-  }, []);
+
+  }, [id, value]);
 
   function handleInput(q: string) {
     setQuery(q);
@@ -154,7 +190,7 @@ export default function StationInput({
           type="text"
           value={query}
           onChange={(e) => handleInput(e.target.value)}
-          onFocus={() => { if (results.length > 0 || errorConfig) setOpen(true); }}
+          onFocus={() => { if (results.length > 0 || errorConfig) openDropdown(); }}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           spellCheck={false}

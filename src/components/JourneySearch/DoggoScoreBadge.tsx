@@ -67,12 +67,12 @@ export default function DoggoScoreBadge({ result }: Props) {
   };
   
   const getConfig = (s: number) => {
-    if (s > 66) return { colorClass: 'text-primary', bgClass: 'bg-primary/5 hover:bg-primary/10' };
-    if (s > 33) return { colorClass: 'text-secondary', bgClass: 'bg-secondary/5 hover:bg-secondary/10' };
-    return { colorClass: 'text-red-500', bgClass: 'bg-red-50 hover:bg-red-100' };
+    if (s > 66) return { colorClass: 'text-emerald-700', pawClass: 'text-emerald-700 fill-emerald-700', borderClass: 'border-emerald-600', bgClass: 'bg-emerald-100 hover:bg-emerald-200' };
+    if (s > 33) return { colorClass: 'text-slate-600', pawClass: 'text-slate-600 fill--slate-600', borderClass: 'border--slate-600', bgClass: 'bg-slate-100 hover:bg-slate-200' };
+    return { colorClass: 'text-red-600', pawClass: 'text-red-600', borderClass: 'border-red-500', bgClass: 'bg-slate-100 hover:bg-slate-200' };
   };
 
-  const { colorClass, bgClass } = getConfig(result.total);
+  const { colorClass, pawClass, borderClass, bgClass } = getConfig(result.total);
 
   // Das Portal mountet das HTML komplett außerhalb der Karte direkt in den Body
   const popoverContent = isOpen ? createPortal(
@@ -84,11 +84,14 @@ export default function DoggoScoreBadge({ result }: Props) {
         left: `${position.left}px`,
         transform: 'translateX(-100%)' // Schiebt das Menü exakt nach links, damit es rechtsbündig abschließt
       }}
-      className="w-64 sm:w-72 bg-white border border-secondary rounded-2xl p-4 sm:p-5 z-[99999] text-sm animate-in fade-in slide-in-from-top-2 shadow-xl"
+      className={`w-64 sm:w-72 bg-white border-2 rounded-2xl p-4 sm:p-5 z-[99999] text-sm animate-in fade-in slide-in-from-top-2 shadow-xl ${borderClass}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <h4 className="font-bold text-slate-800 mb-3">{t('score.details', 'Score details')}</h4>
+      <div className="flex">
+        <h4 className="font-bold text-slate-800 mb-3">{t('score.details', 'Score details')}</h4>
+        <span className="ml-2"><PawPrint size={14} strokeWidth={2.5} className={`relative top-[0.1rem] ${pawClass}`}/></span>
+      </div>
       <ul className="space-y-2.5">
         {result.breakdown.map((item, idx) => (
           <li key={idx} className="flex justify-between items-start gap-4">
@@ -114,13 +117,13 @@ export default function DoggoScoreBadge({ result }: Props) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
-        className={`flex flex-col items-end px-2.5 py-1.5 rounded-xl transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary ${bgClass}`}
+        className={`${bgClass} flex flex-col items-end px-2.5 py-1.5 rounded-xl transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary`}
       >
         <div className="inline-flex items-center gap-1.5">        
           <div className={`flex items-baseline gap-0.5 ${colorClass}`}>
-            <span className="text-lg font-bold tracking-tight">{result.total}</span>
-            <span className="text-[10px] font-bold">/ 100</span>
-            <span className="ml-1"><PawPrint size={12} className="text-secondary fill-secondary"/></span>
+            <span className="text-lg font-bold">{result.total}</span>
+            {/* <span className="text-[10px]">/ 100</span> */}
+            <span className="ml-1"><PawPrint size={14} strokeWidth={2.5} className={`relative top-[0.1rem] ${pawClass}`}/></span>
           </div>
         </div>
       </button>

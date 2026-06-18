@@ -106,8 +106,8 @@ export default function TimelineTransit({
               }`}
             >
               {isCarriageExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-              <PawPrint size={14} strokeWidth={2} className="text-primary fill-primary" />
-              <span>{t('journeys.timeline.dogTips')}</span>
+              <PawPrint size={14} strokeWidth={2} className="text-primary fill-primary mr-1" />
+              <span className="text-primary">{t('journeys.timeline.dogTips')}</span>
             </button>
           </div>
 
@@ -135,20 +135,19 @@ export default function TimelineTransit({
 
           {/* Zwischenhalte Liste */}
           {isStopsExpanded && intermediateStops.length > 0 && (
-            <div className="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 animate-fade-in max-w-md">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">{t('journeys.timeline.stopovers')}</p>
+            <div className="mt-3 p-3 bg-primary/5 rounded-xl space-y-2 animate-fade-in max-w-sm">
+              <p className="text-xs sm:text-sm font-bold text-slate-800 mb-1">{t('journeys.timeline.stopovers')}</p>
               {intermediateStops.map((stopover: any, idx: number) => (
-                <div key={idx} className="flex justify-between items-center text-xs text-slate-600 py-0.5">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="tabular-nums font-medium text-slate-400 w-9 text-right shrink-0">
+                <div key={idx} className="flex justify-between text-xs sm:text-sm text-slate-600 py-0.5">
+                  <div className="flex items-center gap-1 sm:gap-3 min-w-0">
+                    <span className="tabular-nums font-bold text-slate-800 w-8 sm:w-9 shrink-0">
                       {stopover.arrival ? formatTime(stopover.arrival) : formatTime(stopover.departure)}
                     </span>
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
                     <span className="truncate font-medium text-slate-700">{abbreviateStationName(stopover.stop?.name || t('journeys.timeline.station'))}</span>
                   </div>
                   {stopover.arrivalPlatform && (
-                    <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded ml-2 shrink-0 tabular-nums">
-                      Pl. {stopover.arrivalPlatform.replace(/^(platform|pl\.?)\s*/i, '')}
+                    <span className="text-xs sm:text-sm font-bold text-slate-700 bg-slate-200 px-1.5 py-0.5 rounded ml-2 shrink-0 tabular-nums">
+                      {stopover.arrivalPlatform.replace(/^(platform|pl\.?)\s*/i, '')}
                     </span>
                   )}
                 </div>

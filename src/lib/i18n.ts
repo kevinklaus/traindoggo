@@ -374,7 +374,7 @@ const deTranslations = {
     }
   },
   score: {
-    details: "Details zum Score",
+    details: "Doggo Score Bewertung",
     base: "Startwert",
     direct: "Bonus für Direktverbindung",
     transfers: "{{val}} Umstiege",
@@ -766,7 +766,7 @@ const enTranslations = {
     },
   },
   score: {
-    details: "Score details",
+    details: "Doggo Score Evaluation",
     base: "Base score",
     direct: "Direct journey bonus",
     transfers: "{{val}} transfers",

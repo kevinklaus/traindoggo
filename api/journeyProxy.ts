@@ -1,9 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // 1. Wir holen jetzt AUCH earlierRef und laterRef
-  const { from, to, departure, maxChanges, minTransferTime, earlierRef, laterRef } = req.query;
-  
+  const { from, to, departure, maxChanges, minTransferTime, earlierRef, laterRef, results } = req.query;  
   if (!from || !to) {
     return res.status(400).json({ error: 'Missing required journey routing attributes' });
   }
@@ -19,8 +17,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const hafasOptions: any = {
       stopovers: true,
       remarks: true,
-      results: 5 // Tipp: Bei Pagination reichen oft 5 Ergebnisse, dann lädt es blitzschnell
     };
+
+    // 3. Setze die Results dynamisch (mit Fallback)
+    if (results) {
+      hafasOptions.results = Number(results);
+    } else {
+      hafasOptions.results = 10;
+    }
 
     // 3. PAGINATION-LOGIK: Entweder Ref ODER Datum nutzen
     if (earlierRef) {
