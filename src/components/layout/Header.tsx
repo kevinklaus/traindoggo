@@ -17,7 +17,7 @@ interface Props {
   onLogoClick?: () => void;
 }
 
-export default function Header({ dogMode, activePage, onNavigate, onLogoClick }: Props) {
+export default function Header({ activePage, onNavigate, onLogoClick }: Props) {
   const { t, i18n } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

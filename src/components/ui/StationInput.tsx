@@ -33,12 +33,12 @@ export default function StationInput({
   const [loading, setLoading] = useState(false);
   const [errorConfig, setErrorConfig] = useState<{ msg: string; status: number } | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  
+
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const wrapRef = useRef<HTMLDivElement>(null);
   
-  // NEU: Trackt den exakten String der aktuellsten Suche, um Race-Conditions zu verhindern
-  const latestQueryRef = useRef<string>('');
+  /** Hält die Referenz zum aktuellen API-Request, um ihn bei Bedarf abzubrechen */
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (value) setQuery(value.name);
@@ -89,29 +89,33 @@ export default function StationInput({
       return;
     }
 
-    // Debounce auf 350ms erhöht für flüssigere UX und weniger API-Spam
     timer.current = setTimeout(async () => {
-      latestQueryRef.current = q; // Markiert 'q' als den einzig gültigen Request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
       setLoading(true);
       setErrorConfig(null);
-      
+
       try {
-        const stations = await searchStations(q);
-        
-        // State nur updaten, wenn dieser Request noch der aktuellste ist
-        if (latestQueryRef.current === q) {
-          setResults(stations);
-          setErrorConfig(null);
-          openDropdown();
+        const stations = await searchStations(q, controller.signal);
+        setResults(stations);
+        setErrorConfig(null);
+        openDropdown();
+      } catch (err: any) {
+        /** Verhindert Error-Handling bei absichtlich abgebrochenen Requests */
+        if (err.name === 'AbortError') {
+          return;
         }
-      } catch (err) {
-        if (latestQueryRef.current === q) {
-          setResults([]);
-          setErrorConfig({ msg: 'Lookup engine currently down', status: 503 });
-          openDropdown();
-        }
+
+        setResults([]);
+        setErrorConfig({ msg: 'Deutsche Bahn lookup engine currently down', status: 503 });
+        openDropdown();
       } finally {
-        if (latestQueryRef.current === q) {
+        if (!controller.signal.aborted) {
           setLoading(false);
         }
       }
@@ -128,7 +132,7 @@ export default function StationInput({
   function select(s: Station) {
     onChange(s);
     setQuery(s.name);
-    setResults([]); 
+    setResults([]);
     setOpen(false);
     setErrorConfig(null);
   }

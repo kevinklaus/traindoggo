@@ -25,7 +25,6 @@ interface Props {
 
 export default function TimelineTransit({
   leg,
-  i,
   isCarriageExpanded,
   onToggleCarriage,
   isStopsExpanded,
@@ -135,12 +134,11 @@ export default function TimelineTransit({
 
           {/* Zwischenhalte Liste */}
           {isStopsExpanded && intermediateStops.length > 0 && (
-            <div className="mt-3 p-3 bg-primary/5 rounded-xl space-y-2 animate-fade-in max-w-sm">
-              <p className="text-xs sm:text-sm font-bold text-slate-800 mb-1">{t('journeys.timeline.stopovers')}</p>
+            <div className="mt-3 p-3 bg-primary/5 rounded-xl space-y-1.5 animate-fade-in max-w-sm">
               {intermediateStops.map((stopover: any, idx: number) => (
-                <div key={idx} className="flex justify-between text-xs sm:text-sm text-slate-600 py-0.5">
+                <div key={idx} className="flex justify-between text-xs sm:text-sm text-slate-600">
                   <div className="flex items-center gap-1 sm:gap-3 min-w-0">
-                    <span className="tabular-nums font-bold text-slate-800 w-8 sm:w-9 shrink-0">
+                    <span className="tabular-nums font-bold text-slate-700 w-8 sm:w-9 shrink-0">
                       {stopover.arrival ? formatTime(stopover.arrival) : formatTime(stopover.departure)}
                     </span>
                     <span className="truncate font-medium text-slate-700">{abbreviateStationName(stopover.stop?.name || t('journeys.timeline.station'))}</span>

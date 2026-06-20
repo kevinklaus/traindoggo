@@ -17,16 +17,17 @@ async function handleResponse(res: Response, contextLabel: string) {
 }
 
 /** 1. PROXIED STATION SEARCH (AUTOCOMPLETE) */
-export async function searchStations(query: string): Promise<Station[]> {
+export async function searchStations(query: string, signal?: AbortSignal): Promise<Station[]> {
   if (useMockApi) return searchStationsMock(query);
   
   const cleanQuery = query.trim();
   if (cleanQuery.length < 2) return [];
 
-  const res = await fetch(`/api/stations?query=${encodeURIComponent(cleanQuery)}&limit=8`);
+  const res = await fetch(`/api/stations?query=${encodeURIComponent(cleanQuery)}&limit=8`, {
+    signal
+  });
   const data = await handleResponse(res, 'Station');
 
-  // Mapping des HAFAS-Location-Arrays auf dein internes Station-Interface
   return (data || []).map((s: any) => ({
     type: s.type || 'stop',
     id: s.id,

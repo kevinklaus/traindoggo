@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Compass, TrainFront, Github, Linkedin, Mail } from 'lucide-react';
+import { Compass, TrainFront, Github } from 'lucide-react';
 import HeroImage from '../layout/HeroImage';
 import InfoCard from './InfoCard';
 

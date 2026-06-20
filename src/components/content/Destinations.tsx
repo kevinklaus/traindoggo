@@ -3,14 +3,6 @@ import { useTranslation } from 'react-i18next';
 import TableOfContents from './TableOfContents';
 import CardOverview from './CardOverview';
 
-// VITE GLOB IMPORT: Holt auf einen Schlag ALLE Bilder aus dem Ordner!
-// Das { eager: true, as: 'url' } sorgt dafür, dass Vite direkt die fertigen URLs liefert.
-const destinationImages = import.meta.glob('./images/*.{png,jpg,jpeg,webp}', { 
-  eager: true, 
-  query: '?url',
-  import: 'default' 
-}) as Record<string, string>;
-
 export default function Destinations() {
   const { t } = useTranslation();
 
