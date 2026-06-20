@@ -36,12 +36,9 @@ export default function StationInput({
   
   const timer = useRef<ReturnType<typeof setTimeout>>();
   const wrapRef = useRef<HTMLDivElement>(null);
-
-  // Close dropdown when another element is clicked, but this is handled by wrapRef
-  // We need to ensure that when one opens, others close.
-  // We can achieve this by using a custom event or a shared state if they were in the same parent.
-  // Since they are not, we can use a DOM-based approach:
-  // Whenever we open this one, we close all others.
+  
+  // NEU: Trackt den exakten String der aktuellsten Suche, um Race-Conditions zu verhindern
+  const latestQueryRef = useRef<string>('');
 
   useEffect(() => {
     if (value) setQuery(value.name);
@@ -60,10 +57,9 @@ export default function StationInput({
   }, []);
 
   const openDropdown = () => {
-    // Custom event to close other dropdowns
     const event = new CustomEvent('close-other-dropdowns', { detail: { id } });
     document.dispatchEvent(event);
-        setOpen(true);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -80,39 +76,46 @@ export default function StationInput({
   const search = useCallback((q: string) => {
     clearTimeout(timer.current);
 
-
-    // Check if the current query is already exactly the value (the selected station)
-    // If so, do not trigger a search.
     if (value && value.name === q) {
       setResults([]);
-    setOpen(false);
-
+      setOpen(false);
       return;
     }
 
     if (q.length < 2) {
-        setResults([]);
-    setOpen(false);
-    setErrorConfig(null);
+      setResults([]);
+      setOpen(false);
+      setErrorConfig(null);
       return;
-  }
+    }
+
+    // Debounce auf 350ms erhöht für flüssigere UX und weniger API-Spam
     timer.current = setTimeout(async () => {
+      latestQueryRef.current = q; // Markiert 'q' als den einzig gültigen Request
       setLoading(true);
       setErrorConfig(null);
+      
       try {
         const stations = await searchStations(q);
-        setResults(stations);
-        setErrorConfig(null);
-        openDropdown();
+        
+        // State nur updaten, wenn dieser Request noch der aktuellste ist
+        if (latestQueryRef.current === q) {
+          setResults(stations);
+          setErrorConfig(null);
+          openDropdown();
+        }
       } catch (err) {
-        // FIXED: This catch block will now trigger instantly on the very first 503 response
-        setResults([]);
-        setErrorConfig({ msg: 'Deutsche Bahn lookup engine currently down', status: 503 });
-        openDropdown();
+        if (latestQueryRef.current === q) {
+          setResults([]);
+          setErrorConfig({ msg: 'Lookup engine currently down', status: 503 });
+          openDropdown();
+        }
       } finally {
-        setLoading(false);
+        if (latestQueryRef.current === q) {
+          setLoading(false);
+        }
       }
-    }, 150);
+    }, 350);
 
   }, [id, value]);
 
@@ -125,6 +128,7 @@ export default function StationInput({
   function select(s: Station) {
     onChange(s);
     setQuery(s.name);
+    setResults([]); 
     setOpen(false);
     setErrorConfig(null);
   }
