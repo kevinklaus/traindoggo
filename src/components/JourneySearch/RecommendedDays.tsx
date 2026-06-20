@@ -1,13 +1,11 @@
-import { PawPrint, ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { PawPrint } from "lucide-react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function RecommendedDays({ currentDateStr, onDateChange }: { currentDateStr: string, onDateChange: (d: string) => void }) {
   const { t, i18n } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
-  
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(true);
+
 
   // 1. Sichere Datums-Mathematik (ignoriert Sommer-/Winterzeit-Sprünge)
   const baseDate = new Date(currentDateStr || new Date());
@@ -40,28 +38,6 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
   const formatterDayShort = new Intl.DateTimeFormat(i18n.language, { weekday: 'short' });
   const formatterDate = new Intl.DateTimeFormat(i18n.language, { day: '2-digit', month: '2-digit' });
 
-  const checkScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setShowLeftArrow(scrollLeft > 0);
-      // Puffer von 2px für Subpixel-Rundungsfehler im Browser
-      setShowRightArrow(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 2);
-    }
-  };
-
-  useEffect(() => {
-    checkScroll();
-    window.addEventListener('resize', checkScroll);
-    return () => window.removeEventListener('resize', checkScroll);
-  }, [currentDateStr]);
-
-  // const handleScroll = (dir: 'left' | 'right') => {
-  //   if (scrollRef.current) {
-  //     const amount = scrollRef.current.clientWidth * 0.75;
-  //     scrollRef.current.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' });
-  //   }
-  // };
-
   return (
     <div className="w-full mt-2 mb-6">
       
@@ -79,27 +55,9 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
         </p>
       </div>
       
-      {/* Wrapper für Pfeile und Scroll-Area - items-stretch erzwingt gleiche Höhe! */}
       <div className="flex items-stretch gap-1.5 md:gap-2 w-full">
-        
-        {/* Linker Pfeil - pt-4 pb-3 synchronisiert die Höhe mit dem Scroll-Container
-        <div className={`hidden sm:flex flex-col pt-4 pb-3 shrink-0 ${showLeftArrow ? '' : 'sm:hidden'}`}>
-          <button 
-            onClick={() => handleScroll('left')}
-            className="flex-1 px-1.5 md:px-2 rounded-xl border-2 border-slate-200 bg-white text-slate-500 hover:border-primary hover:text-primary transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary/50"
-            aria-label="Zurück scrollen"
-          >
-            <ChevronLeft size={20} />
-          </button>
-        </div> */}
-
-        {/* Scroll Container 
-          - pr-4 & pt-4: Schafft den inneren Platz, damit die absolut positionierten Pfoten nicht von overflow-x-auto abgeschnitten werden.
-          - pl-1: Minimaler Abstand zum linken Pfeil.
-        */}
         <div 
           ref={scrollRef}
-          onScroll={checkScroll}
           className="flex-1 flex gap-2 md:gap-3 overflow-x-auto pt-4 pb-3 pl-1 pr-4 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] scroll-smooth"
         >
           {days.map((d) => {
@@ -146,18 +104,6 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
             );
           })}
         </div>
-
-        {/* Rechter Pfeil */}
-        {/* <div className={`hidden sm:flex flex-col pt-4 pb-3 shrink-0 ${showLeftArrow ? '' : 'sm:hidden'}`}>
-          <button 
-            onClick={() => handleScroll('right')}
-            className="flex-1 px-1.5 md:px-2 rounded-xl border-2 border-slate-200 bg-white text-slate-500 hover:border-primary hover:text-primary transition-colors flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary/50"
-            aria-label="Weiter scrollen"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </div> */}
-
       </div>
     </div>
   );
