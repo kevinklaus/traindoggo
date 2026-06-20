@@ -32,7 +32,7 @@ export default function Input({
         <div className="relative flex-1 min-w-0 group">
           {leftIcon && (
             <span 
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-primary transition-colors pointer-events-none z-10" 
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/70 group-hover:text-primary transition-colors pointer-events-none z-10" 
               aria-hidden="true"
             >
               {leftIcon}

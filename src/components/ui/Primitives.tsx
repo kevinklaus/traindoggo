@@ -6,13 +6,13 @@ import React from 'react';
 // ============================================================================
 export const TOKENS = {
   inputs: {
-    base: "w-full py-3 px-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all font-body text-sm",
+    base: "w-full py-3 px-3 bg-white border border-slate-300 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all font-body text-sm",
     iconPadding: "pl-9 pr-3 sm:pl-10 sm:pr-4",
-    label: "block text-xs font-semibold text-slate-600 tracking-wide mb-1.5 select-none",
+    label: "block text-xs text-slate-600 font-semibold tracking-wide mb-1 select-none",
     error: "mt-1.5 text-xs text-red-600 flex items-center gap-1 font-medium select-none animate-fade-in"
   },
   buttons: {
-    iconButton: "box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-[0.95] disabled:opacity-50",
+    iconButton: "box-border h-[46px] w-[46px] shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-[0.95] disabled:opacity-50",
     dogChip: "p-3 rounded-xl border-2 text-center transition-all active:scale-[0.97] text-sm font-semibold",
     primarySubmit: "w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-secondary text-white font-semibold font-heading tracking-wide rounded-full transition-all active:scale-[0.98]",
   },

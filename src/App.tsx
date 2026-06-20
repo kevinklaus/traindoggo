@@ -3,6 +3,7 @@ import type { SearchParams } from './lib/types';
 import { setMockApiMode } from './lib/api';
 import { getDefaultDate, getDefaultTime } from './lib/helpers';
 import { DEV_INITIAL_FROM, DEV_INITIAL_TO } from './lib/mockData';
+import { getRandomRoute } from './lib/randomDestinations';
 
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -25,13 +26,16 @@ export default function App() {
   const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
   const isDev = import.meta.env.VITE_USE_MOCK_API === 'true' && isLocalhost; 
   
-  // Der letzte verbleibende State für die Suche!
-  const [params, setParams] = useState<SearchParams>({
-    from: isDev ? DEV_INITIAL_FROM : null,
-    to: isDev ? DEV_INITIAL_TO : null,
-    date: getDefaultDate(),
-    time: isDev ? '06:00' : getDefaultTime(),
-    dogMode: 'large',
+  const [params, setParams] = useState<SearchParams>(() => {
+    const randomRoute = getRandomRoute();
+    
+    return {
+      from: isDev ? DEV_INITIAL_FROM : randomRoute.from,
+      to: isDev ? DEV_INITIAL_TO : randomRoute.to,
+      date: getDefaultDate(),
+      time: isDev ? '06:00' : getDefaultTime(),
+      dogMode: 'large',
+    };
   });
   
   const [useMockApi, setUseMockApi] = useState(import.meta.env.VITE_USE_MOCK_API === 'true');

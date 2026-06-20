@@ -112,6 +112,8 @@ const deTranslations = {
     swapTitle: "Richtung tauschen",
     dateLabel: "Datum",
     timeLabel: "Zeit",
+    moreOptions: "Weitere Optionen",
+    lessOptions: "Weniger Optionen", 
     dogLogistics: "Hunde-Optionen",
     dogModes: {
       none: "Kein Hund",
@@ -507,6 +509,8 @@ const enTranslations = {
     swapTitle: "Swap direction",
     dateLabel: "Date",
     timeLabel: "Time",
+    moreOptions: "More options",
+    lessOptions: "Fewer options",
     dogLogistics: "Dog logistics",
     dogModes: {
       none: "No dog",

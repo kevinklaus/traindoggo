@@ -122,7 +122,7 @@ export default function LandingContent({ params, setParams, handleSearch }: Prop
         alt="Hund reist im Zug" 
         title={t('landing.heroTitle')} 
         subtitle={t('landing.heroSubtitle')}
-        imagePositionClass="object-[center_65%] sm:object-[center_60%] md:object-[center_51%]"
+        imagePositionClass="object-[center_75%] sm:object-[center_60%] md:object-[center_51%]"
       />
 
       <section className="w-[92%] sm:w-[88%] md:w-[85%] max-w-xl bg-white rounded-3xl p-5 sm:p-6 md:p-8 relative z-10 -mt-12 sm:-mt-16 md:-mt-20 shadow-xl shadow-slate-200/40">

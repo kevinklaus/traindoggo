@@ -76,7 +76,8 @@ export default function CondensedSearchBar({ params, onUpdateParams, onTriggerSe
                 params={params} 
                 onChange={onUpdateParams} 
                 onSearch={handleSearch} 
-                loading={false} 
+                loading={false}
+                isAdvancedOpenDefault={true}
               />
             </div>
           </div>

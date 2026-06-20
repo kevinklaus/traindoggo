@@ -177,7 +177,7 @@ export default function StationInput({
               <button
                 type="button"
                 onClick={() => { onChange(null); setQuery(''); setResults([]); setErrorConfig(null); }}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-0.5"
+                className="text-slate-500 hover:text-accent transition-colors py-3 pl-2"
                 aria-label={`Clear ${label}`}
               >
                 <X size={16} />
