@@ -18,11 +18,14 @@ import TimelineTransit from './TimelineTransit';
 interface Props {
   legs: Leg[];
   dogMode: 'none' | 'small' | 'large';
+  isExpanded: boolean; // <-- NEU: Prop aus der Parent-Karte empfangen
 }
 
-export default function JourneyTimeline({ legs, dogMode }: Props) {
+export default function JourneyTimeline({ legs, dogMode, isExpanded }: Props) {
   const { t } = useTranslation();
-  const [expanded, setExpanded] = useState(false);
+  
+  // Der lokale 'expanded' State wurde hier entfernt, da die Karte das jetzt steuert!
+  
   const [expandedCarriageLeg, setExpandedCarriageLeg] = useState<number | null>(null);
   const [expandedStopsLeg, setExpandedStopsLeg] = useState<number | null>(null);
   const transfers = countTransfers(legs);
@@ -51,17 +54,15 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
 
   return (
     <div className="mt-3">
-      {/* Header Controller */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-        <button
-          type="button"
-          onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-          aria-expanded={expanded}
-        >
-          {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+      {/* Header Controller 
+        WICHTIG: Das <button> Tag wurde in ein <div> geändert. Da die gesamte JourneyCard 
+        jetzt klickbar ist, dürfen wir hier keinen Button mehr haben (Nested Buttons sind ein a11y-Fehler).
+      */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pointer-events-none">
+        <div className="flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors">
+          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           <span>{transfers === 0 ? t('journeys.timeline.direct') : transfers === 1 ? t('journeys.timeline.change_one') : t('journeys.timeline.change_other', { count: transfers })}</span>
-        </button>
+        </div>
 
         {hasRiskyTransfer && dogMode !== 'none' && (
           <span className="inline-flex items-center gap-1 text-sm font-medium text-red-600" role="alert">
@@ -71,8 +72,15 @@ export default function JourneyTimeline({ legs, dogMode }: Props) {
       </div>
 
       {/* Main Loop */}
-      {expanded && (
-        <div className="mt-4 space-y-0" role="list" aria-label="Journey legs">
+      {isExpanded && (
+        <div 
+          className="mt-4 space-y-0" 
+          role="list" 
+          aria-label="Journey legs"
+          // NEU & WICHTIG: Verhindert, dass Klicks auf innere Buttons (z.B. Zwischenhalte) die Karte einklappen!
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
           {legs.map((leg, i) => {
             const walking = isWalking(leg);
             const prevLeg = i > 0 ? legs[i - 1] : null;

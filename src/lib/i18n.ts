@@ -389,7 +389,11 @@ const deTranslations = {
     legMid: "Lange Etappe",
     loadVeryHigh: "Zug sehr voll",
     loadHigh: "Zug gut gefüllt",
-    capped: "Ausgleich (Limit bei 0-100)"
+    capped: "Ausgleich (Limit bei 0-100)",
+    rushHour: "Regio zur Rush-Hour",
+    busyDay: "Hauptreisetag",
+    fastTrip: "Schnellere Verbindung",
+    veryFastTrip: "Sehr schnelle Verbindung",
   },
 };
 
@@ -781,7 +785,10 @@ const enTranslations = {
     loadHigh: "Crowded train",
     capped: "Score limit adjustment (0-100)",
     transferGood: "Relaxed layover ({{val}} min)",
-
+    rushHour: "Regio during rush hour",
+    busyDay: "Busy travel day",
+    fastTrip: "Faster connection",
+    veryFastTrip: "Very fast connection",
   }, 
 };
 

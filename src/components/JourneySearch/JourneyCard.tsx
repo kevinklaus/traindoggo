@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Clock, ArrowRight, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -19,6 +20,7 @@ interface Props {
   journey: Journey;
   dogMode: DogMode;
   index: number;
+  comparisonDurationMin?: number;
 }
 
 function getJourneyLoadFactor(legs: any[]): string | null {
@@ -62,8 +64,12 @@ function getLoadFactorConfig(factor: string | null, t: TFunction) {
   return mapping[factor] || { label: t('journeys.load.unknown'), desc: t('journeys.load.unknownDesc'), styles: 'bg-slate-50 text-slate-500 border-slate-200' };
 }
 
-export default function JourneyCard({ journey, dogMode, index }: Props) {
-  const { t } = useTranslation(); // i18n wird hier nicht mehr für das Datum gebraucht
+export default function JourneyCard({ journey, dogMode, index, comparisonDurationMin = 0 }: Props) {
+  const { t } = useTranslation(); 
+  
+  // NEU: Der State wandert in die Karte
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const legs = filterValidLegs(journey.legs);
   const firstLeg = legs[0];
   const lastLeg = legs[legs.length - 1];
@@ -72,21 +78,16 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
   const arrival = lastLeg?.arrival ?? '';
   const duration = departure && arrival ? formatDuration(departure, arrival) : '--';
 
-  // DATUMS-BERECHNUNG: Nur noch den +1 / +2 Tageswechsel für die Ankunft berechnen
   let dayDiff = 0;
-
   if (departure && arrival) {
     const depDate = new Date(departure);
     const arrDate = new Date(arrival);
-    
-    // Normalisieren, um exakt die Kalendertage zu vergleichen (ohne Uhrzeit)
     const depDay = new Date(depDate.getFullYear(), depDate.getMonth(), depDate.getDate());
     const arrDay = new Date(arrDate.getFullYear(), arrDate.getMonth(), arrDate.getDate());
     dayDiff = Math.round((arrDay.getTime() - depDay.getTime()) / (1000 * 60 * 60 * 24));
   }
   
-  const doggoScore = calculateDoggoScore(journey, dogMode);
-
+  const doggoScore = calculateDoggoScore(journey, dogMode, comparisonDurationMin);
   const worstLoadFactor = getJourneyLoadFactor(legs);
   const loadConfig = getLoadFactorConfig(worstLoadFactor, t);
 
@@ -94,14 +95,25 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
   const totalMinutes = barSegments.reduce((sum, s) => sum + s.minutes, 0) || 1;
 
   return (
-    <div className={TOKENS.layouts.card} style={{ animationDelay: `${index * 80}ms` }}>
+    <div 
+      className={`${TOKENS.layouts.card} cursor-pointer transition-colors hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary`} 
+      style={{ animationDelay: `${index * 80}ms` }}
+      onClick={() => setIsExpanded(!isExpanded)}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isExpanded}
+      onKeyDown={(e) => {
+        // a11y: Karte lässt sich mit Enter/Leertaste via Tastatur öffnen
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setIsExpanded(!isExpanded);
+        }
+      }}
+    >
       <div className="p-4 sm:p-5 space-y-3.5">
         
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            
-            {/* Der fette Datums-String wurde hier entfernt */}
-
             <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
               <span className="text-xl sm:text-2xl font-bold text-slate-900 tabular-nums font-heading whitespace-nowrap">
                 {formatTime(departure)}
@@ -109,7 +121,6 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
               <ArrowRight size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
               <span className="text-xl sm:text-2xl font-bold text-slate-900 tabular-nums font-heading whitespace-nowrap">
                 {formatTime(arrival)}
-                {/* HIER WIRD WEITERHIN DER +1 / +2 TAG ANGEZEIGT (z.B. für Nachtzüge) */}
                 {dayDiff > 0 && (
                   <sup className="text-xs sm:text-sm font-bold text-slate-500 ml-0.5">
                     +{dayDiff}
@@ -139,14 +150,22 @@ export default function JourneyCard({ journey, dogMode, index }: Props) {
 
           <div className="text-right shrink-0">
           {dogMode !== 'none' && (
-              <DoggoScoreBadge result={doggoScore} />
+              <div 
+                // WICHTIG: Das fängt den Klick ab, bevor er die Karte triggert
+                onClick={(e) => e.stopPropagation()} 
+                onKeyDown={(e) => e.stopPropagation()}
+                className="relative z-10"
+              >
+                <DoggoScoreBadge result={doggoScore} />
+              </div>
             )}
           </div>
         </div>
 
         <JourneyTimelineBar segments={barSegments} totalMinutes={totalMinutes} />
 
-        <JourneyTimeline legs={legs} dogMode={dogMode} />
+        {/* NEU: Das Prop isExpanded wird stumm nach unten durchgereicht */}
+        <JourneyTimeline legs={legs} dogMode={dogMode} isExpanded={isExpanded} />
       </div>
     </div>
   );

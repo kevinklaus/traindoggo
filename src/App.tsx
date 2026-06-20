@@ -52,10 +52,15 @@ export default function App() {
 
   const handleSearch = useCallback(async (searchParams = params) => {
     if (!searchParams.from || !searchParams.to) return;
+    
     setLoading(true);
     setError(null);
     setSearched(true);
     setActivePage('home'); 
+
+    setJourneys([]);
+    setEarlierRef(null);
+    setLaterRef(null);
 
     try {
       const localDate = new Date(`${searchParams.date}T${searchParams.time}:00`);

@@ -127,7 +127,7 @@ export default function TrainComposition({ leg, onClose, badge = "bg-red-600 tex
           {vagonWeb.status === 'found' && vagonWeb.firstAvailableLayout !== -1 && (
             <button 
               onClick={() => vagonWeb.openIndex(vagonWeb.firstAvailableLayout)} 
-              className="block w-full sm:inline-flex sm:w-auto items-center gap-1.5 py-2 px-4 bg-primary hover:bg-secondary text-white font-semibold rounded-xl transition-all active:scale-[0.98] hover:shadow-primary/30 font-heading "
+              className="block w-full sm:inline-flex sm:w-auto items-center gap-1.5 py-2 px-4 bg-primary hover:bg-secondary text-white font-semibold rounded-full transition-all active:scale-[0.98] hover:shadow-primary/30 font-heading "
             >
               <LayoutGrid size={18} className="inline mr-1.5 sm:mr-0" /> 
               {t('composition.ui.openSeatMap')}

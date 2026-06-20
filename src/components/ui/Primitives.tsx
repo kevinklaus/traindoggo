@@ -14,7 +14,7 @@ export const TOKENS = {
   buttons: {
     iconButton: "box-border h-12 w-12 shrink-0 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-0 text-slate-500 hover:text-primary hover:border-primary/30 transition-all active:scale-[0.95] disabled:opacity-50",
     dogChip: "p-3 rounded-xl border-2 text-center transition-all active:scale-[0.97] text-sm font-semibold",
-    primarySubmit: "w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-secondary text-white font-semibold font-heading tracking-wide rounded-xl transition-all active:scale-[0.98]",
+    primarySubmit: "w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-secondary text-white font-semibold font-heading tracking-wide rounded-full transition-all active:scale-[0.98]",
   },
   layouts: {
     card: "bg-white rounded-3xl shadow-sm hover:shadow-md transition-all overflow-hidden",
@@ -189,10 +189,10 @@ export function getLegColorTheme(product?: string, name?: string, isWalking?: bo
     trName.startsWith('re')  
   ) {
     return {
-      badge: 'bg-blue-600 text-white',
-      border: 'border-solid border-blue-600/40',
-      dot: 'border-blue-600 bg-white shadow-sm',
-      bgHex: '#2563eb',   // blue-600
+      badge: 'bg-slate-500 text-white',
+      border: 'border-solid border-slate-500/40',
+      dot: 'border-slate-500 bg-white shadow-sm',
+      bgHex: '#66686a',  
       textHex: '#ffffff',
     };
   }

@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { ChevronUp, ChevronDown, Loader2 } from 'lucide-react'; // <-- NEU: Icons
+import { ChevronUp, ChevronDown, Loader2 } from 'lucide-react';
 import type { Journey, DogMode } from '../../lib/types';
 import JourneyCard from './JourneyCard';
 import { Spinner } from '../ui/Primitives';
 import ErrorDiagnostics from './ErrorDiagnostics';
+import { getMedianJourneyDuration } from '../../lib/doggoScore'; 
 
 interface Props {
   journeys: Journey[];
@@ -54,7 +55,7 @@ export default function JourneyResults({
   const { t, i18n } = useTranslation();
 
   // Die Haupt-Ladeanzeige (nur bei der allerersten Suche, wenn noch keine Journeys da sind)
-  if (loading && journeys.length === 0 && !loadingEarlier && !loadingLater) {
+  if (loading && !loadingEarlier && !loadingLater) {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4" role="status" aria-live="polite">
         <Spinner className="h-10 w-10 text-primary" />
@@ -80,6 +81,8 @@ export default function JourneyResults({
   const groupedJourneys = groupJourneysByDate(journeys, locale);
   let globalIndex = 0; 
 
+  const medianDurationMin = getMedianJourneyDuration(journeys); // <-- NEU
+
   return (
     <section className="space-y-6" aria-label="Journey results">
       
@@ -90,9 +93,9 @@ export default function JourneyResults({
             type="button"
             onClick={onLoadEarlier}
             disabled={loadingEarlier}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 shadow-sm text-sm font-bold text-slate-600 hover:text-primary hover:border-primary/30 transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 pl-2 pr-4 py-2.5 rounded-full bg-white text-sm font-bold text-slate-600 hover:text-primary hover:border-primary/30 transition-all disabled:opacity-50"
           >
-            {loadingEarlier ? <Loader2 size={16} className="animate-spin" /> : <ChevronUp size={16} />}
+            {loadingEarlier ? <Loader2 size={16} className="animate-spin" /> : <ChevronUp size={18} />}
             {t('journeys.loadEarlier', 'Frühere Verbindungen')}
           </button>
         </div>
@@ -114,7 +117,8 @@ export default function JourneyResults({
                     key={`${groupIdx}-${currentIndex}`} 
                     journey={j} 
                     dogMode={dogMode} 
-                    index={currentIndex} 
+                    index={currentIndex}
+                    comparisonDurationMin={medianDurationMin}
                   />
                 );
               })}
@@ -130,9 +134,9 @@ export default function JourneyResults({
             type="button"
             onClick={onLoadLater}
             disabled={loadingLater}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 shadow-sm text-sm font-bold text-slate-600 hover:text-primary hover:border-primary/30 transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 pl-2 pr-4 py-2.5 rounded-full bg-white text-sm font-bold text-slate-600 hover:text-primary hover:border-primary/30 transition-all disabled:opacity-50"
           >
-            {loadingLater ? <Loader2 size={16} className="animate-spin" /> : <ChevronDown size={16} />}
+            {loadingLater ? <Loader2 size={16} className="animate-spin" /> : <ChevronDown size={18} />}
             {t('journeys.loadLater', 'Spätere Verbindungen')}
           </button>
         </div>

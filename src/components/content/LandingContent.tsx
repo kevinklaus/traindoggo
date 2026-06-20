@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react'; // <-- NEU HINZUGEFÜGT
 import { PawPrint, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SearchForm from '../JourneySearch/SearchForm';
@@ -30,6 +31,19 @@ export default function LandingContent({
   onLoadEarlier, onLoadLater, hasEarlier, hasLater, loadingEarlier, loadingLater
 }: Props) {
   const { t } = useTranslation();
+  
+  // --- NEU: Scroll-Logik ---
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Wenn gesucht wird, scrolle weich zum Container. 
+    // Der winzige Timeout sichert ab, dass das DOM im Fall der allerersten Suche bereits gerendert ist.
+    if (loading && searched && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  }, [loading, searched]);
 
   // --- 1. DATEN FÜR INSPIRATIONEN (3-Spaltig) ---
   const exampleTrips: CardData[] = [
@@ -150,7 +164,7 @@ export default function LandingContent({
       </section>
 
       {searched ? (
-        <div className="max-w-3xl mt-8 w-full animate-in fade-in slide-in-from-bottom-4">
+        <div ref={resultsRef} className="max-w-3xl mt-8 w-full animate-in fade-in slide-in-from-bottom-4 scroll-mt-8 sm:scroll-mt-24">
           <RecommendedDays currentDateStr={params.date} onDateChange={handleDayChange} />
           <JourneyResults 
             journeys={journeys} 

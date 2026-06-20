@@ -98,15 +98,11 @@ export default function TimelineTransit({
             <button
               type="button"
               onClick={onToggleCarriage}
-              className={`inline-flex items-center gap-1 font-bold text-sm transition-all pl-2 pr-4 py-2 rounded-xl border ${
-                isCarriageExpanded 
-                  ? 'bg-primary/10 border-primary/30 text-primary' 
-                  : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
-              }`}
+              className={`inline-flex items-center gap-1 font-bold text-sm transition-all pl-2 pr-4 py-2 rounded-full bg-white border border-primary text-primary hover:text-white hover:bg-primary`}
             >
               {isCarriageExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-              <PawPrint size={14} strokeWidth={2} className="text-primary fill-primary mr-1" />
-              <span className="text-primary">{t('journeys.timeline.dogTips')}</span>
+              <PawPrint size={14} strokeWidth={2} className="fill-primary mr-1" />
+              <span>{t('journeys.timeline.dogTips')}</span>
             </button>
           </div>
 
@@ -121,10 +117,10 @@ export default function TimelineTransit({
             <button
               type="button"
               onClick={onToggleStops}
-              className={`inline-flex items-center gap-1 font-bold text-xs transition-all px-2.5 py-1 rounded-xl border ${
+              className={`inline-flex items-center gap-1 font-bold text-xs transition-all pl-2 pr-4 py-1.5 rounded-full border ${
                 isStopsExpanded
                   ? 'bg-slate-100 border-slate-400 text-slate-700'
-                  : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary/30 shadow-sm'
+                  : 'bg-white border-slate-200 text-slate-500 hover:text-primary hover:border-primary'
               }`}
             >
               {isStopsExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
