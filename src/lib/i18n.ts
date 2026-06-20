@@ -146,8 +146,8 @@ const deTranslations = {
   },
   journeys: {
     searching: "Suche Verbindungen…",
-    loadEarlier: "Frühere Verbindungen",
-    loadLater: "Spätere Verbindungen",
+    loadEarlier: "Frühere",
+    loadLater: "Spätere",
     found: {
       zero: "Keine Verbindungen gefunden",
       one: "1 Verbindung gefunden",
@@ -542,8 +542,8 @@ const enTranslations = {
   },
   journeys: {
     searching: "Searching for journeys…",
-    loadEarlier: "Earlier journeys",
-    loadLater: "Later journeys",  
+    loadEarlier: "Earlier",
+    loadLater: "Later",  
     found: {
       zero: "No journeys found",
       one: "1 journey found",

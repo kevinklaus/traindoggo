@@ -17,7 +17,7 @@ export const TOKENS = {
     primarySubmit: "w-full min-h-[3.25rem] inline-flex items-center justify-center py-3.5 bg-primary hover:bg-secondary text-white font-semibold font-heading tracking-wide rounded-full transition-all active:scale-[0.98]",
   },
   layouts: {
-    card: "bg-white rounded-3xl shadow-sm hover:shadow-md transition-all overflow-hidden",
+    card: "bg-white rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-md transition-all overflow-hidden",
     popoverList: "absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto overflow-x-hidden",
   }
 };

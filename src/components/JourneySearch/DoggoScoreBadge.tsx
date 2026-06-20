@@ -67,8 +67,8 @@ export default function DoggoScoreBadge({ result }: Props) {
   };
   
   const getConfig = (s: number) => {
-    if (s > 75) return { colorClass: 'text-emerald-700', pawClass: 'text-emerald-700 fill-emerald-700', borderClass: 'border-emerald-600', bgClass: 'bg-emerald-100 hover:bg-emerald-200' };
-    if (s > 50) return { colorClass: 'text-slate-600', pawClass: 'text-slate-600 fill--slate-600', borderClass: 'border--slate-600', bgClass: 'bg-slate-100 hover:bg-slate-200' };
+    if (s > 74) return { colorClass: 'text-emerald-700', pawClass: 'text-emerald-700 fill-emerald-700', borderClass: 'border-emerald-600', bgClass: 'bg-emerald-100 hover:bg-emerald-200' };
+    if (s > 49) return { colorClass: 'text-slate-600', pawClass: 'text-slate-600 fill--slate-600', borderClass: 'border--slate-600', bgClass: 'bg-slate-100 hover:bg-slate-200' };
     return { colorClass: 'text-red-600', pawClass: 'text-red-600', borderClass: 'border-red-500', bgClass: 'bg-slate-100 hover:bg-slate-200' };
   };
 

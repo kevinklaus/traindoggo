@@ -1,49 +1,19 @@
-import { useRef, useEffect } from 'react'; // <-- NEU HINZUGEFÜGT
 import { PawPrint, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SearchForm from '../JourneySearch/SearchForm';
-import RecommendedDays from '../JourneySearch/RecommendedDays';
-import JourneyResults from '../JourneySearch/JourneyResults';
 import HeroImage from '../layout/HeroImage'; 
 import CardOverview, { CardData } from './CardOverview';
-import type { SearchParams, Journey } from '../../lib/types';
+import type { SearchParams } from '../../lib/types';
 import HeroImg from './images/hero.jpg';
 
 interface Props {
   params: SearchParams;
   setParams: (p: SearchParams) => void;
   handleSearch: (p?: SearchParams) => void;
-  handleDayChange: (d: string) => void;
-  loading: boolean;
-  error: string | null;
-  searched: boolean;
-  journeys: Journey[];
-  onLoadEarlier?: () => void;
-  onLoadLater?: () => void;
-  hasEarlier?: boolean;
-  hasLater?: boolean;
-  loadingEarlier?: boolean;
-  loadingLater?: boolean;
 }
 
-export default function LandingContent({
-  params, setParams, handleSearch, handleDayChange, loading, error, searched, journeys,
-  onLoadEarlier, onLoadLater, hasEarlier, hasLater, loadingEarlier, loadingLater
-}: Props) {
+export default function LandingContent({ params, setParams, handleSearch }: Props) {
   const { t } = useTranslation();
-  
-  // --- NEU: Scroll-Logik ---
-  const resultsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Wenn gesucht wird, scrolle weich zum Container. 
-    // Der winzige Timeout sichert ab, dass das DOM im Fall der allerersten Suche bereits gerendert ist.
-    if (loading && searched && resultsRef.current) {
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
-    }
-  }, [loading, searched]);
 
   // --- 1. DATEN FÜR INSPIRATIONEN (3-Spaltig) ---
   const exampleTrips: CardData[] = [
@@ -120,13 +90,11 @@ export default function LandingContent({
     {
       id: 'feat-destinations',
       headline: t('landing.features.destinations.title', 'Erprobte Reiseziele'),
-      // Wir integrieren die Info zu größeren Hunden (z.B. 35kg), um echte Erfahrung zu signalisieren
       description: t('landing.features.destinations.text', 'Lass dich von unseren persönlichen Erfahrungen inspirieren – egal ob mit kleinem Begleiter oder einem 35kg-Hund, wir kennen die besten entspannten Routen.'),
     },
     {
       id: 'feat-community',
       headline: t('landing.features.community.title', 'Community & Hilfe'),
-      // JSX direkt in die Daten pushen für den E-Mail Link
       description: (
         <span className="flex flex-col gap-3">
           <span>{t('landing.features.community.text', 'Unsicher bei einer Strecke oder den Tarif-Regeln in einem bestimmten Land? Frag uns einfach!')}</span>
@@ -144,13 +112,11 @@ export default function LandingContent({
   const handleExampleSearch = (payload: Partial<SearchParams>) => {
     const searchConfig: SearchParams = { ...params, ...payload, date: params.date };
     setParams(searchConfig);
-    handleSearch(searchConfig);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    handleSearch(searchConfig); // Feuert den Seitenwechsel in App.tsx ab
   };
 
   return (
-    <div className="w-full flex flex-col items-center animate-in fade-in">
-      
+    <div className="w-full flex flex-col items-center animate-in fade-in pb-24">
       <HeroImage 
         src={HeroImg} 
         alt="Hund reist im Zug" 
@@ -160,76 +126,56 @@ export default function LandingContent({
       />
 
       <section className="w-[92%] sm:w-[88%] md:w-[85%] max-w-xl bg-white rounded-3xl p-5 sm:p-6 md:p-8 relative z-10 -mt-12 sm:-mt-16 md:-mt-20 shadow-xl shadow-slate-200/40">
-        <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={loading} />
+        {/* Ladezustand ist immer false, da die Suche hier nur weiterleitet */}
+        <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={false} />
       </section>
 
-      {searched ? (
-        <div ref={resultsRef} className="max-w-3xl mt-8 w-full animate-in fade-in slide-in-from-bottom-4 scroll-mt-8 sm:scroll-mt-24">
-          <RecommendedDays currentDateStr={params.date} onDateChange={handleDayChange} />
-          <JourneyResults 
-            journeys={journeys} 
-            dogMode={params.dogMode} 
-            loading={loading} 
-            error={error} 
-            onLoadEarlier={onLoadEarlier}
-            onLoadLater={onLoadLater}
-            hasEarlier={hasEarlier}
-            hasLater={hasLater}
-            loadingEarlier={loadingEarlier}
-            loadingLater={loadingLater}
-          />
-        </div>
-      ) : (
-        <div className="max-w-6xl px-4 sm:px-0 mt-16 w-full animate-in fade-in slide-in-from-bottom-4 pb-24 space-y-24">
+      <div className="max-w-6xl px-4 sm:px-0 mt-16 w-full space-y-24">
+        {/* Inspiration Section */}
+        <section className="space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <div className="flex justify-center mb-2">
+              <Sparkles size={32} className="text-accent fill-accent" />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-800">
+              {t('landing.inspiration.title', 'Inspiration für eure nächste Reise')}
+            </h2>
+            <p className="text-slate-600">
+              {t('landing.inspiration.subtitle')}
+            </p>
+          </div>
           
-          {/* Inspiration Section */}
-          <section className="space-y-8">
-            <div className="text-center max-w-2xl mx-auto space-y-3">
-              <div className="flex justify-center mb-2">
-                <Sparkles size={32} className="text-accent fill-accent" />
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-800">
-                {t('landing.inspiration.title', 'Inspiration für eure nächste Reise')}
-              </h2>
-              <p className="text-slate-600">
-                {t('landing.inspiration.subtitle')}
-              </p>
-            </div>
-            
-            <CardOverview 
-              cardFields={exampleFields} 
-              data={exampleTrips} 
-              onAction={handleExampleSearch}
-              actionLabel={t('landing.inspiration.searchRoute', 'Route suchen')}
-              colorClass='white'
-            />
-          </section>
+          <CardOverview 
+            cardFields={exampleFields} 
+            data={exampleTrips} 
+            onAction={handleExampleSearch}
+            actionLabel={t('landing.inspiration.searchRoute', 'Route suchen')}
+            colorClass='white'
+          />
+        </section>
 
-          {/* Features / Why Train Doggo Section (ERSETZT DIE ALTE HTML STRUKTUR) */}
-          <section className="space-y-8 max-w-4xl mx-auto w-full">
-            <div className="text-center max-w-2xl mx-auto space-y-3">
-              <div className="flex justify-center mb-2">
-                <PawPrint size={32} className="text-accent fill-accent" />
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-800">
-                {t('landing.features.title')}
-              </h2>
-              <p className="text-slate-600">
-                {t('landing.features.subtitle')}
-              </p>
+        {/* Features / Why Train Doggo Section */}
+        <section className="space-y-8 max-w-4xl mx-auto w-full">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <div className="flex justify-center mb-2">
+              <PawPrint size={32} className="text-accent fill-accent" />
             </div>
-            
-            {/* Hier übergeben wir das 2-Spalten Layout via gridClass */}
-            <CardOverview 
-              cardFields={featureFields} 
-              data={featuresData} 
-              colorClass="secondary"
-              gridClass="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6" 
-            />
-          </section>
-
-        </div>
-      )}
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-800">
+              {t('landing.features.title')}
+            </h2>
+            <p className="text-slate-600">
+              {t('landing.features.subtitle')}
+            </p>
+          </div>
+          
+          <CardOverview 
+            cardFields={featureFields} 
+            data={featuresData} 
+            colorClass="secondary"
+            gridClass="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6" 
+          />
+        </section>
+      </div>
     </div>
   );
 }
