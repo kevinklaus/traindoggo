@@ -6,6 +6,10 @@ export function useVagonWeb(leg: Leg, language: string, trainName: string, ifram
   const [status, setStatus] = useState<'idle' | 'loading' | 'found' | 'not-found'>('idle');
   const [directUrl, setDirectUrl] = useState<string | null>(null);
   
+  // NEU: States für unseren smarten Fallback
+  const [isBlocked, setIsBlocked] = useState<boolean>(false);
+  const [fallbackUrl, setFallbackUrl] = useState<string | null>(null);
+  
   const [layouts, setLayouts] = useState<any[]>([]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [popupUrl, setPopupUrl] = useState<string | null>(null);
@@ -15,6 +19,9 @@ export function useVagonWeb(leg: Leg, language: string, trainName: string, ifram
   useEffect(() => {
     async function checkVagonWeb() {
       setStatus('loading');
+      setIsBlocked(false);
+      setFallbackUrl(null);
+      
       try {
         const params = buildVagonWebParams(leg, language);
         const res = await fetch(`/api/vagonwebProxy?${params}`);
@@ -26,9 +33,13 @@ export function useVagonWeb(leg: Leg, language: string, trainName: string, ifram
           setStatus('found');
         } else {
           setStatus('not-found');
+          // NEU: Werte aus dem Proxy übernehmen, wenn Cloudflare zuschlägt
+          setIsBlocked(data.blocked || false);
+          if (data.fallbackUrl) setFallbackUrl(data.fallbackUrl);
         }
       } catch {
         setStatus('not-found');
+        setIsBlocked(false);
       }
     }
     checkVagonWeb();
@@ -86,6 +97,8 @@ export function useVagonWeb(leg: Leg, language: string, trainName: string, ifram
   return {
     status,
     directUrl,
+    isBlocked, // NEU: Damit die Komponente weiß, ob VagonWEB uns blockiert hat
+    fallbackUrl, // NEU: Der generierte externe Link
     firstAvailableLayout,
     activeUrlToRender,
     activeTitleToRender,

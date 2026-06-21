@@ -206,21 +206,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const isMissing = html.includes('nicht gefunden') || html.includes('not found') || html.includes('nebyl nalezen');
     const hasOverviewLink = html.match(/>\s*(anzeigen|show|zobrazit)\s*<\/a>/i);
     const hasGraphics = html.includes('id="obsah_razeni"') || html.includes('class="bunka_vozu"') || html.includes('vlacek');
+    const isBlocked = html.includes('Just a moment...') || html.includes('cloudflare');
 
-    if (!isMissing && (hasOverviewLink || hasGraphics)) {
-       const urlParams = new URLSearchParams();
-       for (const [key, value] of Object.entries(req.query)) {
-          if (key !== 'render' && key !== 'proxyTarget' && key !== 'isPopup' && typeof value === 'string') {
-            urlParams.append(key, value);
-          }
-       }
-       return res.status(200).json({ exists: true, directUrl: `/api/vagonwebProxy?${urlParams.toString()}&render=true` });
+    // Wir bauen die exakte URL für den neuen Tab zusammen
+    const urlParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(req.query)) {
+      if (key !== 'render' && key !== 'proxyTarget' && key !== 'isPopup' && typeof value === 'string') {
+        urlParams.append(key, value);
+      }
+    }
+    const fallbackUrl = `https://www.vagonweb.cz/razeni/vlak.php?${urlParams.toString()}`;
+
+    if (!isMissing && !isBlocked && (hasOverviewLink || hasGraphics)) {
+       return res.status(200).json({ 
+         exists: true, 
+         directUrl: `/api/vagonwebProxy?${urlParams.toString()}&render=true`, 
+         fallbackUrl 
+       });
     }
     
-    // DEBUG-MODUS: Wir senden die ersten 1500 Zeichen der vagonWEB-Antwort an dein Frontend zurück!
+    // Fallback-Antwort, wenn Cloudflare blockt oder Zug fehlt
     return res.status(200).json({ 
       exists: false, 
-      debug_vagonweb_html: html.substring(0, 1500) 
+      blocked: isBlocked,
+      fallbackUrl: fallbackUrl
     });
   }
 
