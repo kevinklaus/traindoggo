@@ -62,7 +62,7 @@ export function TimelineDepartureNode({
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm font-semibold text-slate-800 tabular-nums">{time}</span>
           <Badge style={{ backgroundColor: lineStyle.bg, color: lineStyle.text }} title={badgeTitle}>{badgeLabel}</Badge>
-          {platform && <span className="text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">Pl. {platform}</span>}
+          {platform && <span className="text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{platform}</span>}
           {delay && delay > 0 ? <span className="text-xs text-red-600">+{delay}m</span> : null}
         </div>
         <div className="text-sm text-slate-600 mt-0.5">{stationName}</div>
@@ -99,7 +99,7 @@ export function TimelineArrivalNode({ time, stationName, platform, delay, lineSt
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm font-semibold text-slate-800 tabular-nums">{time}</span>
-          {platform && <span className="text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">Pl. {platform}</span>}
+          {platform && <span className="text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{platform}</span>}
           {delay && delay > 0 ? <span className="text-xs text-red-600">+{delay}m</span> : null}
         </div>
         <div className="text-sm text-slate-600 mt-0.5 font-semibold">

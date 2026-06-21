@@ -24,8 +24,6 @@ interface Props {
 export default function JourneyTimeline({ legs, dogMode, isExpanded }: Props) {
   const { t } = useTranslation();
   
-  // Der lokale 'expanded' State wurde hier entfernt, da die Karte das jetzt steuert!
-  
   const [expandedCarriageLeg, setExpandedCarriageLeg] = useState<number | null>(null);
   const [expandedStopsLeg, setExpandedStopsLeg] = useState<number | null>(null);
   const transfers = countTransfers(legs);
@@ -34,7 +32,7 @@ export default function JourneyTimeline({ legs, dogMode, isExpanded }: Props) {
     if (!plat) return '';
     const clean = plat.trim();
     const rawNumber = clean.replace(/^(platform|pl\.?)\s*/i, '');
-    return `Pl. ${rawNumber}`;
+    return t('journeys.timeline.platform.short') + ' ' + rawNumber;
   };
 
   const formatDurationFriendly = (mins: number) => {

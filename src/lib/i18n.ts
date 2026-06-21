@@ -89,18 +89,18 @@ const deTranslations = {
         headline: "Berlin ➔ Bozen 🇮🇹",
         desc: "Im RailJet krasse Blicke auf die Alpen genießen und gemütlich vorbei am Stau auf dem Brenner. In Südtirol die Bergluft, Wein und Obst genießen.",
         travel: "Gassi-Tipp: In München ist 5 Geh-Minuten nördlich des Hauptbahnhofs der Neptunbrunnen mit einem kleinen Park."
-      },
-      frankfurtBarcelona: {
-        headline: "Frankfurt ➔ Barcelona 🇪🇸",
+        },
+        frankfurtBarcelona: {
+          headline: "Frankfurt ➔ Barcelona 🇪🇸",
         desc: "Atemberaubende Aussicht aus dem TGV auf die Mittelmeer-Küste. Nimm dir Zeit für ein Croissant und eine Gassi-Pause in Paris.",
         travel: "In Paris müsst ihr mit der Metro von Gare de l'Est zu Gare de Lyon. Hunde fahren kostenlos mit und ihr könnt den Umstig für eine Gassi-Pause nutzen."
-      },
-      freiburgSapri: {
-        headline: "Freiburg ➔ Sapri 🇮🇹",
+        },
+        freiburgSapri: {
+          headline: "Freiburg ➔ Sapri 🇮🇹",
         desc: "Im EC nach Mailand die Alpen genißen. Nachts im InterCityNotte durch Bella Italia und mit Blick auf das türkisblaue Meer des Cilento aufwachen.",
         travel: "Im InterCityNotte mit Hund ein eigenes Abteil buchen (»Cabina intera«). Oft für insgesamt rund 150 Euro zu haben."
+        }
       }
-    }
     },
   },
   searchForm: {
@@ -189,7 +189,11 @@ const deTranslations = {
       station: "Bahnhof",
       transfer: "Umstieg",
       walk: "Fußweg",
-      inclMin: "(inkl. {{count}} Min)"
+      inclMin: "(inkl. {{count}} Min)",
+      platform: {
+        short: "Gl.",
+        long: "Gleis"
+       },
     },
     recommended: {
       title: "Reisetag Empfehlung",
@@ -587,7 +591,11 @@ const enTranslations = {
       station: "Station",
       transfer: "Transfer",
       walk: "Walk",
-      inclMin: "(incl. {{count}} min)"
+      inclMin: "(incl. {{count}} min)",
+      platform: {
+        short: "Pl.",
+        long: "Platform"
+      },
     },
     recommended: {
       title: "Recommended travel days",
