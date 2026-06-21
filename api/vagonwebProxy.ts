@@ -216,9 +216,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
        }
        return res.status(200).json({ exists: true, directUrl: `/api/vagonwebProxy?${urlParams.toString()}&render=true` });
     }
-    // Optional: Logge das HTML in Vercel, falls es immer noch fehlschlägt, um das Captcha zu sehen
-    // console.log("VagonWEB Response snippet:", html.substring(0, 300));
-    return res.status(200).json({ exists: false });
+    
+    // DEBUG-MODUS: Wir senden die ersten 1500 Zeichen der vagonWEB-Antwort an dein Frontend zurück!
+    return res.status(200).json({ 
+      exists: false, 
+      debug_vagonweb_html: html.substring(0, 1500) 
+    });
   }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
