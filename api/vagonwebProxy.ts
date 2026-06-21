@@ -143,7 +143,21 @@ const INJECTED_SCRIPT = `
 `;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const headers: Record<string, string> = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', 'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7' };
+  // NEU: Perfekter Browser-Fingerabdruck, um Cloudflare auszutricksen
+  const headers: Record<string, string> = { 
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36', 
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7',
+    'Sec-Ch-Ua': '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Windows"',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
+    'Cache-Control': 'max-age=0'
+  };
 
   const isRender = req.query.render === 'true';
   const isPopup = req.query.isPopup === 'true';
@@ -183,6 +197,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).send(html);
   }
 
+  // Cloudflare JS-Reste entfernen, bevor wir parsen
   html = html.replace(/<script[^>]*cloudflare[^>]*>[\s\S]*?<\/script>/gi, '');
   html = html.replace(/<script[^>]*cdn-cgi[^>]*>[\s\S]*?<\/script>/gi, '');
   html = html.replace(/@font-face\s*\{[^}]*\}/gi, '');
@@ -201,6 +216,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
        }
        return res.status(200).json({ exists: true, directUrl: `/api/vagonwebProxy?${urlParams.toString()}&render=true` });
     }
+    // Optional: Logge das HTML in Vercel, falls es immer noch fehlschlägt, um das Captcha zu sehen
+    // console.log("VagonWEB Response snippet:", html.substring(0, 300));
     return res.status(200).json({ exists: false });
   }
 
