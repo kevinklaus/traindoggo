@@ -53,11 +53,11 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
   }, [currentDateStr]);
 
   return (
-    <div className="w-full my-2 sm:my-4 sm:my-8">
+    <div className="w-full mb-2 sm:mb-4">
       
-      {/* Kompakter Header mit Tooltip */}
+      {/* Kompakter Header mit Tooltip 
       <div className=" relative z-20">
-        {/* Tooltip Trigger & Content */}
+        //Tooltip Trigger & Content 
         <div className="relative flex items-center">
           <button 
             type="button"
@@ -68,23 +68,23 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
             className="text-slate-400 hover:text-accent transition-colors focus:outline-none p-1 -ml-1 rounded-full flex items-center gap-2"
             aria-label="Info"
           >
-            <span className="text-sm font-bold text-slate-800 capitalize leading-none">
+            <span className="text-sm font-bold text-slate-800 capitalize leading-none px-1">
               {t('journeys.recommended.title')}
             </span>
-            {/* <div className="bg-accent rounded-full p-0.5 flex items-center justify-center shrink-0">
+            <div className="bg-accent rounded-full p-0.5 flex items-center justify-center shrink-0">
               <PawPrint size={10} strokeWidth={2} className="text-white fill-white" />
-            </div> */}
+            </div>
           </button>
 
           {showInfo && (
             <div className="absolute left-0 top-full mt-1.5 w-[260px] sm:w-[300px] bg-slate-800 text-white text-[13px] leading-relaxed p-3 rounded-xl shadow-xl z-50 pointer-events-none animate-in fade-in zoom-in-95">
               {t('journeys.recommended.subtitle')}
-              {/* Kleines Dreieck nach oben für die Sprechblasen-Optik */}
+              {/* Kleines Dreieck nach oben für die Sprechblasen-Optik 
               <div className="absolute -top-1 left-3.5 w-3 h-3 bg-slate-800 rotate-45 rounded-sm"></div>
             </div>
           )}
         </div>
-      </div>
+      </div> */}
       
       {/* Slider */}
       <div className="flex items-stretch gap-1.5 md:gap-2 w-full">
@@ -103,21 +103,21 @@ export default function RecommendedDays({ currentDateStr, onDateChange }: { curr
                 data-date={dateStr}
                 onClick={() => onDateChange(dateStr)}
                 className={`
-                  snap-center shrink-0 flex flex-col items-center justify-center py-1 px-2 md:py-2 md:px-2 rounded-xl transition-all duration-300 ease-out min-w-[72px] md:min-w-[96px] relative focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 overflow-visible
+                  snap-center shrink-0 flex flex-col items-center justify-center py-1 px-2 md:py-2 md:px-2 rounded-2xl transition-all duration-300 ease-out min-w-[72px] md:min-w-[96px] relative focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 overflow-visible
                   ${isActive 
-                    ? 'active-day bg-primary border-primary text-white transform scale-[1.02] z-10 shadow-md' 
+                    ? 'active-day bg-secondary border-2 border-secondary text-white transform scale-[1.02] z-10' 
                     : recommended 
-                      ? 'bg-white border-2 border-primary/40 text-slate-700 hover:border-primary hover:bg-blue-50 z-0' 
+                      ? 'bg-white border-2 border-secondary text-slate-700 hover:border-accent hover:bg-slate-50 z-0' 
                       : 'bg-white text-slate-600 hover:border-2 hover:border-secondary hover:bg-slate-50 z-0'
                   }
                 `}
               >
-                <span className={`text-[14px] font-bold capitalize leading-tight ${isActive ? 'text-white' : 'text-slate-600'}`}>
+                <span className={`text-sm font-bold capitalize leading-tight ${isActive ? 'text-white' : 'text-secondary'}`}>
                   <span className="md:hidden">{formatterDayShort.format(d).replace('.', '')}</span>
                   <span className="hidden md:inline">{formatterDayLong.format(d)}</span>
                 </span>
                 
-                <span className={`text-[11px] mt-0.5 ${isActive ? 'text-white/90' : 'text-slate-500'}`}>
+                <span className={`text-[12px] ${isActive ? 'text-white/90' : 'text-slate-500'}`}>
                   {formatterDate.format(d)}
                 </span>
                 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Edit2, X } from 'lucide-react';
+import { Pencil, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { SearchParams } from '../../lib/types';
 import { formatDate } from '../../lib/helpers';
@@ -24,27 +24,27 @@ export default function CondensedSearchBar({ params, onUpdateParams, onTriggerSe
     <>
       {/* Floating Bar - Dunkel und abgerundet wie im DB Screenshot */}
       <div className="mx-auto w-full max-w-4xl">
-        <div className="bg-slate-800 text-white shadow-2xl shadow-slate-900/20 rounded-full px-5 py-3 sm:px-8 flex items-center justify-between gap-4 transition-all">
+        <div className="bg-secondary text-white rounded-full pl-5 pr-4 py-3 sm:pl-8 sm:pr-4 flex items-center justify-between gap-3 transition-all">
           <div className="flex-1 min-w-0 flex flex-col justify-center">
             <div className="flex items-center gap-2 text-sm sm:text-base font-bold truncate">
               <span className="truncate">{params.from?.name || '?'}</span>
               <span className="text-slate-400 shrink-0">→</span>
               <span className="truncate">{params.to?.name || '?'}</span>
             </div>
-            <div className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm text-slate-300 mt-1 flex-wrap">
-              <span>{formatDate(params.date)}</span>
+            <div className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm text-slate-300 flex-wrap">
+{/*               <span>{formatDate(params.date)}</span>
               <span>&bull;</span>
-              <span>{params.time} {t('time', 'Uhr')}</span>
+              <span>{params.time} {t('time', 'Uhr')}</span> */}
               {/* <span className="capitalize">{t(`searchForm.dogModes.${params.dogMode}`)}</span> */}
             </div>
           </div>
           
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="shrink-0 bg-white/10 hover:bg-white/20 text-white rounded-xl px-3 py-2 sm:px-4 sm:py-2.5 text-sm font-semibold transition-colors flex items-center gap-2"
+            className="shrink-0 bg-white text-primary  hover:bg-primary hover:text-white rounded-full p-3 sm:px-6 sm:py-3 text-sm font-semibold transition-colors flex items-center gap-3"
           >
-            <span className="hidden sm:inline">{t('searchForm.edit', 'Anfrage ändern')}</span>
-            <Edit2 size={16} />
+            <Pencil size={18} strokeWidth={2.5} />
+            <span className="hidden sm:inline">{t('searchForm.edit', 'Suche anpassen')}</span>
           </button>
         </div>
       </div>

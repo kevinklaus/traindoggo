@@ -82,7 +82,7 @@ export default function JourneyResults({
   const medianDurationMin = getMedianJourneyDuration(journeys);
 
   return (
-    <section className="space-y-4 sm:space-y-6" aria-label="Journey results">
+    <section className="mt-6 sm:mt-12 space-y-4 sm:space-y-6" aria-label="Journey results">
       
       <div className="space-y-8">
         {groupedJourneys.map((group, groupIdx) => (
@@ -90,7 +90,7 @@ export default function JourneyResults({
             
             {/* ABSCHNITTSÜBERSCHRIFT: Datum & Frühere Verbindungen Button kombiniert */}
             <div className="flex items-center justify-between pb-1.5 ml-1">
-              <h3 className="text-lg font-bold text-slate-800">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-800">
                 {group.dateLabel}
               </h3>
               
@@ -100,7 +100,7 @@ export default function JourneyResults({
                   type="button"
                   onClick={onLoadEarlier}
                   disabled={loadingEarlier}
-                  className="mr-1 inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white text-primary border border-primary text-sm font-bold hover:text-white hover:bg-primary transition-all disabled:opacity-50"
+                  className="mr-1 inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white text-secondary border-2 border-secondary text-sm font-bold hover:text-white hover:bg-primary transition-all disabled:opacity-50"
                 >
                   {loadingEarlier ? <Loader2 size={18} className="animate-spin" /> : <ChevronUp size={18} />}
                   <span>{t('journeys.loadEarlier')}</span>
@@ -133,7 +133,7 @@ export default function JourneyResults({
             type="button"
             onClick={onLoadLater}
             disabled={loadingLater}
-            className="mr-1 inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white text-primary border border-primary text-sm font-bold hover:text-white hover:bg-primary transition-all disabled:opacity-50"
+            className="mr-1 inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white text-secondary border-2 border-secondary text-sm font-bold hover:text-white hover:bg-primary transition-all disabled:opacity-50"
           >
             {loadingLater ? <Loader2 size={18} className="animate-spin" /> : <ChevronDown size={18} />}
             <span>{t('journeys.loadLater')}</span>

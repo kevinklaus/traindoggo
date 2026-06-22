@@ -104,6 +104,7 @@ const deTranslations = {
     },
   },
   searchForm: {
+    edit: "Ändern",
     fromLabel: "Von",
     fromPlaceholder: "z. B. München Hbf",
     toLabel: "Nach",
@@ -508,6 +509,7 @@ const enTranslations = {
     },
   },
   searchForm: {
+    edit: "Edit",
     fromLabel: "From",
     fromPlaceholder: "E.g. Munich Hbf",
     toLabel: "To",
