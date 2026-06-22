@@ -91,7 +91,7 @@ const deTranslations = {
         travel: "Gassi-Tipp: In München ist 5 Geh-Minuten nördlich des Hauptbahnhofs der Neptunbrunnen mit einem kleinen Park."
         },
         frankfurtBarcelona: {
-          headline: "Frankfurt ➔ Barcelona 🇪🇸",
+          headline: "Frankfurt ➔ Katalonien 🇪🇸",
         desc: "Atemberaubende Aussicht aus dem TGV auf die Mittelmeer-Küste. Nimm dir Zeit für ein Croissant und eine Gassi-Pause in Paris.",
         travel: "In Paris müsst ihr mit der Metro von Gare de l'Est zu Gare de Lyon. Hunde fahren kostenlos mit und ihr könnt den Umstig für eine Gassi-Pause nutzen."
         },
@@ -148,6 +148,9 @@ const deTranslations = {
   },
   journeys: {
     searching: "Suche Verbindungen…",
+    searching1: 'Beste Route erschnüffeln…',
+    searching2: 'Eine Pfote vor die andere setzen…',
+    searching3: 'Platz unter dem Sitz prüfen…',
     loadEarlier: "Frühere",
     loadLater: "Spätere",
     found: {
@@ -492,7 +495,7 @@ const enTranslations = {
         travel: "Doggo tip: In Munich, there's a small park at the Neptune Fountain (Neptunbrunnen), just a 5-minute walk north of the central station."
         },
         frankfurtBarcelona: {
-          headline: "Frankfurt ➔ Barcelona 🇪🇸",
+          headline: "Frankfurt ➔ Catalonia 🇪🇸",
           desc: "Breathtaking views of the Mediterranean coast from the TGV. Take your time for a croissant and a potty break in Paris.",
           travel: "In Paris, you'll need to take the Metro from Gare de l'Est to Gare de Lyon. Dogs travel for free, and you can use the transfer for a potty break."
         },
@@ -550,6 +553,9 @@ const enTranslations = {
   },
   journeys: {
     searching: "Searching for journeys…",
+    searching1: 'Sniffing out the best routes…',
+    searching2: 'Taking paw steps…',
+    searching3: 'Checking seat spacing…',
     loadEarlier: "Earlier",
     loadLater: "Later",  
     found: {

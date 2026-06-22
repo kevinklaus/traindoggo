@@ -14,7 +14,7 @@ const TOP_GERMAN_CITIES: Station[] = [
   { id: '8000098', name: 'Essen Hbf', type: 'station' },
 ];
 
-// Top 10 EU Ziele (EVA-Nummern verifiziert für DB/ÖBB HAFAS)
+// Top EU Ziele (EVA-Nummern verifiziert für DB/ÖBB HAFAS)
 const TOP_EU_CITIES: Station[] = [
   { id: '8103000', name: 'Wien Hbf', type: 'station' },
   { id: '8503000', name: 'Zürich HB', type: 'station' },

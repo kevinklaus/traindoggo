@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronUp, ChevronDown, Loader2 } from 'lucide-react';
 import type { Journey, DogMode } from '../../lib/types';
 import JourneyCard from './JourneyCard';
-import { Spinner } from '../ui/Primitives';
+import { TrainSpinner } from '../ui/TrainSpinner';
 import ErrorDiagnostics from './ErrorDiagnostics';
 import { getMedianJourneyDuration } from '../../lib/doggoScore'; 
 
@@ -56,9 +56,8 @@ export default function JourneyResults({
   // Die Haupt-Ladeanzeige
   if (loading && !loadingEarlier && !loadingLater) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 gap-4" role="status" aria-live="polite">
-        <Spinner className="h-10 w-10 text-primary" />
-        <p className="text-slate-500 font-medium font-body whitespace-nowrap">{t('journeys.searching')}</p>
+      <div className="pt-6" role="status" aria-live="polite">
+        <TrainSpinner/>
       </div>
     );
   }
