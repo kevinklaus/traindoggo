@@ -136,6 +136,7 @@ export default function LandingContent({ params, setParams, handleSearch }: Prop
         {/* Inspiration Section */}
         <section className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
+            <TrainSpinner/>
             <div className="flex justify-center mb-2">
               <Sparkles size={32} className="text-accent fill-accent" />
             </div>
