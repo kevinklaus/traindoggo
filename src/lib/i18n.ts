@@ -149,9 +149,9 @@ const deTranslations = {
   },
   journeys: {
     searching: "Suche Verbindungen…",
-    searching1: 'Beste Route erschnüffeln…',
-    searching2: 'Eine Pfote vor die andere setzen…',
-    searching3: 'Platz unter dem Sitz prüfen…',
+    searching1: 'Beste Route erschnüffeln 🐶',
+    searching2: 'Eine Pfote vor die andere setzen 🐾',
+    searching3: 'Platz unter dem Sitz prüfen 🚂',
     loadEarlier: "Frühere",
     loadLater: "Spätere",
     found: {
@@ -555,9 +555,9 @@ const enTranslations = {
   },
   journeys: {
     searching: "Searching for journeys…",
-    searching1: 'Sniffing out the best routes…',
-    searching2: 'Taking paw steps…',
-    searching3: 'Checking seat spacing…',
+    searching1: 'Sniffing out the best routes 🐶',
+    searching2: 'Taking paw steps 🐾',
+    searching3: 'Checking seat spacing 🚂',
     loadEarlier: "Earlier",
     loadLater: "Later",  
     found: {
