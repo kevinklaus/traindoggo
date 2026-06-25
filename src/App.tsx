@@ -70,13 +70,14 @@ export default function App() {
         setUseMockApi={setUseMockApi} 
       />
 
-      <main className="max-w-6xl mx-auto px-4 py-4 sm:py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
+      <main className="mx-auto px-4 py-4 sm:py-8 w-full flex-1 min-w-0 min-h-[calc(100vh-73px)] flex flex-col justify-start">
         
         {activePage === 'home' && (
           <LandingContent 
             params={params}
             setParams={setParams}
             handleSearch={handleSearch}
+            onNavigate={setActivePage}
           />
         )}
 

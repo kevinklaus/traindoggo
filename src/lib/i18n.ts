@@ -33,8 +33,25 @@ const deTranslations = {
   },
   landing: {
     title: "Im Zug mit Doggos in Europa",
-    heroTitle: "Züge für dich & deinen Hund",
-    heroSubtitle: "Auf hundefreundlichen Bahnreisen Europa entdecken",
+    hero: {
+      title1: "Mit Hund & Bahn ",
+      title2: "Europa entdecken...",
+      imageAlt: "Hund schaut aus Zugfenster",
+      features: {
+        gassi: {
+          title: "Sichere Gassi-Pausen",
+          desc: "Routen mit Zeit für eine Gassi-Runde"
+        },
+        transfer: {
+          title: "Entspannte Umstiege",
+          desc: "Verlässliche und stressfreie Anschlüsse"
+        },
+        space: {
+          title: "Genug Platz im Zug",
+          desc: "Sitzplätze unter die dein Hund passt"
+        }
+      }
+    },
     fernverkehr: {
       title: "Fernverkehr (ICE/TGV/EC)",
       bullet1: "<b>Kleine Hunde</b> (Katzengröße) reisen gratis in der Box.",
@@ -56,15 +73,15 @@ const deTranslations = {
       attribution: "Kartendaten: Christoph Sohn, CC BY-SA 4.0, via Wikimedia Commons. | Alle Angaben ohne Gewähr."
     },
     features: {
-      title: "Das ist Train Doggo",
+      title: "Das macht Train Doggo aus",
       subtitle: "Bahn-Tipps für dich und deinen Hund",
       score: {
         title: "Der Doggo Score",
         text: "Wir bewerten Verbindungen nach Umstiegsstress, Gassi-Puffern, Zugauslastung und Pinkel-Limits. So siehst du sofort, wie hundefreundlich eine Fahrt wirklich ist."
       },
-      layouts: {
-        title: "Europaweite Sitzpläne",
-        text: "Kein Raten mehr beim Buchen. Mit detaillierten Wagenreihungen für Fernverkehrszüge in ganz Europa findest du den Platz mit der meisten Bodenfläche."
+      chuuchuu: {
+        title: "Genaue Verspätungsdaten",
+        text: "Für unseren Doggo Score nutzen wir die Verspätungsdaten von ChuuChuu."
       },
       destinations: {
         title: "Erprobte Reiseziele",
@@ -438,8 +455,25 @@ const enTranslations = {
   },
   landing: {
     title: "Traveling with a Doggo in Europe",
-    heroTitle: "Trains for you & your dog",
-    heroSubtitle: "Discover dog-friendly train travel across Europe",
+    hero: {
+      title1: "Your dog on rails",
+      title2: "exploring Europe...",
+      imageAlt: "Dog looking out of train window",
+      features: {
+        gassi: {
+          title: "Safe Potty Breaks",
+          desc: "Routes with enough time for a walk"
+        },
+        transfer: {
+          title: "Relaxed Transfers",
+          desc: "Reliable and stress-free connections"
+        },
+        space: {
+          title: "Comfort on the train",
+          desc: "Find seats your dog fits under"
+        }
+      }
+    },
     fernverkehr: {
       title: "Long-Distance (ICE/TGV/EC)",
       bullet1: "<b>Small dogs</b> (cat size) travel for free in a carrier.",
@@ -467,9 +501,9 @@ const enTranslations = {
         title: "The Doggo Score",
         text: "We rate connections based on transfer stress, potty buffers, train occupancy, and bladder limits. See how dog-friendly a journey really is."
       },
-      layouts: {
-        title: "European Seat Maps",
-        text: "No more guessing when booking. With detailed carriage layouts for long-distance trains across Europe, we'll help you find the seat with the most floor space."
+      chuuchuu: {
+        title: "Accurate delay data",
+        text: "For our Doggo Score, we use delay data provided by ChuuChuu."
       },
       destinations: {
         title: "Tested Destinations",

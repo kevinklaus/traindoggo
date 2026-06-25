@@ -1,22 +1,63 @@
-import { PawPrint, Sparkles } from 'lucide-react';
+import { Armchair, Sparkles, Route, Dog, PawPrint, Activity, TrainFront } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SearchForm from '../JourneySearch/SearchForm';
-import HeroImage from '../layout/HeroImage'; 
 import CardOverview, { CardData } from './CardOverview';
 import type { SearchParams } from '../../lib/types';
 import HeroImg from './images/hero.jpg';
-import { TrainSpinner } from '../ui/TrainSpinner';
+import type { Page } from '../../App'; 
 
 interface Props {
   params: SearchParams;
   setParams: (p: SearchParams) => void;
   handleSearch: (p?: SearchParams) => void;
+  onNavigate: (page: Page) => void;
 }
 
-export default function LandingContent({ params, setParams, handleSearch }: Props) {
+const HeroFeatureCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
+  <div className="flex items-center gap-5 bg-white rounded-3xl sm:rounded-full py-5 pl-5 pr-7 sm:h-full">
+    <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+      {icon}
+    </div>
+    <div className="">
+      <h3 className="font-bold text-slate-900 text-lg sm:text-xl">{title}</h3>
+      <p className="text-slate-500 text-sm sm:text-lg leading-snug mt-1">{desc}</p>
+    </div>
+  </div>
+);
+
+export default function LandingContent({ params, setParams, handleSearch, onNavigate }: Props) {
   const { t } = useTranslation();
 
-  // --- 1. DATEN FÜR INSPIRATIONEN (3-Spaltig) ---
+  const heroFeaturesData = [
+    {
+      id: 'gassi',
+      icon: <Dog size={24} strokeWidth={2.5} />,
+      title: t('landing.hero.features.gassi.title', 'Sichere Gassi-Pausen'),
+      desc: t('landing.hero.features.gassi.desc', 'Routen mit Zeit für eine Gassi-Runde')
+    },
+    {
+      id: 'transfer',
+      icon: <Route size={24} strokeWidth={2.5} />,
+      title: t('landing.hero.features.transfer.title', 'Entspannte Umstiege'),
+      desc: t('landing.hero.features.transfer.desc', 'Verlässliche und stressfreie Anschlüsse')
+    },
+    {
+      id: 'space',
+      icon: <Armchair size={24} strokeWidth={2.5} />,
+      title: t('landing.hero.features.space.title', 'Genug Platz im Zug'),
+      desc: t('landing.hero.features.space.desc', 'Sitzplätze unter die dein Hund passt')
+    }
+  ];
+
+  const featureCards = heroFeaturesData.map(feat => (
+    <HeroFeatureCard 
+      key={feat.id}
+      icon={feat.icon}
+      title={feat.title}
+      desc={feat.desc}
+    />
+  ));
+
   const exampleTrips: CardData[] = [
     {
       id: 'berlin-bozen',
@@ -83,15 +124,40 @@ export default function LandingContent({ params, setParams, handleSearch }: Prop
       headline: t('landing.features.score.title', 'Der Doggo Score'),
       description: t('landing.features.score.text', 'Wir bewerten Routen nach Umstiegsstress, Gassi-Puffern, Zugauslastung und Pinkel-Limits. So siehst du sofort, wie hundefreundlich eine Fahrt wirklich ist.'),
     },
+    // HIER IST DIE NEUE CHUUCHUU KARTE
     {
-      id: 'feat-layouts',
-      headline: t('landing.features.layouts.title', 'Europaweite Sitzpläne'),
-      description: t('landing.features.layouts.text', 'Kein Raten mehr beim Buchen. Mit detaillierten Wagenreihungen für Fernverkehrszüge in ganz Europa findest du den Platz mit der meisten Bodenfläche.'),
+      id: 'feat-chuuchuu',
+      headline: t('landing.features.chuuchuu.title', 'Powered by chuuchuu'),
+      description: (
+        <span className="flex flex-col gap-4">
+          <span>{t('landing.features.chuuchuu.text', 'Für unsere Empfehlungen und den Doggo Score nutzen wir die verlässlichen Echtzeit- und Verspätungsdaten von chuuchuu.')}</span>
+          <a 
+            href="https://chuuchuu.com" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-3 py-2 bg-white text-primary hover:bg-slate-200 rounded-xl transition-colors font-semibold w-fit"
+          >
+            <Activity size={18} className="text-primary" />
+            ChuuChuu.com
+          </a>
+        </span>
+      ),
     },
     {
       id: 'feat-destinations',
       headline: t('landing.features.destinations.title', 'Erprobte Reiseziele'),
-      description: t('landing.features.destinations.text', 'Lass dich von unseren persönlichen Erfahrungen inspirieren – egal ob mit kleinem Begleiter oder einem 35kg-Hund, wir kennen die besten entspannten Routen.'),
+      description: (
+        <span className="flex flex-col gap-4">
+          <span>{t('landing.features.destinations.text', 'Lass dich von unseren persönlichen Erfahrungen inspirieren – egal ob mit kleinem Begleiter oder einem 35kg-Hund, wir kennen die besten entspannten Routen.')}</span>
+          <button 
+            onClick={() => onNavigate('destinations')}
+            className="flex items-center gap-2 px-3 py-2 bg-white text-primary hover:bg-slate-200 rounded-xl transition-colors font-semibold w-fit"
+          >
+            <TrainFront size={18} className="text-primary" />
+            {t('nav.destinations', 'Reiseziele')}
+          </button>
+        </span>
+      ),
     },
     {
       id: 'feat-community',
@@ -113,27 +179,72 @@ export default function LandingContent({ params, setParams, handleSearch }: Prop
   const handleExampleSearch = (payload: Partial<SearchParams>) => {
     const searchConfig: SearchParams = { ...params, ...payload, date: params.date };
     setParams(searchConfig);
-    handleSearch(searchConfig); // Feuert den Seitenwechsel in App.tsx ab
+    handleSearch(searchConfig); 
   };
 
   return (
     <div className="w-full flex flex-col items-center animate-in fade-in pb-24">
-      <HeroImage 
-        src={HeroImg} 
-        alt="Hund reist im Zug" 
-        title={t('landing.heroTitle')} 
-        subtitle={t('landing.heroSubtitle')}
-        imagePositionClass="object-[center_75%] sm:object-[center_60%] md:object-[center_51%]"
-      />
-
-      <section className="w-[92%] sm:w-[88%] md:w-[85%] max-w-xl bg-white rounded-3xl p-5 sm:p-6 md:p-8 relative z-10 -mt-12 sm:-mt-16 md:-mt-20 shadow-xl shadow-slate-200/40">
-        {/* Ladezustand ist immer false, da die Suche hier nur weiterleitet */}
-        <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={false} />
+      
+      {/* HERO BEREICH */}
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-8 lg:px-8 pt-4 md:pt-8 lg:pt-12 pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           
-      </section>
+          {/* Linke Seite: Content & Features */}
+          <div className="lg:col-span-6 flex flex-col order-1 md:items-center lg:items-start w-full">
+            <h1 className="text-3xl sm:text-5xl lg:text-5xl font-heading font-extrabold text-slate-900 tracking-tight md:text-center lg:text-left">
+              <span className="text-primary">
+                {t('landing.hero.title1', 'Mit Hund & Bahn ')}    
+              </span>
+              <span className="block mt-1 sm:mt-2">
+                {t('landing.hero.title2', 'Europa entdecken...')}
+              </span>
+            </h1>
 
-      <div className="max-w-6xl px-4 sm:px-0 mt-16 w-full space-y-24">
-        {/* Inspiration Section */}
+            <div className="hidden lg:grid auto-rows-fr gap-5 mt-16 w-fit">
+              {featureCards}
+            </div>
+          </div>
+
+          {/* Rechte Seite: Elevated Search Widget */}
+          <div className="lg:col-span-6 order-2 w-full md:max-w-md md:mx-auto lg:max-w-none lg:mx-0 relative z-10">
+            
+            <div className="relative rounded-3xl shadow-[0_20px_80px_-15px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_80px_-10px_rgba(0,0,0,0.25)] transition-shadow duration-500">
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary/10 to-accent/10 rounded-3xl blur opacity-50 -z-10"></div>
+              
+              <div className="relative flex flex-col rounded-3xl overflow-hidden transform-gpu">
+                <div className="w-full h-48 sm:h-56 relative shrink-0 bg-transparent">
+                  <img 
+                    src={HeroImg} 
+                    alt={t('landing.hero.imageAlt', 'Hund schaut aus Zugfenster')} 
+                    className="w-full h-full object-cover object-[center_60%] scale-[1.02] origin-center"
+                  />
+                </div>
+
+                <div className="p-5 sm:p-7 bg-white relative z-10 -mt-6 rounded-t-3xl">
+                  <SearchForm params={params} onChange={setParams} onSearch={() => handleSearch(params)} loading={false} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Die Feature-Karten (Mobile) */}
+          <div className="lg:hidden mt-10 order-3 text-center w-full flex flex-col items-center">
+            <div className="flex justify-center ">
+              <PawPrint size={28} className="text-accent fill-accent" />
+            </div>
+            <h2 className="text-2xl mt-3 sm:text-3xl font-heading font-bold text-slate-800">
+                {t('landing.hero.mobFeatTitle', 'Reisen mit Train Doggo')}
+            </h2>
+          </div>
+          <div className="lg:hidden flex flex-col gap-4 order-4 mt-0 w-full md:max-w-md md:mx-auto">
+            {featureCards}
+          </div>
+
+        </div>
+      </div>
+
+      {/* Inspiration Section */}
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 mt-16 space-y-20">
         <section className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <div className="flex justify-center mb-2">
@@ -142,8 +253,8 @@ export default function LandingContent({ params, setParams, handleSearch }: Prop
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-800">
               {t('landing.inspiration.title', 'Inspiration für eure nächste Reise')}
             </h2>
-            <p className="text-slate-600">
-              {t('landing.inspiration.subtitle')}
+            <p className="text-slate-600 text-lg">
+              {t('landing.inspiration.subtitle', 'Hundefreundliche Bahn-Verbindungen an die schönsten Reiseziele')}
             </p>
           </div>
           
@@ -165,7 +276,7 @@ export default function LandingContent({ params, setParams, handleSearch }: Prop
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-800">
               {t('landing.features.title')}
             </h2>
-            <p className="text-slate-600">
+            <p className="text-slate-600 text-lg">
               {t('landing.features.subtitle')}
             </p>
           </div>
