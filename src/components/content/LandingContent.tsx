@@ -14,7 +14,7 @@ interface Props {
 }
 
 const HeroFeatureCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
-  <div className="flex items-center gap-5 bg-white rounded-3xl sm:rounded-full py-5 pl-5 pr-7 sm:h-full">
+  <div className="flex items-center gap-3 sm:gap-5 bg-white rounded-3xl sm:rounded-full p-3 sm:p-5 sm:pr-10 sm:h-full">
     <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-accent/10 flex items-center justify-center text-accent">
       {icon}
     </div>
@@ -31,19 +31,19 @@ export default function LandingContent({ params, setParams, handleSearch, onNavi
   const heroFeaturesData = [
     {
       id: 'gassi',
-      icon: <Dog size={24} strokeWidth={2.5} />,
+      icon: <Dog size={26} strokeWidth={2} />,
       title: t('landing.hero.features.gassi.title', 'Sichere Gassi-Pausen'),
       desc: t('landing.hero.features.gassi.desc', 'Routen mit Zeit für eine Gassi-Runde')
     },
     {
       id: 'transfer',
-      icon: <Route size={24} strokeWidth={2.5} />,
+      icon: <Route size={26} strokeWidth={2} />,
       title: t('landing.hero.features.transfer.title', 'Entspannte Umstiege'),
       desc: t('landing.hero.features.transfer.desc', 'Verlässliche und stressfreie Anschlüsse')
     },
     {
       id: 'space',
-      icon: <Armchair size={24} strokeWidth={2.5} />,
+      icon: <Armchair size={26} strokeWidth={2} />,
       title: t('landing.hero.features.space.title', 'Genug Platz im Zug'),
       desc: t('landing.hero.features.space.desc', 'Sitzplätze unter die dein Hund passt')
     }

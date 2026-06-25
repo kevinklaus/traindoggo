@@ -62,11 +62,11 @@ export default function JourneyTimeline({ legs, dogMode, isExpanded }: Props) {
           <span>{transfers === 0 ? t('journeys.timeline.direct') : transfers === 1 ? t('journeys.timeline.change_one') : t('journeys.timeline.change_other', { count: transfers })}</span>
         </div>
 
-        {hasRiskyTransfer && dogMode !== 'none' && (
+        {/* {hasRiskyTransfer && dogMode !== 'none' && (
           <span className="inline-flex items-center gap-1 text-sm font-medium text-red-600" role="alert">
             <AlertTriangle size={14} aria-hidden="true" /> {t('journeys.timeline.tightDog')}
           </span>
-        )}
+        )} */}
       </div>
 
       {/* Main Loop */}
