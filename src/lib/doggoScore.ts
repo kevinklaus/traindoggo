@@ -1,4 +1,5 @@
 import type { Journey, DogMode } from './types';
+import { formatChuuChuuLineName } from './helpers';
 
 export interface ScoreBreakdown {
   key: string;
@@ -111,13 +112,8 @@ export function calculateDoggoScore(
         let isRealtime = false;
         
         if (chuuchuuStats && prevLeg.line?.name && prevLeg.destination?.id && leg.line?.name && leg.origin?.id) {
-            const formatLineName = (l: any) => {
-              let name = l.line?.name || '';
-              name = name.replace(/\s*\(Zug-Nr\.\s*([^)]+)\)/gi, ' $1');
-              return name.trim();
-            };
-            const prevLine = formatLineName(prevLeg);
-            const currLine = formatLineName(leg);
+            const prevLine = formatChuuChuuLineName(prevLeg);
+            const currLine = formatChuuChuuLineName(leg);
             
             const chuuchuuKey = `${prevLine}|${prevLeg.destination.id}|${currLine}|${leg.origin.id}`;
             const stats = chuuchuuStats[chuuchuuKey];

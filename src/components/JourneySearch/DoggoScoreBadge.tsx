@@ -128,8 +128,8 @@ export default function DoggoScoreBadge({ result, loading }: Props) {
           </div>
         </div>
         {loading && (
-          <div className="absolute -top-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
-             <Loader2 size={12} className="animate-spin text-slate-400" />
+          <div className="absolute -top-1 -right-1 rounded-full p-0.5 shadow-sm">
+             <Loader2 size={12} className="animate-spin text-primary" />
           </div>
         )}
       </button>

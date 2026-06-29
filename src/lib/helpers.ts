@@ -242,3 +242,28 @@ export function getTrainType(leg: Leg): 'ice' | 'ic' | 'ec' | 're' | 'rb' | 'oth
   if (name.startsWith('en')) return 'ic';
   return 'other';
 }
+
+/**
+ * Formatiert den Liniennamen.
+ * @param leg Die Zug-Etappe
+ */
+export function formatChuuChuuLineName(leg: Leg): string {
+  const name = leg.line?.name || '';
+  
+  // 1. Extrahiere die Zugnummer, falls vorhanden
+  const match = name.match(/\(Zug-Nr\.\s*([^)]+)\)/i);
+  const trainNumber = match ? match[1] : null;
+
+  // 2. Logik-Weiche: Wenn keine Zugnummer da ist, gib einfach den Namen zurück
+  if (!trainNumber) return name.trim();
+
+  // 3. Spezielle Logik für "MEX" (oder andere Formate, die nur die Nummer brauchen)
+  // Hier prüfen wir, ob der Name mit "MEX" beginnt
+  if (name.toUpperCase().startsWith('MEX')) {
+    return trainNumber.trim(); // Gibt nur "4537" zurück
+  }
+
+  // 4. Standard-Logik für alle anderen (RE1, ICE, etc.) -> "RE1 19037"
+  const cleanName = name.replace(/\s*\(Zug-Nr\..*/i, '');
+  return `${cleanName} ${trainNumber}`.trim();
+}

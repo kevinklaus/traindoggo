@@ -1,16 +1,27 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Hilfsfunktion: Limitiert die gleichzeitigen API-Calls
-async function fetchInBatches<T>(tasks: (() => Promise<T>)[], batchSize = 10): Promise<T[]> {
+async function fetchWithRateLimit<T>(tasks: (() => Promise<T>)[], limitPerSecond = 99): Promise<T[]> {
   const results: T[] = [];
-  for (let i = 0; i < tasks.length; i += batchSize) {
-    const batch = tasks.slice(i, i + batchSize);
-    const batchResults = await Promise.all(batch.map(fn => fn()));
-    results.push(...batchResults);
+  const startTime = Date.now();
+  
+  for (let i = 0; i < tasks.length; i++) {
+    // 1. Berechne, wie viele Calls wir schon hätten machen sollen
+    // 2. Falls wir zu schnell sind, warten wir den Rest der Sekunde ab
+    if (i > 0 && i % limitPerSecond === 0) {
+      const elapsed = Date.now() - startTime;
+      const waitTime = 1000 - (elapsed % 1000);
+      if (waitTime > 0) {
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+      }
+    }
+    
+    // Starte den Call (wir pushen das Promise direkt in ein Array, um parallel zu laufen)
+    results.push(await tasks[i]());
   }
+  
   return results;
 }
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS Header für saubere Kommunikation
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -69,7 +80,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     // Limitierte API-Abfrage (max 10 parallel)
-    const results = await fetchInBatches(fetchTasks, 10);
+    const results = await fetchWithRateLimit(fetchTasks);
     
     results.forEach(res => {
       if (res.stat) chuuchuuTransferStats[res.key] = res.stat;

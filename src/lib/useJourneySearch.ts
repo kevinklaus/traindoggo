@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import { searchJourneys, fetchChuuchuuDelays } from '../lib/api'; // <-- fetchChuuchuuDelays importiert!
 import type { Journey, SearchParams } from '../lib/types';
+import { formatChuuChuuLineName } from './helpers';
+
 
 // HILFSFUNKTION: Extrahiert alle relevanten, einzigartigen Umstiege aus den HAFAS-Ergebnissen
 function extractTransfers(journeys: Journey[]) {
@@ -12,16 +14,9 @@ function extractTransfers(journeys: Journey[]) {
     for (let i = 0; i < transitLegs.length - 1; i++) {
       const firstLeg = transitLegs[i];
       const secondLeg = transitLegs[i + 1];
-      
-      // HILFSFUNKTION: Formatiert den Liniennamen, z.B. "RE2 (Zug-Nr. 4700)" zu "RE2 4700"
-      const formatLineName = (leg: any) => {
-        let name = leg.line?.name || '';
-        name = name.replace(/\s*\(Zug-Nr\.\s*([^)]+)\)/gi, ' $1');
-        return name.trim();
-      };
 
-      const firstLineFull = formatLineName(firstLeg);
-      const secondLineFull = formatLineName(secondLeg);
+      const firstLineFull = formatChuuChuuLineName(firstLeg);
+      const secondLineFull = formatChuuChuuLineName(secondLeg);
       const firstDest = firstLeg.destination?.id;
       const secondOrig = secondLeg.origin?.id;
       
