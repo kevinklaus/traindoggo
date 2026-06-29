@@ -421,6 +421,12 @@ const deTranslations = {
     busyDay: "Hauptreisetag",
     fastTrip: "Schnellere Verbindung",
     veryFastTrip: "Sehr schnelle Verbindung",
+    transferShort_chuuchuu: "Stressiger Umstieg (Ø {{val}} Min real)",
+    transferMid_chuuchuu: "Knapper Umstieg (Ø {{val}} Min real)",
+    quickBreak_chuuchuu: "Kleine Gassi-Pause (Ø {{val}} Min real)",
+    transferGood_chuuchuu: "Entspannter Aufenthalt (Ø {{val}} Min real)",
+    chuuchuuMissed: "Riskant: Anschluss oft verpasst ({{val}}%)",
+    arrivalDelay: "Ø Verspätung am Ziel (+{{val}} Min)",
   },
 };
 
@@ -843,6 +849,12 @@ const enTranslations = {
     busyDay: "Busy travel day",
     fastTrip: "Faster connection",
     veryFastTrip: "Very fast connection",
+    transferShort_chuuchuu: "Stressful transfer (Ø {{val}} min real)",
+    transferMid_chuuchuu: "Tight transfer (Ø {{val}} min real)",
+    quickBreak_chuuchuu: "Quick potty break (Ø {{val}} min real)",
+    transferGood_chuuchuu: "Relaxed layover (Ø {{val}} min real)",
+    chuuchuuMissed: "Risky: Connection often missed ({{val}}%)",
+    arrivalDelay: "Ø Delay at destination (+{{val}} min)",
   }, 
 };
 

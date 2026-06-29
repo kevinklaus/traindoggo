@@ -85,6 +85,33 @@ export async function searchJourneys(
   if (laterRef) params.append('laterRef', laterRef);
 
   // Aufruf an deinen Vercel Proxy
-  const res = await fetch(`/api/journeyProxy?${params.toString()}`);
+  const res = await fetch(`/api/journeys?${params.toString()}`);
   return handleResponse(res, 'Journey') as Promise<JourneysResponse>;
+}
+
+
+/** 3. ChuuChuu Delay Data Proxy */
+export async function fetchChuuchuuDelays(transfers: any[]) {
+  // Wenn wir im Mock-Modus sind oder keine Umstiege haben, brechen wir direkt ab
+  if (useMockApi || transfers.length === 0) {
+    return {};
+  }
+
+  try {
+    const res = await fetch('/api/delayProxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ transfers })
+    });
+    
+    // Wir nutzen hier nicht handleResponse, damit ein Fehler hier nicht 
+    // die ganze restliche HAFAS-Logik zerschießt.
+    if (!res.ok) return {};
+    
+    const data = await res.json();
+    return data.transfers || {};
+  } catch (error) {
+    console.error("[Chuuchuu API] Failed to fetch delays:", error);
+    return {};
+  }
 }

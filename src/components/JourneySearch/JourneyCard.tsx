@@ -21,6 +21,8 @@ interface Props {
   dogMode: DogMode;
   index: number;
   comparisonDurationMin?: number;
+  chuuchuuStats?: Record<string, any>;
+  loadingChuuchuu?: boolean;
 }
 
 function getJourneyLoadFactor(legs: any[]): string | null {
@@ -64,7 +66,7 @@ function getLoadFactorConfig(factor: string | null, t: TFunction) {
   return mapping[factor] || { label: t('journeys.load.unknown'), desc: t('journeys.load.unknownDesc'), styles: 'bg-slate-50 text-slate-500 border-slate-200' };
 }
 
-export default function JourneyCard({ journey, dogMode, index, comparisonDurationMin = 0 }: Props) {
+export default function JourneyCard({ journey, dogMode, index, comparisonDurationMin = 0, chuuchuuStats, loadingChuuchuu }: Props) {
   const { t } = useTranslation(); 
   
   // NEU: Der State wandert in die Karte
@@ -86,8 +88,8 @@ export default function JourneyCard({ journey, dogMode, index, comparisonDuratio
     const arrDay = new Date(arrDate.getFullYear(), arrDate.getMonth(), arrDate.getDate());
     dayDiff = Math.round((arrDay.getTime() - depDay.getTime()) / (1000 * 60 * 60 * 24));
   }
-  
-  const doggoScore = calculateDoggoScore(journey, dogMode, comparisonDurationMin);
+
+  const doggoScore = calculateDoggoScore(journey, dogMode, comparisonDurationMin, chuuchuuStats); 
   const worstLoadFactor = getJourneyLoadFactor(legs);
   const loadConfig = getLoadFactorConfig(worstLoadFactor, t);
 
@@ -156,7 +158,7 @@ export default function JourneyCard({ journey, dogMode, index, comparisonDuratio
                 onKeyDown={(e) => e.stopPropagation()}
                 className="relative z-10"
               >
-                <DoggoScoreBadge result={doggoScore} />
+                <DoggoScoreBadge result={doggoScore} loading={loadingChuuchuu} />
               </div>
             )}
           </div>

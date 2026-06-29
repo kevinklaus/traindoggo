@@ -1,12 +1,57 @@
 import { useState, useCallback } from 'react';
-import { searchJourneys } from '../lib/api';
+import { searchJourneys, fetchChuuchuuDelays } from '../lib/api'; // <-- fetchChuuchuuDelays importiert!
 import type { Journey, SearchParams } from '../lib/types';
+
+// HILFSFUNKTION: Extrahiert alle relevanten, einzigartigen Umstiege aus den HAFAS-Ergebnissen
+function extractTransfers(journeys: Journey[]) {
+  const transferMap = new Map<string, any>();
+
+  journeys.forEach(journey => {
+    const transitLegs = journey.legs.filter(l => !l.walking && l.line?.name);
+    
+    for (let i = 0; i < transitLegs.length - 1; i++) {
+      const firstLeg = transitLegs[i];
+      const secondLeg = transitLegs[i + 1];
+      
+      // HILFSFUNKTION: Formatiert den Liniennamen, z.B. "RE2 (Zug-Nr. 4700)" zu "RE2 4700"
+      const formatLineName = (leg: any) => {
+        let name = leg.line?.name || '';
+        name = name.replace(/\s*\(Zug-Nr\.\s*([^)]+)\)/gi, ' $1');
+        return name.trim();
+      };
+
+      const firstLineFull = formatLineName(firstLeg);
+      const secondLineFull = formatLineName(secondLeg);
+      const firstDest = firstLeg.destination?.id;
+      const secondOrig = secondLeg.origin?.id;
+      
+      if (firstLineFull && secondLineFull && firstDest && secondOrig) {
+        const key = `${firstLineFull}|${firstDest}|${secondLineFull}|${secondOrig}`;
+        if (!transferMap.has(key)) {
+          transferMap.set(key, {
+            key,
+            firstLine: firstLineFull,
+            firstDest: firstDest,
+            secondLine: secondLineFull,
+            secondOrig: secondOrig
+          });
+        }
+      }
+    }
+  });
+
+  return Array.from(transferMap.values());
+}
 
 export function useJourneySearch() {
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
+  // NEU: States für die Chuuchuu-Verspätungsdaten
+  const [chuuchuuStats, setChuuchuuStats] = useState<Record<string, any>>({});
+  const [loadingChuuchuu, setLoadingChuuchuu] = useState(false);
+
   // Pagination
   const [earlierRef, setEarlierRef] = useState<string | null>(null);
   const [laterRef, setLaterRef] = useState<string | null>(null);
@@ -20,6 +65,7 @@ export function useJourneySearch() {
       setLoading(true);
       setError(null);
       setJourneys([]);
+      setChuuchuuStats({}); // Reset Chuuchuu beim neuen Suchen
       setEarlierRef(null);
       setLaterRef(null);
     } else if (direction === 'earlier') setLoadingEarlier(true);
@@ -37,6 +83,7 @@ export function useJourneySearch() {
         direction === 'later' ? (laterRef ?? undefined) : undefined
       );
 
+      // 1. HAFAS JOURNEYS IM STATE SPEICHERN (UI aktualisiert sich sofort)
       if (direction === 'earlier') {
         setJourneys(prev => [...(result.journeys ?? []), ...prev]);
         setEarlierRef(result.earlierRef ?? null);
@@ -51,7 +98,30 @@ export function useJourneySearch() {
 
       if (!result.journeys?.length && !isPagination) {
         setError('No journeys found.');
+      } else {
+        // ==========================================
+        // 2. CHUUCHUU LAZY LOADING (Hintergrund-Aufruf)
+        // ==========================================
+        // Wir nehmen nur die NEU geladenen Journeys (result.journeys), 
+        // um nicht alte Züge bei Pagination doppelt zu prüfen.
+        const transfersToCheck = extractTransfers(result.journeys ?? []);
+        
+        if (transfersToCheck.length > 0) {
+          setLoadingChuuchuu(true);
+          
+          // Wir nutzen kein "await", damit die UI nicht auf Chuuchuu warten muss!
+          fetchChuuchuuDelays(transfersToCheck)
+            .then(stats => {
+              // Wir mergen die neuen Stats in den bestehenden Object-State
+              setChuuchuuStats(prev => ({ ...prev, ...stats }));
+            })
+            .catch(err => console.error("[useJourneySearch] Chuuchuu lazy load failed", err))
+            .finally(() => {
+              setLoadingChuuchuu(false);
+            });
+        }
       }
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Search failed.');
     } finally {
@@ -61,5 +131,10 @@ export function useJourneySearch() {
     }
   }, [earlierRef, laterRef]);
 
-  return { journeys, loading, error, fetchJourneys, loadingEarlier, loadingLater, earlierRef, laterRef };
+  // Wir geben die neuen Chuuchuu-States ans Frontend zurück
+  return { 
+    journeys, loading, error, fetchJourneys, 
+    loadingEarlier, loadingLater, earlierRef, laterRef,
+    chuuchuuStats, loadingChuuchuu 
+  };
 }

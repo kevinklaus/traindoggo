@@ -1,4 +1,4 @@
-import { PawPrint } from "lucide-react";
+import { PawPrint, Loader2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -6,9 +6,10 @@ import type { DoggoScoreResult } from "../../lib/doggoScore";
 
 interface Props {
   result: DoggoScoreResult;
+  loading?: boolean;
 }
 
-export default function DoggoScoreBadge({ result }: Props) {
+export default function DoggoScoreBadge({ result, loading }: Props) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -117,7 +118,7 @@ export default function DoggoScoreBadge({ result }: Props) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         aria-expanded={isOpen}
-        className={`${bgClass} flex flex-col items-end px-2.5 py-1.5 rounded-xl transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary`}
+        className={`${bgClass} flex flex-col items-end px-2.5 py-1.5 rounded-xl transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary relative`}
       >
         <div className="inline-flex items-center gap-1.5">        
           <div className={`flex items-baseline gap-0.5 ${colorClass}`}>
@@ -126,6 +127,11 @@ export default function DoggoScoreBadge({ result }: Props) {
             <span className="ml-1"><PawPrint size={14} strokeWidth={2.5} className={`relative top-[0.1rem] ${pawClass}`}/></span>
           </div>
         </div>
+        {loading && (
+          <div className="absolute -top-1 -right-1 bg-white rounded-full p-0.5 shadow-sm">
+             <Loader2 size={12} className="animate-spin text-slate-400" />
+          </div>
+        )}
       </button>
       
       {popoverContent}

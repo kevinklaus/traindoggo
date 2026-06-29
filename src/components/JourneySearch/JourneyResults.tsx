@@ -17,6 +17,8 @@ interface Props {
   hasLater?: boolean;
   loadingEarlier?: boolean;
   loadingLater?: boolean;
+  chuuchuuStats?: Record<string, any>;
+  loadingChuuchuu?: boolean;
 }
 
 // Gruppiert die Verbindungen nach ihrem Startdatum
@@ -49,7 +51,8 @@ function groupJourneysByDate(journeys: Journey[], locale: string) {
 
 export default function JourneyResults({ 
   journeys, dogMode, loading, error, 
-  onLoadEarlier, onLoadLater, hasEarlier, hasLater, loadingEarlier, loadingLater 
+  onLoadEarlier, onLoadLater, hasEarlier, hasLater, loadingEarlier, loadingLater,
+  chuuchuuStats, loadingChuuchuu
 }: Props) {
   const { t, i18n } = useTranslation();
 
@@ -118,6 +121,8 @@ export default function JourneyResults({
                     dogMode={dogMode} 
                     index={currentIndex}
                     comparisonDurationMin={medianDurationMin}
+                    chuuchuuStats={chuuchuuStats}
+                    loadingChuuchuu={loadingChuuchuu}
                   />
                 );
               })}

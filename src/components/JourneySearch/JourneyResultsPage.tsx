@@ -13,7 +13,8 @@ interface Props {
 export default function JourneyResultsPage({ params, setParams }: Props) {
   const { 
     journeys, loading, error, fetchJourneys, 
-    loadingEarlier, loadingLater, earlierRef, laterRef 
+    loadingEarlier, loadingLater, earlierRef, laterRef,
+    chuuchuuStats, loadingChuuchuu
   } = useJourneySearch();
 
   // Wenn die Seite zum ersten Mal gerendert wird (Nutzer kam vom Startbildschirm),
@@ -61,6 +62,8 @@ export default function JourneyResultsPage({ params, setParams }: Props) {
           hasLater={!!laterRef}
           loadingEarlier={loadingEarlier}
           loadingLater={loadingLater}
+          chuuchuuStats={chuuchuuStats}
+          loadingChuuchuu={loadingChuuchuu}
         />
       </div>
     </div>

@@ -4,6 +4,7 @@ export interface ScoreBreakdown {
   key: string;
   points: number;
   val?: number;
+  isChuuchuu?: boolean; // <--- NEU: Damit die UI ein "Echtzeit"-Badge anzeigen kann
 }
 
 export interface DoggoScoreResult {
@@ -11,7 +12,6 @@ export interface DoggoScoreResult {
   breakdown: ScoreBreakdown[];
 }
 
-// NEU: Berechnet den Median, um Ausreißer (wie einzelne Nachtzüge) zu ignorieren
 export function getMedianJourneyDuration(journeys: Journey[]): number {
   const durations: number[] = [];
   
@@ -38,7 +38,8 @@ export function getMedianJourneyDuration(journeys: Journey[]): number {
 export function calculateDoggoScore(
   journey: Journey, 
   dogMode: DogMode, 
-  comparisonDurationMin: number = 0 // <-- Neutraler Name für den Vergleichswert
+  comparisonDurationMin: number = 0,
+  chuuchuuStats?: Record<string, any> 
 ): DoggoScoreResult {
   if (dogMode === 'none') return { total: 100, breakdown: [] };
 
@@ -55,6 +56,21 @@ export function calculateDoggoScore(
   if (firstDeparture && lastArrival) {
     journeyDurationMin = Math.round((new Date(lastArrival).getTime() - new Date(firstDeparture).getTime()) / 60000);
     
+    // ZIEL-VERSPÄTUNG (Vorbereitung für den nächsten Schritt)
+    // Wenn wir für den letzten Zug Verspätungsdaten haben, addieren wir sie zur Reisedauer
+    const lastLeg = transitLegs[transitLegs.length - 1];
+    if (chuuchuuStats && lastLeg?.line?.name && lastLeg?.destination?.id) {
+        const delayKey = `${lastLeg.line.name}|${lastLeg.destination.id}|arrival`;
+        if (chuuchuuStats[delayKey] && chuuchuuStats[delayKey].averageDelay) {
+            const delayMin = Math.round(chuuchuuStats[delayKey].averageDelay / 60);
+            if (delayMin >= 10) {
+                journeyDurationMin += delayMin;
+                score -= Math.floor(delayMin / 10) * 5; // -5 Pkt pro 10 Min Verspätung
+                breakdown.push({ key: 'arrivalDelay', points: -(Math.floor(delayMin / 10) * 5), val: delayMin, isChuuchuu: true });
+            }
+        }
+    }
+
     const day = new Date(firstDeparture).getDay();
     const isRecommended = [2, 3, 4, 6].includes(day); 
     if (!isRecommended) {
@@ -62,7 +78,6 @@ export function calculateDoggoScore(
       breakdown.push({ key: 'busyDay', points: -10 });
     }
 
-    // Relative Reisezeit (Vergleich zum stabilen Median)
     if (comparisonDurationMin > 0 && journeyDurationMin > 0) {
       const diff = comparisonDurationMin - journeyDurationMin;
       if (diff >= 60) {
@@ -75,7 +90,7 @@ export function calculateDoggoScore(
     }
   }
 
-  // --- 2. UMSTIEGE ---
+  // --- 2. UMSTIEGE ZÄHLEN ---
   const transfers = Math.max(0, transitLegs.length - 1);
   if (transfers === 0) { 
     score += 10; breakdown.push({ key: 'direct', points: 10 }); 
@@ -88,30 +103,69 @@ export function calculateDoggoScore(
   for (let i = 0; i < transitLegs.length; i++) {
     const leg = transitLegs[i];
 
-    // --- 3. UMSTIEGSZEITEN ---
+    // --- 3. UMSTIEGSZEITEN & CHUUCHUU ---
     if (i > 0) {
       const prevLeg = transitLegs[i - 1];
       if (leg.departure && prevLeg.arrival) {
-        const transferMin = Math.round((new Date(leg.departure).getTime() - new Date(prevLeg.arrival).getTime()) / 60000);
+        let transferMin = Math.round((new Date(leg.departure).getTime() - new Date(prevLeg.arrival).getTime()) / 60000);
+        let isRealtime = false;
         
+        if (chuuchuuStats && prevLeg.line?.name && prevLeg.destination?.id && leg.line?.name && leg.origin?.id) {
+            const formatLineName = (l: any) => {
+              let name = l.line?.name || '';
+              name = name.replace(/\s*\(Zug-Nr\.\s*([^)]+)\)/gi, ' $1');
+              return name.trim();
+            };
+            const prevLine = formatLineName(prevLeg);
+            const currLine = formatLineName(leg);
+            
+            const chuuchuuKey = `${prevLine}|${prevLeg.destination.id}|${currLine}|${leg.origin.id}`;
+            const stats = chuuchuuStats[chuuchuuKey];
+                      
+          if (stats) {
+            if (stats.avgSecondsToChange !== undefined) {
+              // Wir nutzen die reale Zeit und markieren es als Chuuchuu-Datenpunkt
+              transferMin = Math.round(stats.avgSecondsToChange / 60);
+              isRealtime = true;
+            }
+            
+            if (stats.percentageMissedConnections !== undefined && stats.percentageMissedConnections >= 15) {
+               const missRate = Math.round(stats.percentageMissedConnections);
+               score -= 20; 
+               breakdown.push({ key: 'chuuchuuMissed', points: -20, val: missRate, isChuuchuu: true });
+            }
+          }
+        }
+
+        // Dynamischer Key je nachdem, ob es Echtzeit ist
+        const keySuffix = isRealtime ? '_chuuchuu' : '';
+
         if (transferMin < 15) { 
-          score -= 30; breakdown.push({ key: 'transferShort', points: -30, val: transferMin }); 
+          score -= 30; breakdown.push({ key: `transferShort${keySuffix}`, points: -30, val: transferMin, isChuuchuu: isRealtime }); 
         } else if (transferMin >= 15 && transferMin < 25) { 
-          score -= 15; breakdown.push({ key: 'transferMid', points: -15, val: transferMin }); 
+          score -= 15; breakdown.push({ key: `transferMid${keySuffix}`, points: -15, val: transferMin, isChuuchuu: isRealtime }); 
         } else if (transferMin >= 25 && transferMin <= 45) { 
-          score += 5; breakdown.push({ key: 'quickBreak', points: 5, val: transferMin }); 
+          score += 5; breakdown.push({ key: `quickBreak${keySuffix}`, points: 5, val: transferMin, isChuuchuu: isRealtime }); 
         } else if (transferMin > 45 && transferMin <= 120) { 
-          score += 20; breakdown.push({ key: 'transferGood', points: 20, val: transferMin }); 
+          score += 20; breakdown.push({ key: `transferGood${keySuffix}`, points: 20, val: transferMin, isChuuchuu: isRealtime }); 
         }
       }
     }
 
     // --- 4. ETAPPEN-LÄNGE & NACHTZUG ---
     if (leg.departure && leg.arrival) {
-      const durationMin = Math.round((new Date(leg.arrival).getTime() - new Date(leg.departure).getTime()) / 60000);
+      let durationMin = Math.round((new Date(leg.arrival).getTime() - new Date(leg.departure).getTime()) / 60000);
+      
+      // Auch hier: Wenn wir Einzelverspätungen für den Leg haben, addieren wir sie (Vorbereitung)
+      if (chuuchuuStats && leg.line?.name && leg.destination?.id) {
+         const legDelayKey = `${leg.line.name}|${leg.destination.id}|arrival`;
+         if (chuuchuuStats[legDelayKey] && chuuchuuStats[legDelayKey].averageDelay) {
+             durationMin += Math.round(chuuchuuStats[legDelayKey].averageDelay / 60);
+         }
+      }
+
       const depHour = new Date(leg.departure).getHours();
       const arrHour = new Date(leg.arrival).getHours();
-      
       const isNightTrain = (depHour >= 17 || depHour <= 2) && (arrHour >= 4 && arrHour <= 10) && durationMin > 320;
 
       if (isNightTrain) {
@@ -146,7 +200,6 @@ export function calculateDoggoScore(
       }
     }
 
-    // --- 5. AUSLASTUNG ---
     if (leg.loadFactor === 'very-high') { score -= 30; breakdown.push({ key: 'loadVeryHigh', points: -30 }); }
     else if (leg.loadFactor === 'high') { score -= 15; breakdown.push({ key: 'loadHigh', points: -15 }); }
   }
